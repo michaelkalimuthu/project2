@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.cs413.walker.actors.Actor;
 import com.cs413.walker.locations.Location;
 
 
@@ -18,6 +19,11 @@ import com.cs413.walker.locations.Location;
 public class TerrainView extends View {
 	private static final String TAG = "VIEW";
 	private Location start;
+	
+	private Actor actor;
+	
+	float placeHolderX;
+	float placeHolderY;
 
 	public TerrainView(Context context, Location start) {
 		super(context);
@@ -30,22 +36,6 @@ public class TerrainView extends View {
 		
 		//setMinimumWidth(x);
 		//setMinimumHeight(y-400);
-		
-		OnTouchListener listener = new OnTouchListener(){
-			
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if(event.getAction() == MotionEvent.ACTION_DOWN) {
-		            float x = event.getX();
-		            float y = event.getY();
-		            Log.d(TAG, String.valueOf(x) + " " + String.valueOf(x));
-		            return true;
-		        }
-				Log.d(TAG, "FALSE");
-		        return false;
-			}
-		};
-		this.setOnTouchListener(listener);
 		setFocusable(true);
 	}
 	
@@ -79,6 +69,8 @@ public class TerrainView extends View {
         int floor = canvas.getHeight();
         Log.d(TAG, String.valueOf(bottom));
         int count = 0;
+        float clickX = getPlaceHolderX();
+        float clickY = getPlaceHolderY();
         for (int i = 0; i<51; i++){
         	
         	countHeight++;
@@ -91,18 +83,29 @@ public class TerrainView extends View {
         		bottom += bottomInc;
         		countHeight = 1;
         	}
-        	
+        
         	int x = (int) rect.exactCenterX();
         	int y = (int) rect.exactCenterY();
         	
+        	Log.d(TAG, "clickX = " + String.valueOf(clickX)
+        			+ " clickY = " + String.valueOf(clickY));
+        	
+        	
+        	
         	rect.set(left, top , right, bottom);
-        	text = String.valueOf(count);
-        	canvas.drawText(text, x, y, paint);
+        	if (clickX >= left && clickX <=right && clickY>=top && clickY <=bottom){
+        		canvas.drawText("HERE", x, y, paint);
+        		Log.d(TAG, "FOUND");
+        	}
+        //	text = String.valueOf(count);
+        //	canvas.drawText(text, x, y, paint);
         	//canvas.drawPoint(center, center2, paint);
+        	/*
         	if (count % 2 == 0){
         		paint.setColor(Color.BLUE);
         		paint.setStyle(Paint.Style.FILL);
         	}
+        	*/
         	canvas.drawRect(rect, paint);
         	left = right;
         	right += inc; 
@@ -122,5 +125,32 @@ public class TerrainView extends View {
     	
     	return paint;
     }
+
+	public Actor getActor() {
+		return actor;
+	}
+
+	public void setActor(Actor actor) {
+		this.actor = actor;
+	}
+	
+	public float getPlaceHolderX() {
+		return placeHolderX;
+	}
+
+	public void setPlaceHolderX(float placeHolderX) {
+		this.placeHolderX = placeHolderX;
+	}
+	
+	public float getPlaceHolderY() {
+		return placeHolderY;
+	}
+
+	public void setPlaceHolderY(float placeHolderY) {
+		this.placeHolderY = placeHolderY;
+	}
+	
+	
+	
 
 }
