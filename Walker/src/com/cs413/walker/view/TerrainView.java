@@ -59,6 +59,8 @@ public class TerrainView extends View {
         int countHeight = 0;
         int five = 5;
         
+        boolean first = true;
+        
         String text = "";
         int left = 0;
         int top = 0;
@@ -73,15 +75,22 @@ public class TerrainView extends View {
         float clickY = getPlaceHolderY();
         for (int i = 0; i<51; i++){
         	
-        	countHeight++;
+        	
+        	
         	paint.setColor(Color.BLACK);
         	paint.setStyle(Paint.Style.STROKE);
-        	if (countHeight == 6){
+        	if (countHeight == 5){
         		left = 0;
         		right = inc;
         		top += bottomInc;
         		bottom += bottomInc;
-        		countHeight = 1;
+        		countHeight = 0;
+        	}
+        	if (first){
+        		rect.set(left, top , right, bottom);
+        		first = false;
+        	} else {
+        		rect.set(left, top , right, bottom);
         	}
         
         	int x = (int) rect.exactCenterX();
@@ -92,13 +101,13 @@ public class TerrainView extends View {
         	
         	
         	
-        	rect.set(left, top , right, bottom);
+        	
         	if (clickX >= left && clickX <=right && clickY>=top && clickY <=bottom){
         		canvas.drawText("HERE", x, y, paint);
         		Log.d(TAG, "FOUND");
         	}
-        //	text = String.valueOf(count);
-        //	canvas.drawText(text, x, y, paint);
+        	text = String.valueOf(count);
+        	canvas.drawText(text, x, y, paint);
         	//canvas.drawPoint(center, center2, paint);
         	/*
         	if (count % 2 == 0){
@@ -111,6 +120,7 @@ public class TerrainView extends View {
         	right += inc; 
         //canvas.drawRect(0, 50, getWidth() - 1, getHeight() -1, paint);
         	count++;
+        	countHeight++;
         	
         }
         
