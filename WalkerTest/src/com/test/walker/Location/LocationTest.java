@@ -46,7 +46,7 @@ public class LocationTest extends TestCase {
 	}
 	
 	HashMap<Neighbor, Location> getDefaultMap(){
-		HashMap map = new HashMap<Neighbor, Location>();
+		HashMap<Neighbor, Location> map = new HashMap<Neighbor, Location>();
 		map.put(Neighbor.NORTH, north);
 		map.put(Neighbor.SOUTH, south);
 		map.put(Neighbor.EAST, east);
@@ -78,9 +78,14 @@ public class LocationTest extends TestCase {
 		
 		Location incompatible = new DefaultLocation("7");
 		
+		//adding incompatible should not work
 		center.addNeighbor(Neighbor.NORTH, incompatible);
 		
+		//north is still NORTH for center after attempting to add incompatible
 		assertEquals(north, center.getNeighbors().get(Neighbor.NORTH));
+		
+		//incompatible's SOUTH neighbor is null since it was never added to center's map
+		assertEquals(null, incompatible.getNeighbors().get(Neighbor.SOUTH));
 	}
 
 }
