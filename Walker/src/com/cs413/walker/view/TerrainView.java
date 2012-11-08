@@ -1,6 +1,8 @@
 package com.cs413.walker.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -12,11 +14,15 @@ import android.view.View;
 
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.locations.Location;
+import com.example.walker.R;
+
 
 
 
 
 public class TerrainView extends View {
+	
+	
 	private static final String TAG = "VIEW";
 	private Location start;
 	
@@ -52,7 +58,7 @@ public class TerrainView extends View {
  
         Paint paint = new Paint();
         
-        
+        Bitmap player = BitmapFactory.decodeResource(getResources(), R.drawable.player);
         
         
         Rect rect = new Rect();
@@ -103,7 +109,7 @@ public class TerrainView extends View {
         	
         	
         	if (clickX >= left && clickX <=right && clickY>=top && clickY <=bottom){
-        		canvas.drawText("HERE", x, y, paint);
+        		canvas.drawBitmap(player, x, y, paint);
         		Log.d(TAG, "FOUND");
         	}
         	text = String.valueOf(count);
