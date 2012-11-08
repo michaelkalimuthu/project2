@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.cs413.walker.locations.Location;
@@ -30,8 +31,21 @@ public class TerrainView extends View {
 		//setMinimumWidth(x);
 		//setMinimumHeight(y-400);
 		
-		
-		
+		OnTouchListener listener = new OnTouchListener(){
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+		            float x = event.getX();
+		            float y = event.getY();
+		            Log.d(TAG, String.valueOf(x) + " " + String.valueOf(x));
+		            return true;
+		        }
+				Log.d(TAG, "FALSE");
+		        return false;
+			}
+		};
+		this.setOnTouchListener(listener);
 		setFocusable(true);
 	}
 	
