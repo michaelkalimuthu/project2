@@ -6,10 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Point;
 import android.graphics.Rect;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.cs413.walker.actors.Actor;
@@ -40,14 +39,14 @@ public class TerrainView extends View {
 	public TerrainView(Context context, Location start) {
 		super(context);
 		this.start = start;
-		/*
+		
 		DisplayMetrics metrics = new DisplayMetrics();
 		int x = getContext().getResources().getDisplayMetrics().widthPixels;
 		int y = getContext().getResources().getDisplayMetrics().heightPixels;
-		*/
+		
 		currentLoc = 0;
 		//setMinimumWidth(x);
-		//setMinimumHeight(y-400);
+		//setMinimumHeight(y - 200);
 		setFocusable(true);
 	}
 	
@@ -65,6 +64,8 @@ public class TerrainView extends View {
         paint = new Paint();
         
         Bitmap player = BitmapFactory.decodeResource(getResources(), R.drawable.player);
+        Bitmap upRed = BitmapFactory.decodeResource(getResources(), R.drawable.up_red);
+        Bitmap downRed = BitmapFactory.decodeResource(getResources(), R.drawable.down_red);
         
         
         Rect rect = new Rect();
@@ -91,7 +92,7 @@ public class TerrainView extends View {
         int loc = runGrid(canvas);
         Log.d(TAG, String.valueOf(loc));
         
-        for (int i = 0; i<51; i++){
+        for (int i = 0; i<45; i++){
         	setUpPaint(i);
         	
         	
@@ -147,7 +148,30 @@ public class TerrainView extends View {
         	count++;
         	countHeight++;
         	
-        }                
+        }   
+        int bRow = canvas.getHeight() - (canvas.getHeight()/10);
+        
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.STROKE);
+        
+    	rect.set(0, bRow, canvas.getWidth()/2, canvas.getHeight());
+    	
+    	int x = (int) rect.exactCenterX();
+    	int y = (int) rect.exactCenterY();
+    	
+    	canvas.drawBitmap(upRed, x, y-20, paint);
+    	
+        canvas.drawRect(rect, paint);
+        
+        rect.set(canvas.getWidth()/2, bRow, canvas.getWidth(), canvas.getHeight());
+        
+        x = (int) rect.exactCenterX();
+    	y = (int) rect.exactCenterY();
+    	
+    	canvas.drawBitmap(downRed, x, y-20, paint);
+    	
+    	canvas.drawRect(rect, paint);
+        
         //canvas.drawRect(10, 10, 10, 10, paint);
     }
     
@@ -166,7 +190,7 @@ public class TerrainView extends View {
         float clickX = getPlaceHolderX();
         float clickY = getPlaceHolderY();
         
-        for (int i=0; i<51; i ++){
+        for (int i=0; i<45; i ++){
         	
         	if (countHeight == 5){
         		left = 0;
