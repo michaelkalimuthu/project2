@@ -28,8 +28,14 @@ public class TerrainView extends View {
 	
 	private Actor actor;
 	
+	int currentLoc;
+	
 	float placeHolderX;
 	float placeHolderY;
+	
+	Paint paint;
+	
+	boolean stroke = false;
 
 	public TerrainView(Context context, Location start) {
 		super(context);
@@ -39,7 +45,7 @@ public class TerrainView extends View {
 		int x = getContext().getResources().getDisplayMetrics().widthPixels;
 		int y = getContext().getResources().getDisplayMetrics().heightPixels;
 		*/
-		
+		currentLoc = 0;
 		//setMinimumWidth(x);
 		//setMinimumHeight(y-400);
 		setFocusable(true);
@@ -56,7 +62,7 @@ public class TerrainView extends View {
     @Override protected void onDraw(Canvas canvas) {
        // canvas.drawColor(Color.WHITE);
  
-        Paint paint = new Paint();
+        paint = new Paint();
         
         Bitmap player = BitmapFactory.decodeResource(getResources(), R.drawable.player);
         
@@ -66,6 +72,8 @@ public class TerrainView extends View {
         int five = 5;
         
         boolean first = true;
+        
+       canvas.drawColor(Color.GRAY);
         
         String text = "";
         int left = 0;
@@ -79,12 +87,20 @@ public class TerrainView extends View {
         int count = 0;
         float clickX = getPlaceHolderX();
         float clickY = getPlaceHolderY();
+        
+        int loc = runGrid(canvas);
+        Log.d(TAG, String.valueOf(loc));
+        
         for (int i = 0; i<51; i++){
+        	setUpPaint(i);
         	
         	
-        	
-        	paint.setColor(Color.BLACK);
-        	paint.setStyle(Paint.Style.STROKE);
+        	// paint.setColor(Color.BLACK);
+        	paint.setStyle(Paint.Style.FILL);
+        	if (stroke){
+        		paint.setStyle(Paint.Style.STROKE);
+        		stroke = false;
+        	}
         	if (countHeight == 5){
         		left = 0;
         		right = inc;
@@ -105,13 +121,16 @@ public class TerrainView extends View {
         	Log.d(TAG, "clickX = " + String.valueOf(clickX)
         			+ " clickY = " + String.valueOf(clickY));
         	
+        	if (i == getCurrentLoc())
+        		canvas.drawBitmap(player, x, y, paint);
         	
-        	
-        	
+        	/*
         	if (clickX >= left && clickX <=right && clickY>=top && clickY <=bottom){
         		canvas.drawBitmap(player, x, y, paint);
+        		setCurrentLoc(count);
         		Log.d(TAG, "FOUND");
         	}
+        	*/
         	text = String.valueOf(count);
         	canvas.drawText(text, x, y, paint);
         	//canvas.drawPoint(center, center2, paint);
@@ -128,15 +147,67 @@ public class TerrainView extends View {
         	count++;
         	countHeight++;
         	
-        }
-        
-        
+        }                
         //canvas.drawRect(10, 10, 10, 10, paint);
-        
-   
     }
     
-    private Paint getPaint(Location location){
+    private int runGrid(Canvas canvas){
+    	
+    	int countHeight = 0;
+        int left = 0;
+        int top = 0;
+        int right = canvas.getWidth()/5;
+        int inc = canvas.getWidth()/5;
+        int bottom = canvas.getHeight()/10;
+        int bottomInc = canvas.getHeight()/10;
+        int floor = canvas.getHeight();
+        Log.d(TAG, String.valueOf(bottom));
+        int count = 0;
+        float clickX = getPlaceHolderX();
+        float clickY = getPlaceHolderY();
+        
+        for (int i=0; i<51; i ++){
+        	
+        	if (countHeight == 5){
+        		left = 0;
+        		right = inc;
+        		top += bottomInc;
+        		bottom += bottomInc;
+        		countHeight = 0;
+        	}
+        	
+        	if (clickX >= left && clickX <=right && clickY>=top && clickY <=bottom){
+        		setCurrentLoc(i);
+        		return i;
+        	}
+        	left = right;
+        	right += inc; 
+        	countHeight++;
+        	
+        }
+        return 0;
+    }
+    
+    private void setUpPaint(int i) {
+		if (i == getCurrentLoc()){
+			paint.setColor(Color.WHITE);
+			stroke = true;
+			
+		} 
+		else if (( 
+		        (i == getCurrentLoc()+5 || i == getCurrentLoc()-5) ||
+		        (i == getCurrentLoc() + 1 && (getCurrentLoc()+1) % 5 !=0) || 
+		        (i == (getCurrentLoc() - 1) && (i+1) % 5  != 0)
+		        )) 
+		        {
+			paint.setColor(Color.GREEN);
+			
+		} else{
+			paint.setColor(Color.GRAY);	
+		}
+	}
+
+	private Paint getPaint(Location location){
     	Paint paint = new Paint();
     	
     	return paint;
@@ -164,6 +235,14 @@ public class TerrainView extends View {
 
 	public void setPlaceHolderY(float placeHolderY) {
 		this.placeHolderY = placeHolderY;
+	}
+	
+	public int getCurrentLoc() {
+		return currentLoc;
+	}
+
+	public void setCurrentLoc(int currentLoc) {
+		this.currentLoc = currentLoc;
 	}
 	
 	

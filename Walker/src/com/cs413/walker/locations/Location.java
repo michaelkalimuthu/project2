@@ -24,7 +24,7 @@ public interface Location {
 	/**
 	 * Allow an actor to enter
 	 */
-	void addActor(Actor actor);
+	Boolean addActor(Actor actor);
 	/**
 	 * Allow actor to leave
 	 */

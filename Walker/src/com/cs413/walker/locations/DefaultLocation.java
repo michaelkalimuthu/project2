@@ -53,8 +53,9 @@ public class DefaultLocation implements Location{
 	}
 
 	@Override
-	public void addActor(Actor actor) {
+	public Boolean addActor(Actor actor) {
 		actors.add(actor);
+		return true;
 	}
 
 	@Override
