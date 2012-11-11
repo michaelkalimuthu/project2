@@ -25,6 +25,9 @@ public class TerrainView extends View {
 	private static final String TAG = "VIEW";
 	private Location start;
 	
+	private static final int UP = -1;
+	private static final int DOWN = -2;
+	
 	private Actor actor;
 	
 	int currentLoc;
@@ -35,6 +38,12 @@ public class TerrainView extends View {
 	Paint paint;
 	
 	boolean stroke = false;
+	
+	  Bitmap player = BitmapFactory.decodeResource(getResources(), R.drawable.player);
+      Bitmap upRed = BitmapFactory.decodeResource(getResources(), R.drawable.up_red);
+      Bitmap downRed = BitmapFactory.decodeResource(getResources(), R.drawable.down_red);
+      Bitmap upGreen = BitmapFactory.decodeResource(getResources(), R.drawable.up_green);
+      Bitmap downGreen = BitmapFactory.decodeResource(getResources(), R.drawable.down_green);
 
 	public TerrainView(Context context, Location start) {
 		super(context);
@@ -45,11 +54,13 @@ public class TerrainView extends View {
 		int y = getContext().getResources().getDisplayMetrics().heightPixels;
 		
 		currentLoc = 0;
-		//setMinimumWidth(x);
-		//setMinimumHeight(y - 200);
+
 		setFocusable(true);
+		
 	}
 	
+
+
 	/*
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -63,9 +74,8 @@ public class TerrainView extends View {
  
         paint = new Paint();
         
-        Bitmap player = BitmapFactory.decodeResource(getResources(), R.drawable.player);
-        Bitmap upRed = BitmapFactory.decodeResource(getResources(), R.drawable.up_red);
-        Bitmap downRed = BitmapFactory.decodeResource(getResources(), R.drawable.down_red);
+      
+        
         
         
         Rect rect = new Rect();
@@ -84,13 +94,17 @@ public class TerrainView extends View {
         int bottom = canvas.getHeight()/10;
         int bottomInc = canvas.getHeight()/10;
         int floor = canvas.getHeight();
-        Log.d(TAG, String.valueOf(bottom));
+ //       Log.d(TAG, String.valueOf(bottom));
         int count = 0;
         float clickX = getPlaceHolderX();
         float clickY = getPlaceHolderY();
         
         int loc = runGrid(canvas);
-        Log.d(TAG, String.valueOf(loc));
+        Log.d(TAG, String.valueOf(loc) + " LOC");
+ //       Log.d(TAG, String.valueOf(loc));
+        if (loc == UP || loc == DOWN){
+        	setCurrentLoc(0);					//eventually will be get up/down neighbor and set loc to that. right now just go back to tile 0
+        }
         
         for (int i = 0; i<45; i++){
         	setUpPaint(i);
@@ -99,7 +113,7 @@ public class TerrainView extends View {
         	// paint.setColor(Color.BLACK);
         	paint.setStyle(Paint.Style.FILL);
         	if (stroke){
-        		paint.setStyle(Paint.Style.STROKE);
+        		paint.setStyle(Paint.Style.FILL);
         		stroke = false;
         	}
         	if (countHeight == 5){
@@ -119,29 +133,20 @@ public class TerrainView extends View {
         	int x = (int) rect.exactCenterX();
         	int y = (int) rect.exactCenterY();
         	
-        	Log.d(TAG, "clickX = " + String.valueOf(clickX)
-        			+ " clickY = " + String.valueOf(clickY));
+      //  	Log.d(TAG, "clickX = " + String.valueOf(clickX)
+      //  			+ " clickY = " + String.valueOf(clickY));
+        	
+        	
+
+        	text = String.valueOf(count);
+        	canvas.drawText(text, x, y, paint);
+        	//canvas.drawPoint(center, center2, paint);
+
+        	canvas.drawRect(rect, paint);
         	
         	if (i == getCurrentLoc())
         		canvas.drawBitmap(player, x, y, paint);
         	
-        	/*
-        	if (clickX >= left && clickX <=right && clickY>=top && clickY <=bottom){
-        		canvas.drawBitmap(player, x, y, paint);
-        		setCurrentLoc(count);
-        		Log.d(TAG, "FOUND");
-        	}
-        	*/
-        	text = String.valueOf(count);
-        	canvas.drawText(text, x, y, paint);
-        	//canvas.drawPoint(center, center2, paint);
-        	/*
-        	if (count % 2 == 0){
-        		paint.setColor(Color.BLUE);
-        		paint.setStyle(Paint.Style.FILL);
-        	}
-        	*/
-        	canvas.drawRect(rect, paint);
         	left = right;
         	right += inc; 
         //canvas.drawRect(0, 50, getWidth() - 1, getHeight() -1, paint);
@@ -159,7 +164,7 @@ public class TerrainView extends View {
     	int x = (int) rect.exactCenterX();
     	int y = (int) rect.exactCenterY();
     	
-    	canvas.drawBitmap(upRed, x, y-20, paint);
+    	canvas.drawBitmap(downRed, x, y-20, paint);
     	
         canvas.drawRect(rect, paint);
         
@@ -168,7 +173,7 @@ public class TerrainView extends View {
         x = (int) rect.exactCenterX();
     	y = (int) rect.exactCenterY();
     	
-    	canvas.drawBitmap(downRed, x, y-20, paint);
+    	canvas.drawBitmap(upRed, x, y-20, paint);
     	
     	canvas.drawRect(rect, paint);
         
@@ -176,6 +181,8 @@ public class TerrainView extends View {
     }
     
     private int runGrid(Canvas canvas){
+    	
+    	
     	
     	int countHeight = 0;
         int left = 0;
@@ -185,10 +192,18 @@ public class TerrainView extends View {
         int bottom = canvas.getHeight()/10;
         int bottomInc = canvas.getHeight()/10;
         int floor = canvas.getHeight();
-        Log.d(TAG, String.valueOf(bottom));
+ //       Log.d(TAG, String.valueOf(bottom));
         int count = 0;
         float clickX = getPlaceHolderX();
         float clickY = getPlaceHolderY();
+        
+        int bRow = canvas.getHeight() - (canvas.getHeight()/10);
+        
+        if (clickX < canvas.getWidth()/2 && clickY > bRow){
+        	return DOWN;
+        } else if (clickX > canvas.getWidth()/2 && clickY > bRow){
+        	return UP;
+        }
         
         for (int i=0; i<45; i ++){
         	
@@ -209,6 +224,8 @@ public class TerrainView extends View {
         	countHeight++;
         	
         }
+
+        
         return 0;
     }
     

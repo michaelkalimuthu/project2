@@ -53,8 +53,13 @@ public class DefaultLocation implements Location{
 	}
 
 	@Override
-	public Boolean addActor(Actor actor) {
+	public boolean addActor(Actor actor) {
 		actors.add(actor);
+		return true;
+	}
+	
+	@Override
+	public boolean canAddActor(){
 		return true;
 	}
 

@@ -24,7 +24,7 @@ public interface Location {
 	/**
 	 * Allow an actor to enter
 	 */
-	Boolean addActor(Actor actor);
+	boolean addActor(Actor actor);
 	/**
 	 * Allow actor to leave
 	 */
@@ -41,5 +41,5 @@ public interface Location {
 	 */
 	void setOppositeNeighbor(Location location, Location opposite, Neighbor neighbor);
 	
-
+	boolean canAddActor();
 }
