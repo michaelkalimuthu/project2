@@ -21,6 +21,9 @@ public class DefaultLocation implements Location{
 	HashMap<Neighbor, Location> map;
 	List<Actor> actors;
 	LocationAbility ability;
+	
+	int tile;
+	
 	/**
 	 * Default constructor. Names the location randomly after a number through 0 and 50000.
 	 */
@@ -54,8 +57,14 @@ public class DefaultLocation implements Location{
 
 	@Override
 	public boolean addActor(Actor actor) {
-		actors.add(actor);
-		return true;
+		if (canAddActor()){
+			actors.add(actor);
+			return true;
+		} return false;
+	}
+	@Override
+	public String getName(){
+		return name;
 	}
 	
 	@Override
@@ -75,7 +84,7 @@ public class DefaultLocation implements Location{
 	public void setOppositeNeighbor(Location location, Location opposite, Neighbor neighbor){
 		location.getNeighbors().put(Neighbor.getOpposite(neighbor), opposite);
 	}
-	
+
 	
 
 }

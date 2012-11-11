@@ -42,4 +42,7 @@ public interface Location {
 	void setOppositeNeighbor(Location location, Location opposite, Neighbor neighbor);
 	
 	boolean canAddActor();
+	
+	String getName();
+
 }

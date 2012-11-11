@@ -18,4 +18,5 @@ public interface Actor {
 	 */
 	public Location getLocation();
 
+
 }

@@ -1,5 +1,9 @@
 package com.cs413.walker.view;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +17,7 @@ import android.view.View;
 
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.locations.Location;
+import com.cs413.walker.locations.Neighbor;
 import com.example.walker.R;
 
 
@@ -30,6 +35,9 @@ public class TerrainView extends View {
 	
 	private Actor actor;
 	
+	private HashMap<Integer, ArrayList<Location>> map;
+	private HashMap<Integer, Location> mapping;
+	
 	int currentLoc;
 	
 	float placeHolderX;
@@ -45,13 +53,15 @@ public class TerrainView extends View {
       Bitmap upGreen = BitmapFactory.decodeResource(getResources(), R.drawable.up_green);
       Bitmap downGreen = BitmapFactory.decodeResource(getResources(), R.drawable.down_green);
 
-	public TerrainView(Context context, Location start) {
+	public TerrainView(Context context, Location start, HashMap<Integer, ArrayList<Location>> map) {
 		super(context);
 		this.start = start;
-		
+		this.map = map;
 		DisplayMetrics metrics = new DisplayMetrics();
 		int x = getContext().getResources().getDisplayMetrics().widthPixels;
 		int y = getContext().getResources().getDisplayMetrics().heightPixels;
+		
+		
 		
 		currentLoc = 0;
 
@@ -73,18 +83,13 @@ public class TerrainView extends View {
        // canvas.drawColor(Color.WHITE);
  
         paint = new Paint();
-        
-      
-        
-        
-        
+
         Rect rect = new Rect();
         int countHeight = 0;
-        int five = 5;
-        
+
         boolean first = true;
         
-       canvas.drawColor(Color.GRAY);
+        canvas.drawColor(Color.GRAY);
         
         String text = "";
         int left = 0;
@@ -93,11 +98,9 @@ public class TerrainView extends View {
         int inc = canvas.getWidth()/5;
         int bottom = canvas.getHeight()/10;
         int bottomInc = canvas.getHeight()/10;
-        int floor = canvas.getHeight();
- //       Log.d(TAG, String.valueOf(bottom));
+
         int count = 0;
-        float clickX = getPlaceHolderX();
-        float clickY = getPlaceHolderY();
+
         
         int loc = runGrid(canvas);
         Log.d(TAG, String.valueOf(loc) + " LOC");
@@ -154,7 +157,13 @@ public class TerrainView extends View {
         	countHeight++;
         	
         }   
-        int bRow = canvas.getHeight() - (canvas.getHeight()/10);
+        drawButtons(rect, canvas);
+        
+        //canvas.drawRect(10, 10, 10, 10, paint);
+    }
+    
+    private void drawButtons(Rect rect, Canvas canvas) {
+    	int bRow = canvas.getHeight() - (canvas.getHeight()/10);
         
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.STROKE);
@@ -176,13 +185,14 @@ public class TerrainView extends View {
     	canvas.drawBitmap(upRed, x, y-20, paint);
     	
     	canvas.drawRect(rect, paint);
-        
-        //canvas.drawRect(10, 10, 10, 10, paint);
-    }
-    
-    private int runGrid(Canvas canvas){
-    	
-    	
+		
+	}
+
+
+
+	private int runGrid(Canvas canvas){
+    	mapping = new HashMap<Integer, Location>();
+    	int location = 0;
     	
     	int countHeight = 0;
         int left = 0;
@@ -200,9 +210,9 @@ public class TerrainView extends View {
         int bRow = canvas.getHeight() - (canvas.getHeight()/10);
         
         if (clickX < canvas.getWidth()/2 && clickY > bRow){
-        	return DOWN;
+        	location = DOWN;
         } else if (clickX > canvas.getWidth()/2 && clickY > bRow){
-        	return UP;
+        	location = UP;
         }
         
         for (int i=0; i<45; i ++){
@@ -217,35 +227,83 @@ public class TerrainView extends View {
         	
         	if (clickX >= left && clickX <=right && clickY>=top && clickY <=bottom){
         		setCurrentLoc(i);
-        		return i;
+        		location = i;
         	}
         	left = right;
         	right += inc; 
+        	
+        	
         	countHeight++;
         	
         }
 
         
-        return 0;
+        return location;
     }
     
     private void setUpPaint(int i) {
+    	int[] neighbors = new int[4];
+    	HashMap<Neighbor, Location> m = map.get(1).get(getCurrentLoc()).getNeighbors();
+    	
+    	for (Map.Entry<Neighbor, Location> neigh : m.entrySet()){
+    		
+    	}
+    	
 		if (i == getCurrentLoc()){
 			paint.setColor(Color.WHITE);
 			stroke = true;
-			
+			return;
 		} 
+		
+		if (i == getCurrentLoc() + 5){
+			if (m.get(Neighbor.SOUTH) == null ){
+				paint.setColor(Color.GRAY);
+			} else if (m.get(Neighbor.SOUTH).canAddActor()){
+				paint.setColor(Color.GREEN);
+			} else {paint.setColor(Color.RED);}
+		} 
+		
+		else if (i == getCurrentLoc() - 5){
+			if (m.get(Neighbor.NORTH) == null ){
+				paint.setColor(Color.GRAY);
+			} else if (m.get(Neighbor.NORTH).canAddActor()){
+				paint.setColor(Color.GREEN);
+			} else {paint.setColor(Color.RED);}
+		} 
+		
+		else if (i == getCurrentLoc() + 1){
+			if (m.get(Neighbor.EAST) == null ){
+				paint.setColor(Color.GRAY);
+			} else if (m.get(Neighbor.EAST).canAddActor()){
+				paint.setColor(Color.GREEN);
+			} else {paint.setColor(Color.RED);}
+		} 
+		
+		else if (i == getCurrentLoc() - 1){
+			if (m.get(Neighbor.WEST) == null ){
+				paint.setColor(Color.GRAY);
+			} else if (m.get(Neighbor.WEST).canAddActor()){
+				paint.setColor(Color.GREEN);
+			} else {paint.setColor(Color.RED);}
+		}
+		
+		else {paint.setColor(Color.GRAY);}
+		
+		/*
 		else if (( 
 		        (i == getCurrentLoc()+5 || i == getCurrentLoc()-5) ||
 		        (i == getCurrentLoc() + 1 && (getCurrentLoc()+1) % 5 !=0) || 
 		        (i == (getCurrentLoc() - 1) && (i+1) % 5  != 0)
 		        )) 
 		        {
+			
 			paint.setColor(Color.GREEN);
 			
 		} else{
 			paint.setColor(Color.GRAY);	
 		}
+		*/
+		
 	}
 
 	private Paint getPaint(Location location){

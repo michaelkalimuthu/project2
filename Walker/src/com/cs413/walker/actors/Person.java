@@ -13,7 +13,8 @@ public class Person extends AbstractActor implements Actor {
 	
 	@Override
 	public void move(Location newLocation) {
-		this.location = newLocation;
+		if (newLocation.canAddActor())
+			this.location = newLocation;
 	}
 
 }
