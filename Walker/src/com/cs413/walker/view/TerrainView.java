@@ -110,14 +110,12 @@ public class TerrainView extends View {
 		paint = new Paint();
 
 		Rect rect = new Rect();
+		
+		runGrid(canvas);
+		
 		int countHeight = 0;
-
 		boolean first = true;
-
-
 		canvas.drawColor(Color.WHITE);
-
-		String text = "";
 		int left = 0;
 		int top = 0;
 		int right = canvas.getWidth()/5;
@@ -130,19 +128,8 @@ public class TerrainView extends View {
 		if (!initDraw)
 			movingOptions.clear();
 
-
-		int loc = runGrid(canvas);
-		Log.d(TAG, String.valueOf(loc) + " LOC");
-		//       Log.d(TAG, String.valueOf(loc));
-		if (loc == UP || loc == DOWN){
-			setCurrentLoc(0);					//eventually will be get up/down neighbor and set loc to that. right now just go back to tile 0
-		}
-
 		for (int i = 0; i<45; i++){
 			setUpNeighbors(i);
-
-
-			// paint.setColor(Color.BLACK);
 			paint.setStyle(Paint.Style.FILL);
 			if (stroke){
 				paint.setStyle(Paint.Style.FILL);
@@ -164,22 +151,12 @@ public class TerrainView extends View {
 
 			int x = (int) rect.exactCenterX();
 			int y = (int) rect.exactCenterY();
-
-
-
-
-			text = String.valueOf(count);
-			canvas.drawText(text, x, y, paint);
-
-
 			canvas.drawRect(rect, paint);
-
 			if (i == getCurrentLoc())
-				canvas.drawBitmap(player, x, y, paint);
+				canvas.drawBitmap(player, x-20, y-25, paint);
 
 			left = right;
 			right += inc; 
-
 			count++;
 			countHeight++;
 
@@ -198,7 +175,7 @@ public class TerrainView extends View {
 		paint.setStyle(Paint.Style.STROKE);
 
 		rect.set(0, bRow, canvas.getWidth()/2, canvas.getHeight());
-		gridMap.put(DOWN, new GridCell(0, bRow, canvas.getWidth()/2, canvas.getHeight()));
+		gridMap.put(DOWN, new GridCell(0, canvas.getWidth()/2, bRow, canvas.getHeight()));
 
 		int x = (int) rect.exactCenterX();
 		int y = (int) rect.exactCenterY();
@@ -211,7 +188,7 @@ public class TerrainView extends View {
 		canvas.drawRect(rect, paint);
 
 		rect.set(canvas.getWidth()/2, bRow, canvas.getWidth(), canvas.getHeight());
-		gridMap.put(UP, new GridCell(canvas.getWidth()/2, bRow, canvas.getWidth(), canvas.getHeight()));
+		gridMap.put(UP, new GridCell(canvas.getWidth()/2, canvas.getWidth(),  bRow,  canvas.getHeight()));
 
 		x = (int) rect.exactCenterX();
 		y = (int) rect.exactCenterY();
@@ -243,20 +220,7 @@ public class TerrainView extends View {
 		int inc = canvas.getWidth()/5;
 		int bottom = canvas.getHeight()/10;
 		int bottomInc = canvas.getHeight()/10;
-		int floor = canvas.getHeight();
-		//       Log.d(TAG, String.valueOf(bottom));
-		int count = 0;
-		float clickX = getPlaceHolderX();
-		float clickY = getPlaceHolderY();
 
-		int bRow = canvas.getHeight() - (canvas.getHeight()/10);
-/*
-		if (clickX < canvas.getWidth()/2 && clickY > bRow){
-			location = DOWN;
-		} else if (clickX > canvas.getWidth()/2 && clickY > bRow){
-			location = UP;
-		}
-*/
 		for (int i=0; i<45; i ++){
 
 			if (countHeight == 5){

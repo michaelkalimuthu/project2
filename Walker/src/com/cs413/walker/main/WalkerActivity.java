@@ -74,13 +74,13 @@ public class WalkerActivity extends Activity {
 					Log.d(TAG, String.valueOf(view.isCanGoDown()));
 					Log.d(TAG, String.valueOf(view.isCanGoUp()));
 
-					if (view.isCanGoDown() && clickX >= down.getLeft() && clickX <=down.getRight()
+					if (view.isCanGoDown() && clickX >= down.getLeft() && clickX <=down.getRight()  //if down button pressed
 							&& clickY<=down.getTop() && clickY >= down.getBottom()){
 						player.move(player.getLocation().getNeighbors().get(Neighbor.BELOW));
 						view.changeLevel(-1);
 						view.notify(player.getLocation(), player);
 						view.invalidate();
-					} else if(view.isCanGoUp() && clickX >= up.getLeft() && clickX <=up.getRight()
+					} else if(view.isCanGoUp() && clickX >= up.getLeft() && clickX <=up.getRight()  //if up button pressed
 							&& clickY<=up.getTop() && clickY >= up.getBottom()){
 						player.move(player.getLocation().getNeighbors().get(Neighbor.ABOVE));
 						view.changeLevel(1);
