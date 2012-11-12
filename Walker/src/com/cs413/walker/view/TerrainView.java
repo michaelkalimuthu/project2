@@ -30,8 +30,8 @@ public class TerrainView extends View {
 	private static final String TAG = "VIEW";
 	private Location start;
 
-	private static final int UP = -1;
-	private static final int DOWN = -2;
+	public static final int UP = -1;
+	public static final int DOWN = -2;
 
 	private Actor actor;
 	private Toast toast;
@@ -55,6 +55,9 @@ public class TerrainView extends View {
 
 	boolean init = true;
 	boolean initDraw = true;
+	
+	boolean canGoUp;
+	boolean canGoDown;
 
 	Bitmap player = BitmapFactory.decodeResource(getResources(), R.drawable.player);
 	Bitmap upRed = BitmapFactory.decodeResource(getResources(), R.drawable.up_red);
@@ -63,9 +66,11 @@ public class TerrainView extends View {
 	Bitmap downGreen = BitmapFactory.decodeResource(getResources(), R.drawable.down_green);
 
 	public TerrainView(Context context, HashMap<Integer, ArrayList<Location>> map, Actor actor) {
-		
+
 		super(context);
 		this.context = context;
+		canGoUp = false;
+		canGoDown = false;
 		this.start = actor.getLocation();
 		this.map = map;
 		setLevel(1);
@@ -101,12 +106,14 @@ public class TerrainView extends View {
 		// canvas.drawColor(Color.WHITE);
 		setCurrentLoc(mapping.get(actor.getLocation()));
 
+
 		paint = new Paint();
 
 		Rect rect = new Rect();
 		int countHeight = 0;
 
 		boolean first = true;
+
 
 		canvas.drawColor(Color.WHITE);
 
@@ -132,7 +139,7 @@ public class TerrainView extends View {
 		}
 
 		for (int i = 0; i<45; i++){
-			setUpPaint(i);
+			setUpNeighbors(i);
 
 
 			// paint.setColor(Color.BLACK);
@@ -191,22 +198,32 @@ public class TerrainView extends View {
 		paint.setStyle(Paint.Style.STROKE);
 
 		rect.set(0, bRow, canvas.getWidth()/2, canvas.getHeight());
+		gridMap.put(DOWN, new GridCell(0, bRow, canvas.getWidth()/2, canvas.getHeight()));
 
 		int x = (int) rect.exactCenterX();
 		int y = (int) rect.exactCenterY();
-
-		canvas.drawBitmap(downRed, x, y-20, paint);
+		if (canGoDown){
+			canvas.drawBitmap(downGreen, x, y-20, paint);
+		} else{
+			canvas.drawBitmap(upRed, x, y-20, paint);
+		}
 
 		canvas.drawRect(rect, paint);
 
 		rect.set(canvas.getWidth()/2, bRow, canvas.getWidth(), canvas.getHeight());
+		gridMap.put(UP, new GridCell(canvas.getWidth()/2, bRow, canvas.getWidth(), canvas.getHeight()));
 
 		x = (int) rect.exactCenterX();
 		y = (int) rect.exactCenterY();
-
-		canvas.drawBitmap(upRed, x, y-20, paint);
+		if (canGoUp){
+			canvas.drawBitmap(upGreen, x, y-20, paint);
+		} else {
+			canvas.drawBitmap(upRed, x, y-20, paint);
+		}
 
 		canvas.drawRect(rect, paint);
+
+
 
 	}
 
@@ -216,7 +233,8 @@ public class TerrainView extends View {
 
 		int location = getCurrentLoc();
 
-
+		setCanGoUp(false);
+		setCanGoDown(false);
 
 		int countHeight = 0;
 		int left = 0;
@@ -232,13 +250,13 @@ public class TerrainView extends View {
 		float clickY = getPlaceHolderY();
 
 		int bRow = canvas.getHeight() - (canvas.getHeight()/10);
-
+/*
 		if (clickX < canvas.getWidth()/2 && clickY > bRow){
 			location = DOWN;
 		} else if (clickX > canvas.getWidth()/2 && clickY > bRow){
 			location = UP;
 		}
-
+*/
 		for (int i=0; i<45; i ++){
 
 			if (countHeight == 5){
@@ -273,7 +291,7 @@ public class TerrainView extends View {
 
 
 
-	private void setUpPaint(int i) {
+	private void setUpNeighbors(int i) {
 		int[] neighbors = new int[4];
 		HashMap<Neighbor, Location> m = map.get(getLevel()).get(getCurrentLoc()).getNeighbors();
 
@@ -325,6 +343,19 @@ public class TerrainView extends View {
 
 		else {paint.setColor(Color.GRAY);}
 
+
+		if (m.get(Neighbor.ABOVE) != null && m.get(Neighbor.ABOVE).canAddActor()){
+			movingOptions.add(mapping.get(m.get(Neighbor.ABOVE)));
+			setCanGoUp(true);
+		} else if (m.get(Neighbor.BELOW) != null && m.get(Neighbor.BELOW).canAddActor()){
+			movingOptions.add(mapping.get(m.get(Neighbor.BELOW)));		
+			setCanGoDown(true);
+		} else{
+			setCanGoDown(false);
+			setCanGoUp(false);
+		}
+
+
 		/*
 		else if (( 
 		        (i == getCurrentLoc()+5 || i == getCurrentLoc()-5) ||
@@ -341,19 +372,23 @@ public class TerrainView extends View {
 		 */
 
 	}
+
+
+
+
 	public void notify(Location newLocation, Actor player){
 		String text = "Location " + newLocation.toString() + " entered by actor " + player.toString();
-		
+
 		if (toast != null){
 			toast.cancel();
 		}
-		
+
 		toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
 		toast.show();
 	}
 
 	private void setMapping(){
-
+		mapping.clear();
 		for (int i=0; i<map.get(getLevel()).size(); i++)
 			mapping.put(map.get(getLevel()).get(i), i);
 	}
@@ -407,6 +442,27 @@ public class TerrainView extends View {
 	}
 	public ArrayList<Integer> getMovingOptions(){
 		return movingOptions;
+	}
+
+
+
+	public boolean isCanGoUp() {
+		return canGoUp;
+	}
+	private void setCanGoUp(boolean canGoUp) {
+		this.canGoUp = canGoUp;
+	}
+
+	public void changeLevel(int dir){
+		setLevel(getLevel() + dir);
+		setMapping();
+	}
+
+	public boolean isCanGoDown() {
+		return canGoDown;
+	}
+	private void setCanGoDown(boolean canGoDown) {
+		this.canGoDown = canGoDown;
 	}
 
 }
