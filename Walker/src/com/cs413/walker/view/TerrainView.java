@@ -36,9 +36,11 @@ public class TerrainView extends View {
 	private Actor actor;
 	
 	private HashMap<Integer, ArrayList<Location>> map;
-	private HashMap<Integer, Location> mapping;
+	private HashMap<Location, Integer> mapping;
 	
 	int currentLoc;
+	
+	int level;
 	
 	float placeHolderX;
 	float placeHolderY;
@@ -47,23 +49,27 @@ public class TerrainView extends View {
 	
 	boolean stroke = false;
 	
+	boolean init = true;
+	
 	  Bitmap player = BitmapFactory.decodeResource(getResources(), R.drawable.player);
       Bitmap upRed = BitmapFactory.decodeResource(getResources(), R.drawable.up_red);
       Bitmap downRed = BitmapFactory.decodeResource(getResources(), R.drawable.down_red);
       Bitmap upGreen = BitmapFactory.decodeResource(getResources(), R.drawable.up_green);
       Bitmap downGreen = BitmapFactory.decodeResource(getResources(), R.drawable.down_green);
 
-	public TerrainView(Context context, Location start, HashMap<Integer, ArrayList<Location>> map) {
+	public TerrainView(Context context, HashMap<Integer, ArrayList<Location>> map, Actor actor) {
 		super(context);
-		this.start = start;
+		this.start = actor.getLocation();
 		this.map = map;
-		DisplayMetrics metrics = new DisplayMetrics();
-		int x = getContext().getResources().getDisplayMetrics().widthPixels;
-		int y = getContext().getResources().getDisplayMetrics().heightPixels;
+		setLevel(1);
+
+		mapping = new HashMap<Location, Integer>();
+		setMapping();
 		
 		
-		
-		currentLoc = 0;
+		Log.d(TAG, String.valueOf(mapping.containsKey(start)));
+
+		setCurrentLoc(mapping.get(actor.getLocation()));
 
 		setFocusable(true);
 		
@@ -89,7 +95,7 @@ public class TerrainView extends View {
 
         boolean first = true;
         
-        canvas.drawColor(Color.GRAY);
+        canvas.drawColor(Color.WHITE);
         
         String text = "";
         int left = 0;
@@ -191,8 +197,8 @@ public class TerrainView extends View {
 
 
 	private int runGrid(Canvas canvas){
-    	mapping = new HashMap<Integer, Location>();
-    	int location = 0;
+    	
+    	int location = getCurrentLoc();
     	
     	int countHeight = 0;
         int left = 0;
@@ -225,7 +231,7 @@ public class TerrainView extends View {
         		countHeight = 0;
         	}
         	
-        	if (clickX >= left && clickX <=right && clickY>=top && clickY <=bottom){
+        	if (!init && clickX >= left && clickX <=right && clickY>=top && clickY <=bottom){
         		setCurrentLoc(i);
         		location = i;
         	}
@@ -237,13 +243,13 @@ public class TerrainView extends View {
         	
         }
 
-        
+        init = false;
         return location;
     }
     
     private void setUpPaint(int i) {
     	int[] neighbors = new int[4];
-    	HashMap<Neighbor, Location> m = map.get(1).get(getCurrentLoc()).getNeighbors();
+    	HashMap<Neighbor, Location> m = map.get(getLevel()).get(getCurrentLoc()).getNeighbors();
     	
     	for (Map.Entry<Neighbor, Location> neigh : m.entrySet()){
     		
@@ -305,6 +311,12 @@ public class TerrainView extends View {
 		*/
 		
 	}
+    
+    private void setMapping(){
+    	
+    	for (int i=0; i<map.get(getLevel()).size(); i++)
+    		mapping.put(map.get(getLevel()).get(i), i);
+    }
 
 	private Paint getPaint(Location location){
     	Paint paint = new Paint();
@@ -344,7 +356,12 @@ public class TerrainView extends View {
 		this.currentLoc = currentLoc;
 	}
 	
-	
+	public int getLevel(){
+		return level;
+	}
+	public void setLevel(int level){
+		this.level = level;
+	}
 	
 
 }

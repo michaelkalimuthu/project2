@@ -28,6 +28,8 @@ public class WalkerActivity extends Activity {
 	ArrayList<Location> one;
 	ArrayList<Location> two;
 	ArrayList<Location> three;
+	
+	Actor player;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,9 +46,9 @@ public class WalkerActivity extends Activity {
         setContentView(R.layout.activity_walker);
         Location l = new DefaultLocation();
         
-        Actor player = new Person("player", l);
-        final TerrainView view = new TerrainView(this, l, levels);
-        view.setActor(player);
+        
+        final TerrainView view = new TerrainView(this, levels, player);
+        
         
         
 		OnTouchListener listener = new OnTouchListener(){
@@ -100,6 +102,7 @@ public class WalkerActivity extends Activity {
     		}
     	}	
     	
+    	player = new Person("Player", one.get(12));
     	
     	levels.put(1, one);
     	

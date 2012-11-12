@@ -2,11 +2,17 @@ package com.cs413.walker.actors;
 
 import com.cs413.walker.locations.Location;
 
-public class AbstractActor{
+public abstract class AbstractActor{
 	
-	private Location location;
+	protected Location location;
 	
-	private String name;
+	protected String name;
+	
+	public AbstractActor(String name, Location location){
+		this.name = name;
+		this.location = location;
+	}
+	
 	
 	public String getName(){
 		return name;
