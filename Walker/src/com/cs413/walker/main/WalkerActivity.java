@@ -68,7 +68,7 @@ public class WalkerActivity extends Activity {
 					movingOptions = view.getMovingOptions();
 					for (Map.Entry<Integer, GridCell> cell : gridMap.entrySet()){
 						if (clickX >= cell.getValue().getLeft() && clickX <=cell.getValue().getRight()
-											&& clickY>=cell.getValue().getTop() && clickY <= cell.getValue().getBottom()){
+								&& clickY>=cell.getValue().getTop() && clickY <= cell.getValue().getBottom()){
 							for (Map.Entry<Location, Integer> mapping : view.getMapping().entrySet()){
 								if (mapping.getValue() == cell.getKey() && movingOptions.contains(mapping.getValue()))
 									player.move(mapping.getKey());
@@ -107,7 +107,7 @@ public class WalkerActivity extends Activity {
 		}
 
 		for (int i = 0; i<44; i++){
-			if (i < 39)
+			if (i <= 39)
 				one.get(i).addNeighbor(Neighbor.SOUTH, one.get(i + 5));
 			if (i % 5 == 0){
 				one.get(i).addNeighbor(Neighbor.EAST, one.get(i+1));
