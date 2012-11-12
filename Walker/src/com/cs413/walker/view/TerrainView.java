@@ -37,6 +37,8 @@ public class TerrainView extends View {
 	
 	private HashMap<Integer, ArrayList<Location>> map;
 	private HashMap<Location, Integer> mapping;
+	private HashMap<Integer, GridCell> gridMap;
+	private ArrayList<Integer> movingOptions;
 	
 	int currentLoc;
 	
@@ -50,6 +52,7 @@ public class TerrainView extends View {
 	boolean stroke = false;
 	
 	boolean init = true;
+	boolean initDraw = true;
 	
 	  Bitmap player = BitmapFactory.decodeResource(getResources(), R.drawable.player);
       Bitmap upRed = BitmapFactory.decodeResource(getResources(), R.drawable.up_red);
@@ -62,7 +65,12 @@ public class TerrainView extends View {
 		this.start = actor.getLocation();
 		this.map = map;
 		setLevel(1);
-
+		
+		this.actor = actor;
+		
+		gridMap = new HashMap<Integer, GridCell>();
+		
+		movingOptions = new ArrayList<Integer>();
 		mapping = new HashMap<Location, Integer>();
 		setMapping();
 		
@@ -87,6 +95,7 @@ public class TerrainView extends View {
     */
     @Override protected void onDraw(Canvas canvas) {
        // canvas.drawColor(Color.WHITE);
+    	setCurrentLoc(mapping.get(actor.getLocation()));
  
         paint = new Paint();
 
@@ -106,6 +115,9 @@ public class TerrainView extends View {
         int bottomInc = canvas.getHeight()/10;
 
         int count = 0;
+        
+        if (!initDraw)
+    		movingOptions.clear();
 
         
         int loc = runGrid(canvas);
@@ -141,15 +153,13 @@ public class TerrainView extends View {
         
         	int x = (int) rect.exactCenterX();
         	int y = (int) rect.exactCenterY();
-        	
-      //  	Log.d(TAG, "clickX = " + String.valueOf(clickX)
-      //  			+ " clickY = " + String.valueOf(clickY));
+
         	
         	
 
         	text = String.valueOf(count);
         	canvas.drawText(text, x, y, paint);
-        	//canvas.drawPoint(center, center2, paint);
+        	
 
         	canvas.drawRect(rect, paint);
         	
@@ -158,12 +168,14 @@ public class TerrainView extends View {
         	
         	left = right;
         	right += inc; 
-        //canvas.drawRect(0, 50, getWidth() - 1, getHeight() -1, paint);
+
         	count++;
         	countHeight++;
         	
         }   
         drawButtons(rect, canvas);
+        
+        initDraw = false;
         
         //canvas.drawRect(10, 10, 10, 10, paint);
     }
@@ -200,6 +212,8 @@ public class TerrainView extends View {
     	
     	int location = getCurrentLoc();
     	
+    	
+    	
     	int countHeight = 0;
         int left = 0;
         int top = 0;
@@ -230,11 +244,13 @@ public class TerrainView extends View {
         		bottom += bottomInc;
         		countHeight = 0;
         	}
-        	
+        	gridMap.put(i, new GridCell(left, right, bottom, top));
+        	/*
         	if (!init && clickX >= left && clickX <=right && clickY>=top && clickY <=bottom){
         		setCurrentLoc(i);
         		location = i;
         	}
+        	*/
         	left = right;
         	right += inc; 
         	
@@ -247,7 +263,13 @@ public class TerrainView extends View {
         return location;
     }
     
-    private void setUpPaint(int i) {
+    public HashMap<Integer, GridCell> getGridMap() {
+		return gridMap;
+	}
+
+
+
+	private void setUpPaint(int i) {
     	int[] neighbors = new int[4];
     	HashMap<Neighbor, Location> m = map.get(getLevel()).get(getCurrentLoc()).getNeighbors();
     	
@@ -265,6 +287,7 @@ public class TerrainView extends View {
 			if (m.get(Neighbor.SOUTH) == null ){
 				paint.setColor(Color.GRAY);
 			} else if (m.get(Neighbor.SOUTH).canAddActor()){
+				movingOptions.add(mapping.get(m.get(Neighbor.SOUTH)));
 				paint.setColor(Color.GREEN);
 			} else {paint.setColor(Color.RED);}
 		} 
@@ -273,6 +296,7 @@ public class TerrainView extends View {
 			if (m.get(Neighbor.NORTH) == null ){
 				paint.setColor(Color.GRAY);
 			} else if (m.get(Neighbor.NORTH).canAddActor()){
+				movingOptions.add(mapping.get(m.get(Neighbor.NORTH)));
 				paint.setColor(Color.GREEN);
 			} else {paint.setColor(Color.RED);}
 		} 
@@ -281,6 +305,7 @@ public class TerrainView extends View {
 			if (m.get(Neighbor.EAST) == null ){
 				paint.setColor(Color.GRAY);
 			} else if (m.get(Neighbor.EAST).canAddActor()){
+				movingOptions.add(mapping.get(m.get(Neighbor.EAST)));
 				paint.setColor(Color.GREEN);
 			} else {paint.setColor(Color.RED);}
 		} 
@@ -289,6 +314,7 @@ public class TerrainView extends View {
 			if (m.get(Neighbor.WEST) == null ){
 				paint.setColor(Color.GRAY);
 			} else if (m.get(Neighbor.WEST).canAddActor()){
+				movingOptions.add(mapping.get(m.get(Neighbor.WEST)));
 				paint.setColor(Color.GREEN);
 			} else {paint.setColor(Color.RED);}
 		}
@@ -316,6 +342,9 @@ public class TerrainView extends View {
     	
     	for (int i=0; i<map.get(getLevel()).size(); i++)
     		mapping.put(map.get(getLevel()).get(i), i);
+    }
+    public HashMap<Location, Integer> getMapping(){
+    	return mapping;
     }
 
 	private Paint getPaint(Location location){
@@ -362,6 +391,8 @@ public class TerrainView extends View {
 	public void setLevel(int level){
 		this.level = level;
 	}
-	
+	public ArrayList<Integer> getMovingOptions(){
+		return movingOptions;
+	}
 
 }
