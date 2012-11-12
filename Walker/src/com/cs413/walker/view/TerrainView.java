@@ -11,9 +11,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.locations.Location;
@@ -34,6 +34,7 @@ public class TerrainView extends View {
 	private static final int DOWN = -2;
 
 	private Actor actor;
+	private Toast toast;
 
 	private HashMap<Integer, ArrayList<Location>> map;
 	private HashMap<Location, Integer> mapping;
@@ -46,6 +47,7 @@ public class TerrainView extends View {
 
 	float placeHolderX;
 	float placeHolderY;
+	Context context;
 
 	Paint paint;
 
@@ -61,7 +63,9 @@ public class TerrainView extends View {
 	Bitmap downGreen = BitmapFactory.decodeResource(getResources(), R.drawable.down_green);
 
 	public TerrainView(Context context, HashMap<Integer, ArrayList<Location>> map, Actor actor) {
+		
 		super(context);
+		this.context = context;
 		this.start = actor.getLocation();
 		this.map = map;
 		setLevel(1);
@@ -336,6 +340,16 @@ public class TerrainView extends View {
 		}
 		 */
 
+	}
+	public void notify(Location newLocation, Actor player){
+		String text = "Location " + newLocation.toString() + " entered by actor " + player.toString();
+		
+		if (toast != null){
+			toast.cancel();
+		}
+		
+		toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+		toast.show();
 	}
 
 	private void setMapping(){

@@ -17,6 +17,7 @@ public interface Actor {
 	 * returns actor's Location
 	 */
 	public Location getLocation();
-
+	
+	String toString();
 
 }

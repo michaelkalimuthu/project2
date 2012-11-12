@@ -44,5 +44,7 @@ public interface Location {
 	boolean canAddActor();
 	
 	String getName();
+	
+	String toString();
 
 }

@@ -70,8 +70,10 @@ public class WalkerActivity extends Activity {
 						if (clickX >= cell.getValue().getLeft() && clickX <=cell.getValue().getRight()
 								&& clickY>=cell.getValue().getTop() && clickY <= cell.getValue().getBottom()){
 							for (Map.Entry<Location, Integer> mapping : view.getMapping().entrySet()){
-								if (mapping.getValue() == cell.getKey() && movingOptions.contains(mapping.getValue()))
+								if (mapping.getValue() == cell.getKey() && movingOptions.contains(mapping.getValue())){
 									player.move(mapping.getKey());
+									view.notify(mapping.getKey(), player);
+								}
 							}
 						}
 					}

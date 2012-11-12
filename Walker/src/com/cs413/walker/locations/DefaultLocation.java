@@ -84,6 +84,11 @@ public class DefaultLocation implements Location{
 	public void setOppositeNeighbor(Location location, Location opposite, Neighbor neighbor){
 		location.getNeighbors().put(Neighbor.getOpposite(neighbor), opposite);
 	}
+	
+	@Override
+	public String toString(){
+		return this.name;
+	}
 
 	
 

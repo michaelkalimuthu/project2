@@ -2,7 +2,7 @@ package com.cs413.walker.actors;
 
 import com.cs413.walker.locations.Location;
 
-public abstract class AbstractActor{
+public abstract class AbstractActor implements Actor{
 	
 	protected Location location;
 	
@@ -28,6 +28,10 @@ public abstract class AbstractActor{
 		this.location = location;
 	}
 	
+	@Override
+	public String toString(){
+		return this.name;
+	}
 	
 
 }
