@@ -133,10 +133,10 @@ public class WalkerActivity extends Activity {
 			}
 		}
 
-
+		int j = 45;
 
 		for (int i = 0; i<45; i++){
-			int j = 45;
+			
 			if (i == 25 || i == 12 || i == 4){
 				loc = new Water(String.valueOf(j++));
 				two.add(loc);
@@ -146,7 +146,7 @@ public class WalkerActivity extends Activity {
 			}
 		}
 
-		for (int i = 0; i<44; i++){
+		for (int i = 0; i<45; i++){
 			if (i <= 39){
 				one.get(i).addNeighbor(Neighbor.SOUTH, one.get(i + 5));
 				two.get(i).addNeighbor(Neighbor.SOUTH, two.get(i + 5));
