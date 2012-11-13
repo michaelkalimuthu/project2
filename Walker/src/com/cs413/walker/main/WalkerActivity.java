@@ -39,7 +39,7 @@ public class WalkerActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		//this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		one = new ArrayList<Location>();
 		two = new ArrayList<Location>();
 		levels = new HashMap<Integer, ArrayList<Location>>();

@@ -19,5 +19,7 @@ public interface Actor {
 	public Location getLocation();
 	
 	String toString();
+	
+	String getName();
 
 }

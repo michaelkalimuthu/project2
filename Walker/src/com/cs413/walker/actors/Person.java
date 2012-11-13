@@ -14,5 +14,9 @@ public class Person extends AbstractActor implements Actor {
 		if (newLocation.canAddActor())
 			location = newLocation;
 	}
+	
+	public String getName(){
+		return super.getName();
+	}
 
 }

@@ -56,7 +56,7 @@ public class LocationTest extends TestCase {
 		
 		return map;
 	}
-	
+	@Test
 	public void testAddNeighbor(){
 		center.addNeighbor(Neighbor.NORTH, north);
 		center.addNeighbor(Neighbor.SOUTH, south);

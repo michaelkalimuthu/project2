@@ -13,7 +13,7 @@ public abstract class AbstractActor implements Actor{
 		this.location = location;
 	}
 	
-	
+	@Override
 	public String getName(){
 		return name;
 	}
