@@ -350,6 +350,8 @@ public class TerrainView extends View {
 
 		toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
 		toast.show();
+		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(20);
 	}
 
 	private void setMapping(){
