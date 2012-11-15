@@ -182,7 +182,7 @@ public class TerrainView extends View {
 		if (canGoDown) {
 			canvas.drawBitmap(downGreen, x, y - 20, paint);
 		} else {
-			canvas.drawBitmap(upRed, x, y - 20, paint);
+			canvas.drawBitmap(downRed, x, y - 20, paint);
 		}
 
 		canvas.drawRect(rect, paint);
