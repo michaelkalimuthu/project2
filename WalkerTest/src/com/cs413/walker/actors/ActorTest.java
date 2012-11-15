@@ -1,4 +1,4 @@
-package com.test.walker.Actor;
+package com.cs413.walker.actors;
 
 import junit.framework.TestCase;
 
@@ -25,6 +25,7 @@ public class ActorTest extends TestCase{
 		super.tearDown();
 	}
 
+	
 	public void testMove(){
 		actor.move(new DefaultLocation("newLocation"));
 		assertNotSame("location", actor.getLocation().getName());

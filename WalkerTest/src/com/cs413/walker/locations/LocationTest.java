@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.test.walker.Location;
+package com.cs413.walker.locations;
 
 import java.util.ArrayList;
 import java.util.HashMap;

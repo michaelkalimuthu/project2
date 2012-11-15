@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.Window;
 
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.actors.Person;
@@ -39,7 +38,7 @@ public class WalkerActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		//this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		// this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		one = new ArrayList<Location>();
 		two = new ArrayList<Location>();
 		levels = new HashMap<Integer, ArrayList<Location>>();
@@ -48,21 +47,16 @@ public class WalkerActivity extends Activity {
 		movingOptions = new ArrayList<Integer>();
 		setUpGame();
 
-
-
 		setContentView(R.layout.activity_walker);
 		Location l = new DefaultLocation();
 
-
 		final TerrainView view = new TerrainView(this, levels, player);
 
-
-
-		OnTouchListener listener = new OnTouchListener(){
+		OnTouchListener listener = new OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					float clickX = event.getX();
 					float clickY = event.getY();
 					gridMap = view.getGridMap();
@@ -70,30 +64,45 @@ public class WalkerActivity extends Activity {
 
 					GridCell down = gridMap.get(TerrainView.DOWN);
 					GridCell up = gridMap.get(TerrainView.UP);
-					
+
 					Log.d(TAG, String.valueOf(view.isCanGoDown()));
 					Log.d(TAG, String.valueOf(view.isCanGoUp()));
 
-					if (view.isCanGoDown() && clickX >= down.getLeft() && clickX <=down.getRight()  //if down button pressed
-							&& clickY<=down.getTop() && clickY >= down.getBottom()){
-						player.move(player.getLocation().getNeighbors().get(Neighbor.BELOW));
+					if (view.isCanGoDown()
+							&& clickX >= down.getLeft()
+							&& clickX <= down.getRight() // if down button
+															// pressed
+							&& clickY <= down.getTop()
+							&& clickY >= down.getBottom()) {
+						player.move(player.getLocation().getNeighbors()
+								.get(Neighbor.BELOW));
 						view.changeLevel(-1);
 						view.notify(player.getLocation(), player);
 						view.invalidate();
-					} else if(view.isCanGoUp() && clickX >= up.getLeft() && clickX <=up.getRight()  //if up button pressed
-							&& clickY<=up.getTop() && clickY >= up.getBottom()){
-						player.move(player.getLocation().getNeighbors().get(Neighbor.ABOVE));
+					} else if (view.isCanGoUp()
+							&& clickX >= up.getLeft()
+							&& clickX <= up.getRight() // if up button pressed
+							&& clickY <= up.getTop()
+							&& clickY >= up.getBottom()) {
+						player.move(player.getLocation().getNeighbors()
+								.get(Neighbor.ABOVE));
 						view.changeLevel(1);
 						view.notify(player.getLocation(), player);
 						view.invalidate();
-					} else{
+					} else {
 
-						for (Map.Entry<Integer, GridCell> cell : gridMap.entrySet()){
+						for (Map.Entry<Integer, GridCell> cell : gridMap
+								.entrySet()) {
 
-							if (clickX >= cell.getValue().getLeft() && clickX <=cell.getValue().getRight()
-									&& clickY>=cell.getValue().getTop() && clickY <= cell.getValue().getBottom()){
-								for (Map.Entry<Location, Integer> mapping : view.getMapping().entrySet()){
-									if (mapping.getValue() == cell.getKey() && movingOptions.contains(mapping.getValue())){
+							if (clickX >= cell.getValue().getLeft()
+									&& clickX <= cell.getValue().getRight()
+									&& clickY >= cell.getValue().getTop()
+									&& clickY <= cell.getValue().getBottom()) {
+								for (Map.Entry<Location, Integer> mapping : view
+										.getMapping().entrySet()) {
+									if (mapping.getValue() == cell.getKey()
+											&& movingOptions.contains(mapping
+													.getValue())) {
 										player.move(mapping.getKey());
 										view.notify(mapping.getKey(), player);
 										view.invalidate();
@@ -102,14 +111,12 @@ public class WalkerActivity extends Activity {
 							}
 						}
 					}
-					
 
 					return true;
 				}
 
 				return false;
 			}
-
 
 		};
 
@@ -118,16 +125,14 @@ public class WalkerActivity extends Activity {
 		setContentView(view);
 	}
 
-
-
-	private void setUpGame(){
+	private void setUpGame() {
 		Location loc = null;
 
-		for (int i = 0; i < 45; i++){
-			if (i == 22){
+		for (int i = 0; i < 45; i++) {
+			if (i == 22) {
 				loc = new Water(String.valueOf(i));
 				one.add(loc);
-			} else{
+			} else {
 				loc = new DefaultLocation(String.valueOf(i));
 				one.add(loc);
 			}
@@ -135,29 +140,29 @@ public class WalkerActivity extends Activity {
 
 		int j = 45;
 
-		for (int i = 0; i<45; i++){
-			
-			if (i == 25 || i == 12 || i == 4){
+		for (int i = 0; i < 45; i++) {
+
+			if (i == 25 || i == 12 || i == 4) {
 				loc = new Water(String.valueOf(j++));
 				two.add(loc);
-			} else{
+			} else {
 				loc = new DefaultLocation(String.valueOf(j++));
 				two.add(loc);
 			}
 		}
 
-		for (int i = 0; i<45; i++){
-			if (i <= 39){
+		for (int i = 0; i < 45; i++) {
+			if (i <= 39) {
 				one.get(i).addNeighbor(Neighbor.SOUTH, one.get(i + 5));
 				two.get(i).addNeighbor(Neighbor.SOUTH, two.get(i + 5));
 			}
-			if (i % 5 == 0){
-				one.get(i).addNeighbor(Neighbor.EAST, one.get(i+1));
-				two.get(i).addNeighbor(Neighbor.EAST, two.get(i+1));
-			} else if ((i + 1) % 5 == 0){
+			if (i % 5 == 0) {
+				one.get(i).addNeighbor(Neighbor.EAST, one.get(i + 1));
+				two.get(i).addNeighbor(Neighbor.EAST, two.get(i + 1));
+			} else if ((i + 1) % 5 == 0) {
 				one.get(i).addNeighbor(Neighbor.WEST, one.get(i - 1));
 				two.get(i).addNeighbor(Neighbor.WEST, two.get(i - 1));
-			} else{
+			} else {
 				one.get(i).addNeighbor(Neighbor.EAST, one.get(i + 1));
 				two.get(i).addNeighbor(Neighbor.EAST, two.get(i + 1));
 				one.get(i).addNeighbor(Neighbor.WEST, one.get(i - 1));
@@ -166,7 +171,7 @@ public class WalkerActivity extends Activity {
 		}
 
 		one.get(32).addNeighbor(Neighbor.ABOVE, two.get(5));
-		
+
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
 		player = new Person("Player", one.get(12));
@@ -175,8 +180,6 @@ public class WalkerActivity extends Activity {
 		levels.put(2, two);
 
 	}
-
-
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

@@ -20,6 +20,6 @@ public interface Actor {
 	
 	String toString();
 	
-	String getName();
+	public String getName();
 
 }
