@@ -21,15 +21,10 @@ import com.cs413.walker.locations.Location;
 import com.cs413.walker.locations.Neighbor;
 import com.example.walker.R;
 
-
-
-
-
 public class TerrainView extends View {
 
-
 	private static final String TAG = "VIEW";
-	private Location start;
+	private final Location start;
 
 	public static final int UP = -1;
 	public static final int DOWN = -2;
@@ -37,10 +32,10 @@ public class TerrainView extends View {
 	private Actor actor;
 	private Toast toast;
 
-	private HashMap<Integer, ArrayList<Location>> map;
-	private HashMap<Location, Integer> mapping;
-	private HashMap<Integer, GridCell> gridMap;
-	private ArrayList<Integer> movingOptions;
+	private final HashMap<Integer, ArrayList<Location>> map;
+	private final HashMap<Location, Integer> mapping;
+	private final HashMap<Integer, GridCell> gridMap;
+	private final ArrayList<Integer> movingOptions;
 
 	int currentLoc;
 
@@ -56,17 +51,23 @@ public class TerrainView extends View {
 
 	boolean init = true;
 	boolean initDraw = true;
-	
+
 	boolean canGoUp;
 	boolean canGoDown;
 
-	Bitmap player = BitmapFactory.decodeResource(getResources(), R.drawable.player);
-	Bitmap upRed = BitmapFactory.decodeResource(getResources(), R.drawable.up_red);
-	Bitmap downRed = BitmapFactory.decodeResource(getResources(), R.drawable.down_red);
-	Bitmap upGreen = BitmapFactory.decodeResource(getResources(), R.drawable.up_green);
-	Bitmap downGreen = BitmapFactory.decodeResource(getResources(), R.drawable.down_green);
+	Bitmap player = BitmapFactory.decodeResource(getResources(),
+			R.drawable.player);
+	Bitmap upRed = BitmapFactory.decodeResource(getResources(),
+			R.drawable.up_red);
+	Bitmap downRed = BitmapFactory.decodeResource(getResources(),
+			R.drawable.down_red);
+	Bitmap upGreen = BitmapFactory.decodeResource(getResources(),
+			R.drawable.up_green);
+	Bitmap downGreen = BitmapFactory.decodeResource(getResources(),
+			R.drawable.down_green);
 
-	public TerrainView(Context context, HashMap<Integer, ArrayList<Location>> map, Actor actor) {
+	public TerrainView(Context context,
+			HashMap<Integer, ArrayList<Location>> map, Actor actor) {
 
 		super(context);
 		this.context = context;
@@ -84,7 +85,6 @@ public class TerrainView extends View {
 		mapping = new HashMap<Location, Integer>();
 		setMapping();
 
-
 		Log.d(TAG, String.valueOf(mapping.containsKey(start)));
 
 		setCurrentLoc(mapping.get(actor.getLocation()));
@@ -93,121 +93,118 @@ public class TerrainView extends View {
 
 	}
 
-
-
 	/*
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(
-            getSuggestedMinimumWidth(),
-            getSuggestedMinimumHeight());
-    }
+	 * @Override protected void onMeasure(int widthMeasureSpec, int
+	 * heightMeasureSpec) { setMeasuredDimension( getSuggestedMinimumWidth(),
+	 * getSuggestedMinimumHeight()); }
 	 */
-	@Override protected void onDraw(Canvas canvas) {
+	@Override
+	protected void onDraw(Canvas canvas) {
 		// canvas.drawColor(Color.WHITE);
 		setCurrentLoc(mapping.get(actor.getLocation()));
-
 
 		paint = new Paint();
 
 		Rect rect = new Rect();
-		
+
 		runGrid(canvas);
-		
+
 		int countHeight = 0;
 		boolean first = true;
 		canvas.drawColor(Color.WHITE);
 		int left = 0;
 		int top = 0;
-		int right = canvas.getWidth()/5;
-		int inc = canvas.getWidth()/5;
-		int bottom = canvas.getHeight()/10;
-		int bottomInc = canvas.getHeight()/10;
+		int right = canvas.getWidth() / 5;
+		int inc = canvas.getWidth() / 5;
+		int bottom = canvas.getHeight() / 10;
+		int bottomInc = canvas.getHeight() / 10;
 
 		int count = 0;
 
-		if (!initDraw)
+		if (!initDraw) {
 			movingOptions.clear();
+		}
 
-		for (int i = 0; i<45; i++){
+		for (int i = 0; i < 45; i++) {
 			setUpNeighbors(i);
 			paint.setStyle(Paint.Style.FILL);
-			if (stroke){
+			if (stroke) {
 				paint.setStyle(Paint.Style.FILL);
 				stroke = false;
 			}
-			if (countHeight == 5){
+			if (countHeight == 5) {
 				left = 0;
 				right = inc;
 				top += bottomInc;
 				bottom += bottomInc;
 				countHeight = 0;
 			}
-			if (first){
-				rect.set(left, top , right, bottom);
+			if (first) {
+				rect.set(left, top, right, bottom);
 				first = false;
 			} else {
-				rect.set(left, top , right, bottom);
+				rect.set(left, top, right, bottom);
 			}
 
 			int x = (int) rect.exactCenterX();
 			int y = (int) rect.exactCenterY();
 			canvas.drawRect(rect, paint);
-			if (i == getCurrentLoc())
-				canvas.drawBitmap(player, x-20, y-25, paint);
+			if (i == getCurrentLoc()) {
+				canvas.drawBitmap(player, x - 20, y - 25, paint);
+			}
 
 			left = right;
-			right += inc; 
+			right += inc;
 			count++;
 			countHeight++;
 
-		}   
+		}
 		drawButtons(rect, canvas);
 
 		initDraw = false;
 
-		//canvas.drawRect(10, 10, 10, 10, paint);
+		// canvas.drawRect(10, 10, 10, 10, paint);
 	}
 
 	private void drawButtons(Rect rect, Canvas canvas) {
-		int bRow = canvas.getHeight() - (canvas.getHeight()/10);
+		int bRow = canvas.getHeight() - (canvas.getHeight() / 10);
 
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Paint.Style.STROKE);
 
-		rect.set(0, bRow, canvas.getWidth()/2, canvas.getHeight());
-		gridMap.put(DOWN, new GridCell(0, canvas.getWidth()/2, bRow, canvas.getHeight()));
+		rect.set(0, bRow, canvas.getWidth() / 2, canvas.getHeight());
+		gridMap.put(
+				DOWN,
+				new GridCell(0, canvas.getWidth() / 2, bRow, canvas.getHeight()));
 
 		int x = (int) rect.exactCenterX();
 		int y = (int) rect.exactCenterY();
-		if (canGoDown){
-			canvas.drawBitmap(downGreen, x, y-20, paint);
-		} else{
-			canvas.drawBitmap(upRed, x, y-20, paint);
+		if (canGoDown) {
+			canvas.drawBitmap(downGreen, x, y - 20, paint);
+		} else {
+			canvas.drawBitmap(upRed, x, y - 20, paint);
 		}
 
 		canvas.drawRect(rect, paint);
 
-		rect.set(canvas.getWidth()/2, bRow, canvas.getWidth(), canvas.getHeight());
-		gridMap.put(UP, new GridCell(canvas.getWidth()/2, canvas.getWidth(),  bRow,  canvas.getHeight()));
+		rect.set(canvas.getWidth() / 2, bRow, canvas.getWidth(),
+				canvas.getHeight());
+		gridMap.put(UP, new GridCell(canvas.getWidth() / 2, canvas.getWidth(),
+				bRow, canvas.getHeight()));
 
 		x = (int) rect.exactCenterX();
 		y = (int) rect.exactCenterY();
-		if (canGoUp){
-			canvas.drawBitmap(upGreen, x, y-20, paint);
+		if (canGoUp) {
+			canvas.drawBitmap(upGreen, x, y - 20, paint);
 		} else {
-			canvas.drawBitmap(upRed, x, y-20, paint);
+			canvas.drawBitmap(upRed, x, y - 20, paint);
 		}
 
 		canvas.drawRect(rect, paint);
 
-
-
 	}
 
-
-
-	private int runGrid(Canvas canvas){
+	private int runGrid(Canvas canvas) {
 
 		int location = getCurrentLoc();
 
@@ -217,14 +214,14 @@ public class TerrainView extends View {
 		int countHeight = 0;
 		int left = 0;
 		int top = 0;
-		int right = canvas.getWidth()/5;
-		int inc = canvas.getWidth()/5;
-		int bottom = canvas.getHeight()/10;
-		int bottomInc = canvas.getHeight()/10;
+		int right = canvas.getWidth() / 5;
+		int inc = canvas.getWidth() / 5;
+		int bottom = canvas.getHeight() / 10;
+		int bottomInc = canvas.getHeight() / 10;
 
-		for (int i=0; i<45; i ++){
+		for (int i = 0; i < 45; i++) {
 
-			if (countHeight == 5){
+			if (countHeight == 5) {
 				left = 0;
 				right = inc;
 				top += bottomInc;
@@ -233,14 +230,11 @@ public class TerrainView extends View {
 			}
 			gridMap.put(i, new GridCell(left, right, bottom, top));
 			/*
-        	if (!init && clickX >= left && clickX <=right && clickY>=top && clickY <=bottom){
-        		setCurrentLoc(i);
-        		location = i;
-        	}
+			 * if (!init && clickX >= left && clickX <=right && clickY>=top &&
+			 * clickY <=bottom){ setCurrentLoc(i); location = i; }
 			 */
 			left = right;
-			right += inc; 
-
+			right += inc;
 
 			countHeight++;
 
@@ -254,116 +248,121 @@ public class TerrainView extends View {
 		return gridMap;
 	}
 
-
-
 	private void setUpNeighbors(int i) {
 		int[] neighbors = new int[4];
-		HashMap<Neighbor, Location> m = map.get(getLevel()).get(getCurrentLoc()).getNeighbors();
+		HashMap<Neighbor, Location> m = map.get(getLevel())
+				.get(getCurrentLoc()).getNeighbors();
 
-		for (Map.Entry<Neighbor, Location> neigh : m.entrySet()){
+		for (Map.Entry<Neighbor, Location> neigh : m.entrySet()) {
 
 		}
 
-		if (i == getCurrentLoc()){
+		if (i == getCurrentLoc()) {
 			paint.setColor(Color.WHITE);
 			stroke = true;
 			return;
-		} 
-
-		if (i == getCurrentLoc() + 5){
-			if (m.get(Neighbor.SOUTH) == null ){
-				paint.setColor(Color.GRAY);
-			} else if (m.get(Neighbor.SOUTH).canAddActor()){
-				movingOptions.add(mapping.get(m.get(Neighbor.SOUTH)));
-				paint.setColor(Color.GREEN);
-			} else {paint.setColor(Color.RED);}
-		} 
-
-		else if (i == getCurrentLoc() - 5){
-			if (m.get(Neighbor.NORTH) == null ){
-				paint.setColor(Color.GRAY);
-			} else if (m.get(Neighbor.NORTH).canAddActor()){
-				movingOptions.add(mapping.get(m.get(Neighbor.NORTH)));
-				paint.setColor(Color.GREEN);
-			} else {paint.setColor(Color.RED);}
-		} 
-
-		else if (i == getCurrentLoc() + 1){
-			if (m.get(Neighbor.EAST) == null ){
-				paint.setColor(Color.GRAY);
-			} else if (m.get(Neighbor.EAST).canAddActor()){
-				movingOptions.add(mapping.get(m.get(Neighbor.EAST)));
-				paint.setColor(Color.GREEN);
-			} else {paint.setColor(Color.RED);}
-		} 
-
-		else if (i == getCurrentLoc() - 1){
-			if (m.get(Neighbor.WEST) == null ){
-				paint.setColor(Color.GRAY);
-			} else if (m.get(Neighbor.WEST).canAddActor()){
-				movingOptions.add(mapping.get(m.get(Neighbor.WEST)));
-				paint.setColor(Color.GREEN);
-			} else {paint.setColor(Color.RED);}
 		}
 
-		else {paint.setColor(Color.GRAY);}
+		if (i == getCurrentLoc() + 5) {
+			if (m.get(Neighbor.SOUTH) == null) {
+				paint.setColor(Color.GRAY);
+			} else if (m.get(Neighbor.SOUTH).canAddActor()) {
+				movingOptions.add(mapping.get(m.get(Neighbor.SOUTH)));
+				paint.setColor(Color.GREEN);
+			} else {
+				paint.setColor(Color.RED);
+			}
+		}
 
+		else if (i == getCurrentLoc() - 5) {
+			if (m.get(Neighbor.NORTH) == null) {
+				paint.setColor(Color.GRAY);
+			} else if (m.get(Neighbor.NORTH).canAddActor()) {
+				movingOptions.add(mapping.get(m.get(Neighbor.NORTH)));
+				paint.setColor(Color.GREEN);
+			} else {
+				paint.setColor(Color.RED);
+			}
+		}
 
-		if (m.get(Neighbor.ABOVE) != null && m.get(Neighbor.ABOVE).canAddActor()){
+		else if (i == getCurrentLoc() + 1) {
+			if (m.get(Neighbor.EAST) == null) {
+				paint.setColor(Color.GRAY);
+			} else if (m.get(Neighbor.EAST).canAddActor()) {
+				movingOptions.add(mapping.get(m.get(Neighbor.EAST)));
+				paint.setColor(Color.GREEN);
+			} else {
+				paint.setColor(Color.RED);
+			}
+		}
+
+		else if (i == getCurrentLoc() - 1) {
+			if (m.get(Neighbor.WEST) == null) {
+				paint.setColor(Color.GRAY);
+			} else if (m.get(Neighbor.WEST).canAddActor()) {
+				movingOptions.add(mapping.get(m.get(Neighbor.WEST)));
+				paint.setColor(Color.GREEN);
+			} else {
+				paint.setColor(Color.RED);
+			}
+		}
+
+		else {
+			paint.setColor(Color.GRAY);
+		}
+
+		if (m.get(Neighbor.ABOVE) != null
+				&& m.get(Neighbor.ABOVE).canAddActor()) {
 			movingOptions.add(mapping.get(m.get(Neighbor.ABOVE)));
 			setCanGoUp(true);
-		} else if (m.get(Neighbor.BELOW) != null && m.get(Neighbor.BELOW).canAddActor()){
-			movingOptions.add(mapping.get(m.get(Neighbor.BELOW)));		
+		} else if (m.get(Neighbor.BELOW) != null
+				&& m.get(Neighbor.BELOW).canAddActor()) {
+			movingOptions.add(mapping.get(m.get(Neighbor.BELOW)));
 			setCanGoDown(true);
-		} else{
+		} else {
 			setCanGoDown(false);
 			setCanGoUp(false);
 		}
 
-
 		/*
-		else if (( 
-		        (i == getCurrentLoc()+5 || i == getCurrentLoc()-5) ||
-		        (i == getCurrentLoc() + 1 && (getCurrentLoc()+1) % 5 !=0) || 
-		        (i == (getCurrentLoc() - 1) && (i+1) % 5  != 0)
-		        )) 
-		        {
-
-			paint.setColor(Color.GREEN);
-
-		} else{
-			paint.setColor(Color.GRAY);	
-		}
+		 * else if (( (i == getCurrentLoc()+5 || i == getCurrentLoc()-5) || (i
+		 * == getCurrentLoc() + 1 && (getCurrentLoc()+1) % 5 !=0) || (i ==
+		 * (getCurrentLoc() - 1) && (i+1) % 5 != 0) )) {
+		 * 
+		 * paint.setColor(Color.GREEN);
+		 * 
+		 * } else{ paint.setColor(Color.GRAY); }
 		 */
 
 	}
 
+	public void notify(Location newLocation, Actor player) {
+		String text = "Location " + newLocation.toString()
+				+ " entered by actor " + player.toString();
 
-
-
-	public void notify(Location newLocation, Actor player){
-		String text = "Location " + newLocation.toString() + " entered by actor " + player.toString();
-
-		if (toast != null){
+		if (toast != null) {
 			toast.cancel();
 		}
 
 		toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
 		toast.show();
-		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		Vibrator v = (Vibrator) context
+				.getSystemService(Context.VIBRATOR_SERVICE);
 		v.vibrate(20);
 	}
 
-	private void setMapping(){
+	private void setMapping() {
 		mapping.clear();
-		for (int i=0; i<map.get(getLevel()).size(); i++)
+		for (int i = 0; i < map.get(getLevel()).size(); i++) {
 			mapping.put(map.get(getLevel()).get(i), i);
+		}
 	}
-	public HashMap<Location, Integer> getMapping(){
+
+	public HashMap<Location, Integer> getMapping() {
 		return mapping;
 	}
 
-	private Paint getPaint(Location location){
+	private Paint getPaint(Location location) {
 		Paint paint = new Paint();
 
 		return paint;
@@ -401,26 +400,27 @@ public class TerrainView extends View {
 		this.currentLoc = currentLoc;
 	}
 
-	public int getLevel(){
+	public int getLevel() {
 		return level;
 	}
-	public void setLevel(int level){
+
+	public void setLevel(int level) {
 		this.level = level;
 	}
-	public ArrayList<Integer> getMovingOptions(){
+
+	public ArrayList<Integer> getMovingOptions() {
 		return movingOptions;
 	}
-
-
 
 	public boolean isCanGoUp() {
 		return canGoUp;
 	}
+
 	private void setCanGoUp(boolean canGoUp) {
 		this.canGoUp = canGoUp;
 	}
 
-	public void changeLevel(int dir){
+	public void changeLevel(int dir) {
 		setLevel(getLevel() + dir);
 		setMapping();
 	}
@@ -428,6 +428,7 @@ public class TerrainView extends View {
 	public boolean isCanGoDown() {
 		return canGoDown;
 	}
+
 	private void setCanGoDown(boolean canGoDown) {
 		this.canGoDown = canGoDown;
 	}

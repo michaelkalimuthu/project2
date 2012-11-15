@@ -1,4 +1,4 @@
-package com.test.walker.Actor;
+package com.cs413.walker.actors;
 
 import junit.framework.TestCase;
 
