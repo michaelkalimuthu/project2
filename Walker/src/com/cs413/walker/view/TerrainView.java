@@ -346,12 +346,8 @@ public class TerrainView extends View {
 
 		toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
 		toast.show();
-<<<<<<< HEAD
 		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-=======
-		Vibrator v = (Vibrator) context
-				.getSystemService(Context.VIBRATOR_SERVICE);
->>>>>>> bb6a9d19eafb44f6d90e2f98d427417a0eb0c856
+		//Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 		v.vibrate(20);
 	}
 
