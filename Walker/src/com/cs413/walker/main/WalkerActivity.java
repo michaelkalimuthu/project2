@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -33,6 +35,10 @@ public class WalkerActivity extends Activity {
 	ArrayList<Integer> movingOptions;
 
 	Actor player;
+	
+	SoundPool sp;
+	int footsteps;
+	int elevator;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -46,7 +52,12 @@ public class WalkerActivity extends Activity {
 		gridMap = new HashMap<Integer, GridCell>();
 		movingOptions = new ArrayList<Integer>();
 		setUpGame();
-
+		
+		// SoundPool object allows up to 3 simultaneous sounds to be played.0 represents normal audio quality.
+		sp = new SoundPool(3, AudioManager.STREAM_MUSIC,0);
+		footsteps = sp.load(this,R.raw.footsteps,1); // links footsteps variable to audio clip in raw folder
+		elevator = sp.load(this,R.raw.elevator,1);
+	
 		setContentView(R.layout.activity_walker);
 		Location l = new DefaultLocation();
 
@@ -68,24 +79,19 @@ public class WalkerActivity extends Activity {
 					Log.d(TAG, String.valueOf(view.isCanGoDown()));
 					Log.d(TAG, String.valueOf(view.isCanGoUp()));
 
-					if (view.isCanGoDown()
-							&& clickX >= down.getLeft()
-							&& clickX <= down.getRight() // if down button
-															// pressed
+					if (view.isCanGoDown()&& clickX >= down.getLeft()&& clickX <= down.getRight() // if down button pressed
 							&& clickY <= down.getTop()
 							&& clickY >= down.getBottom()) {
-						player.move(player.getLocation().getNeighbors()
-								.get(Neighbor.BELOW));
+						sp.play(elevator, 1, 1, 0, 0, 1); // play elevator sound
+						player.move(player.getLocation().getNeighbors().get(Neighbor.BELOW));
 						view.changeLevel(-1);
 						view.notify(player.getLocation(), player);
 						view.invalidate();
-					} else if (view.isCanGoUp()
-							&& clickX >= up.getLeft()
-							&& clickX <= up.getRight() // if up button pressed
+					} else if (view.isCanGoUp()&& clickX >= up.getLeft()&& clickX <= up.getRight() // if up button pressed
 							&& clickY <= up.getTop()
 							&& clickY >= up.getBottom()) {
-						player.move(player.getLocation().getNeighbors()
-								.get(Neighbor.ABOVE));
+						sp.play(elevator, 1, 1, 0, 0, 1); // play elevator sound
+						player.move(player.getLocation().getNeighbors().get(Neighbor.ABOVE));
 						view.changeLevel(1);
 						view.notify(player.getLocation(), player);
 						view.invalidate();
@@ -104,6 +110,7 @@ public class WalkerActivity extends Activity {
 											&& movingOptions.contains(mapping
 													.getValue())) {
 										player.move(mapping.getKey());
+										sp.play(footsteps, 1, 1, 0, 0, 1); // play footsteps sound onTouch of accessible space
 										view.notify(mapping.getKey(), player);
 										view.invalidate();
 									}
