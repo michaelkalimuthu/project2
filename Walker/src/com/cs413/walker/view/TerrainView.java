@@ -14,6 +14,8 @@ import android.graphics.Rect;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cs413.walker.actors.Actor;
@@ -41,6 +43,8 @@ public class TerrainView extends View {
 
 	int level;
 
+	float placeHolderX;
+	float placeHolderY;
 	Context context;
 
 	Paint paint;
@@ -160,12 +164,11 @@ public class TerrainView extends View {
 		drawButtons(rect, canvas);
 
 		initDraw = false;
-
 		// canvas.drawRect(10, 10, 10, 10, paint);
+		drawText(actor.getLocation(), actor, canvas);
+
 	}
-	/**
-	 * Draws the buttons on the bottom of the screen
-	 */
+
 	private void drawButtons(Rect rect, Canvas canvas) {
 		int bRow = canvas.getHeight() - (canvas.getHeight() / 10);
 
@@ -182,7 +185,7 @@ public class TerrainView extends View {
 		if (canGoDown) {
 			canvas.drawBitmap(downGreen, x, y - 20, paint);
 		} else {
-			canvas.drawBitmap(downRed, x, y - 20, paint);
+			canvas.drawBitmap(upRed, x, y - 20, paint);
 		}
 
 		canvas.drawRect(rect, paint);
@@ -262,7 +265,7 @@ public class TerrainView extends View {
 			stroke = true;
 			return;
 		}
-		//Draw south neighbor
+
 		if (i == getCurrentLoc() + 5) {
 			if (m.get(Neighbor.SOUTH) == null) {
 				paint.setColor(Color.GRAY);
@@ -273,7 +276,7 @@ public class TerrainView extends View {
 				paint.setColor(Color.RED);
 			}
 		}
-		//Draw north neighbor
+
 		else if (i == getCurrentLoc() - 5) {
 			if (m.get(Neighbor.NORTH) == null) {
 				paint.setColor(Color.GRAY);
@@ -284,7 +287,7 @@ public class TerrainView extends View {
 				paint.setColor(Color.RED);
 			}
 		}
-		//Draw east neighbor
+
 		else if (i == getCurrentLoc() + 1) {
 			if (m.get(Neighbor.EAST) == null) {
 				paint.setColor(Color.GRAY);
@@ -295,7 +298,7 @@ public class TerrainView extends View {
 				paint.setColor(Color.RED);
 			}
 		}
-		//draw west neighbor
+
 		else if (i == getCurrentLoc() - 1) {
 			if (m.get(Neighbor.WEST) == null) {
 				paint.setColor(Color.GRAY);
@@ -323,6 +326,17 @@ public class TerrainView extends View {
 			setCanGoDown(false);
 			setCanGoUp(false);
 		}
+
+		/*
+		 * else if (( (i == getCurrentLoc()+5 || i == getCurrentLoc()-5) || (i
+		 * == getCurrentLoc() + 1 && (getCurrentLoc()+1) % 5 !=0) || (i ==
+		 * (getCurrentLoc() - 1) && (i+1) % 5 != 0) )) {
+		 * 
+		 * paint.setColor(Color.GREEN);
+		 * 
+		 * } else{ paint.setColor(Color.GRAY); }
+		 */
+
 	}
 
 	public void notify(Location newLocation, Actor player) {
@@ -335,8 +349,30 @@ public class TerrainView extends View {
 
 		toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
 		toast.show();
-		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		Vibrator v = (Vibrator) context
+				.getSystemService(Context.VIBRATOR_SERVICE);
+		// Vibrator v = (Vibrator)
+		// context.getSystemService(Context.VIBRATOR_SERVICE);
 		v.vibrate(20);
+		// Canvas canvas = this.canvas;
+
+	}
+
+	public void drawText(Location location, Actor player, Canvas canvas) {
+		LinearLayout layout = new LinearLayout(context);
+		TextView textView = new TextView(context);
+		textView.setVisibility(View.VISIBLE);
+		textView.setText("location: " + player.getLocation().getName()
+				+ "\nItems:null \nHP:10");
+		layout.addView(textView);
+
+		layout.measure(canvas.getWidth(), canvas.getHeight());
+		layout.layout(0, 0, canvas.getWidth(), canvas.getHeight());
+
+		// To place the text view somewhere specific:
+		// canvas.translate(0, 0);
+
+		layout.draw(canvas);
 	}
 
 	private void setMapping() {
@@ -363,6 +399,23 @@ public class TerrainView extends View {
 	public void setActor(Actor actor) {
 		this.actor = actor;
 	}
+
+	public float getPlaceHolderX() {
+		return placeHolderX;
+	}
+
+	public void setPlaceHolderX(float placeHolderX) {
+		this.placeHolderX = placeHolderX;
+	}
+
+	public float getPlaceHolderY() {
+		return placeHolderY;
+	}
+
+	public void setPlaceHolderY(float placeHolderY) {
+		this.placeHolderY = placeHolderY;
+	}
+
 	public int getCurrentLoc() {
 		return currentLoc;
 	}
