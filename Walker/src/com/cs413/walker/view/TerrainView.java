@@ -41,8 +41,6 @@ public class TerrainView extends View {
 
 	int level;
 
-	float placeHolderX;
-	float placeHolderY;
 	Context context;
 
 	Paint paint;
@@ -165,7 +163,9 @@ public class TerrainView extends View {
 
 		// canvas.drawRect(10, 10, 10, 10, paint);
 	}
-
+	/**
+	 * Draws the buttons on the bottom of the screen
+	 */
 	private void drawButtons(Rect rect, Canvas canvas) {
 		int bRow = canvas.getHeight() - (canvas.getHeight() / 10);
 
@@ -262,7 +262,7 @@ public class TerrainView extends View {
 			stroke = true;
 			return;
 		}
-
+		//Draw south neighbor
 		if (i == getCurrentLoc() + 5) {
 			if (m.get(Neighbor.SOUTH) == null) {
 				paint.setColor(Color.GRAY);
@@ -273,7 +273,7 @@ public class TerrainView extends View {
 				paint.setColor(Color.RED);
 			}
 		}
-
+		//Draw north neighbor
 		else if (i == getCurrentLoc() - 5) {
 			if (m.get(Neighbor.NORTH) == null) {
 				paint.setColor(Color.GRAY);
@@ -284,7 +284,7 @@ public class TerrainView extends View {
 				paint.setColor(Color.RED);
 			}
 		}
-
+		//Draw east neighbor
 		else if (i == getCurrentLoc() + 1) {
 			if (m.get(Neighbor.EAST) == null) {
 				paint.setColor(Color.GRAY);
@@ -295,7 +295,7 @@ public class TerrainView extends View {
 				paint.setColor(Color.RED);
 			}
 		}
-
+		//draw west neighbor
 		else if (i == getCurrentLoc() - 1) {
 			if (m.get(Neighbor.WEST) == null) {
 				paint.setColor(Color.GRAY);
@@ -323,17 +323,6 @@ public class TerrainView extends View {
 			setCanGoDown(false);
 			setCanGoUp(false);
 		}
-
-		/*
-		 * else if (( (i == getCurrentLoc()+5 || i == getCurrentLoc()-5) || (i
-		 * == getCurrentLoc() + 1 && (getCurrentLoc()+1) % 5 !=0) || (i ==
-		 * (getCurrentLoc() - 1) && (i+1) % 5 != 0) )) {
-		 * 
-		 * paint.setColor(Color.GREEN);
-		 * 
-		 * } else{ paint.setColor(Color.GRAY); }
-		 */
-
 	}
 
 	public void notify(Location newLocation, Actor player) {
@@ -347,7 +336,6 @@ public class TerrainView extends View {
 		toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
 		toast.show();
 		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-		//Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 		v.vibrate(20);
 	}
 
@@ -375,23 +363,6 @@ public class TerrainView extends View {
 	public void setActor(Actor actor) {
 		this.actor = actor;
 	}
-
-	public float getPlaceHolderX() {
-		return placeHolderX;
-	}
-
-	public void setPlaceHolderX(float placeHolderX) {
-		this.placeHolderX = placeHolderX;
-	}
-
-	public float getPlaceHolderY() {
-		return placeHolderY;
-	}
-
-	public void setPlaceHolderY(float placeHolderY) {
-		this.placeHolderY = placeHolderY;
-	}
-
 	public int getCurrentLoc() {
 		return currentLoc;
 	}

@@ -45,8 +45,9 @@ public class WalkerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		// this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		one = new ArrayList<Location>();
-		two = new ArrayList<Location>();
+		one = new ArrayList<Location>(); //level one
+		two = new ArrayList<Location>(); // level two
+		three = new ArrayList<Location>();
 		levels = new HashMap<Integer, ArrayList<Location>>();
 
 		gridMap = new HashMap<Integer, GridCell>();
@@ -70,11 +71,11 @@ public class WalkerActivity extends Activity {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					float clickX = event.getX();
 					float clickY = event.getY();
-					gridMap = view.getGridMap();
-					movingOptions = view.getMovingOptions();
+					gridMap = view.getGridMap(); //get the grid
+					movingOptions = view.getMovingOptions(); //get moving options
 
-					GridCell down = gridMap.get(TerrainView.DOWN);
-					GridCell up = gridMap.get(TerrainView.UP);
+					GridCell down = gridMap.get(TerrainView.DOWN); //get down button
+					GridCell up = gridMap.get(TerrainView.UP); //get up button
 
 					Log.d(TAG, String.valueOf(view.isCanGoDown()));
 					Log.d(TAG, String.valueOf(view.isCanGoUp()));
@@ -83,9 +84,9 @@ public class WalkerActivity extends Activity {
 							&& clickY <= down.getTop()
 							&& clickY >= down.getBottom()) {
 						sp.play(elevator, 1, 1, 0, 0, 1); // play elevator sound
-						player.move(player.getLocation().getNeighbors().get(Neighbor.BELOW));
-						view.changeLevel(-1);
-						view.notify(player.getLocation(), player);
+						player.move(player.getLocation().getNeighbors().get(Neighbor.BELOW)); //move player
+						view.changeLevel(-1); //let view know level is changing
+						view.notify(player.getLocation(), player); //tell view to notify
 						view.invalidate();
 					} else if (view.isCanGoUp()&& clickX >= up.getLeft()&& clickX <= up.getRight() // if up button pressed
 							&& clickY <= up.getTop()
@@ -157,27 +158,42 @@ public class WalkerActivity extends Activity {
 				two.add(loc);
 			}
 		}
+		
+		for (int i= 0; i < 45; i++){
+			if (i == 5 || i == 6 || i == 7 || i == 8 || i == 9){
+				three.add(new Water(String.valueOf(j++)));
+			} else {
+				three.add(new DefaultLocation(String.valueOf(j++)));
+			}
+		}
 
 		for (int i = 0; i < 45; i++) {
 			if (i <= 39) {
 				one.get(i).addNeighbor(Neighbor.SOUTH, one.get(i + 5));
 				two.get(i).addNeighbor(Neighbor.SOUTH, two.get(i + 5));
+				three.get(i).addNeighbor(Neighbor.SOUTH, three.get(i + 5));
 			}
 			if (i % 5 == 0) {
 				one.get(i).addNeighbor(Neighbor.EAST, one.get(i + 1));
 				two.get(i).addNeighbor(Neighbor.EAST, two.get(i + 1));
+				three.get(i).addNeighbor(Neighbor.EAST, three.get(i + 1));
 			} else if ((i + 1) % 5 == 0) {
 				one.get(i).addNeighbor(Neighbor.WEST, one.get(i - 1));
 				two.get(i).addNeighbor(Neighbor.WEST, two.get(i - 1));
+				three.get(i).addNeighbor(Neighbor.WEST, three.get(i - 1));
 			} else {
 				one.get(i).addNeighbor(Neighbor.EAST, one.get(i + 1));
 				two.get(i).addNeighbor(Neighbor.EAST, two.get(i + 1));
+				three.get(i).addNeighbor(Neighbor.EAST, three.get(i + 1));
 				one.get(i).addNeighbor(Neighbor.WEST, one.get(i - 1));
 				two.get(i).addNeighbor(Neighbor.WEST, two.get(i - 1));
+				three.get(i).addNeighbor(Neighbor.WEST, three.get(i - 1));
 			}
 		}
 
-		one.get(32).addNeighbor(Neighbor.ABOVE, two.get(5));
+		one.get(32).addNeighbor(Neighbor.ABOVE, two.get(5));  //32's above neighbor is now 5 and vice versa
+		
+		two.get(13).addNeighbor(Neighbor.ABOVE, three.get(0)); //13's above neighbor is now 0 and vice versa
 
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
@@ -185,6 +201,7 @@ public class WalkerActivity extends Activity {
 
 		levels.put(1, one);
 		levels.put(2, two);
+		levels.put(3, three);
 
 	}
 
