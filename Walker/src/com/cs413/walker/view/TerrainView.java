@@ -251,6 +251,9 @@ public class TerrainView extends View {
 		return gridMap;
 	}
 
+	/* Colors are used to represent the accessibility of a location by the player 
+	   where green is a location the player can move into, red locations are not. The remaining locations in the level
+	   are colored gray*/
 	private void setUpNeighbors(int i) {
 		int[] neighbors = new int[4];
 		HashMap<Neighbor, Location> m = map.get(getLevel())
@@ -358,11 +361,12 @@ public class TerrainView extends View {
 
 	}
 
+	// Draws a box of player stats for current location, obtained items and health
 	public void drawText(Location location, Actor player, Canvas canvas) {
 		LinearLayout layout = new LinearLayout(context);
 		TextView textView = new TextView(context);
 		textView.setVisibility(View.VISIBLE);
-		textView.setText("location: " + player.getLocation().getName()
+		textView.setText("Location: " + player.getLocation().getName()
 				+ "\nItems:null \nHP:10");
 		layout.addView(textView);
 

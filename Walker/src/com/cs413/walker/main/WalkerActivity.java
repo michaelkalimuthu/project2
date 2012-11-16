@@ -55,7 +55,7 @@ public class WalkerActivity extends Activity {
 		setUpGame();
 		
 		// SoundPool object allows up to 3 simultaneous sounds to be played.0 represents normal audio quality.
-		sp = new SoundPool(3, AudioManager.STREAM_MUSIC,0);
+		sp = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
 		footsteps = sp.load(this,R.raw.footsteps,1); // links footsteps variable to audio clip in raw folder
 		elevator = sp.load(this,R.raw.elevator,1);
 	
