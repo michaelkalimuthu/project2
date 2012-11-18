@@ -185,7 +185,7 @@ public class TerrainView extends View {
 		if (canGoDown) {
 			canvas.drawBitmap(downGreen, x, y - 20, paint);
 		} else {
-			canvas.drawBitmap(upRed, x, y - 20, paint);
+			canvas.drawBitmap(downRed, x, y - 20, paint);
 		}
 
 		canvas.drawRect(rect, paint);
@@ -255,13 +255,10 @@ public class TerrainView extends View {
 	   where green is a location the player can move into, red locations are not. The remaining locations in the level
 	   are colored gray*/
 	private void setUpNeighbors(int i) {
-		int[] neighbors = new int[4];
+
 		HashMap<Neighbor, Location> m = map.get(getLevel())
 				.get(getCurrentLoc()).getNeighbors();
 
-		for (Map.Entry<Neighbor, Location> neigh : m.entrySet()) {
-
-		}
 
 		if (i == getCurrentLoc()) {
 			paint.setColor(Color.WHITE);
@@ -330,15 +327,7 @@ public class TerrainView extends View {
 			setCanGoUp(false);
 		}
 
-		/*
-		 * else if (( (i == getCurrentLoc()+5 || i == getCurrentLoc()-5) || (i
-		 * == getCurrentLoc() + 1 && (getCurrentLoc()+1) % 5 !=0) || (i ==
-		 * (getCurrentLoc() - 1) && (i+1) % 5 != 0) )) {
-		 * 
-		 * paint.setColor(Color.GREEN);
-		 * 
-		 * } else{ paint.setColor(Color.GRAY); }
-		 */
+
 
 	}
 
