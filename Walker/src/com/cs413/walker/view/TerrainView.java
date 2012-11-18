@@ -265,7 +265,7 @@ public class TerrainView extends View {
 			stroke = true;
 			return;
 		}
-
+		//get display info for south neighbor
 		if (i == getCurrentLoc() + 5) {
 			if (m.get(Neighbor.SOUTH) == null) {
 				paint.setColor(Color.GRAY);
@@ -276,7 +276,7 @@ public class TerrainView extends View {
 				paint.setColor(Color.RED);
 			}
 		}
-
+		//get display info for north neighbor
 		else if (i == getCurrentLoc() - 5) {
 			if (m.get(Neighbor.NORTH) == null) {
 				paint.setColor(Color.GRAY);
@@ -287,7 +287,7 @@ public class TerrainView extends View {
 				paint.setColor(Color.RED);
 			}
 		}
-
+		//get display info for east neighbor
 		else if (i == getCurrentLoc() + 1) {
 			if (m.get(Neighbor.EAST) == null) {
 				paint.setColor(Color.GRAY);
@@ -298,7 +298,7 @@ public class TerrainView extends View {
 				paint.setColor(Color.RED);
 			}
 		}
-
+		//get display info for west neighbor
 		else if (i == getCurrentLoc() - 1) {
 			if (m.get(Neighbor.WEST) == null) {
 				paint.setColor(Color.GRAY);
@@ -313,7 +313,7 @@ public class TerrainView extends View {
 		else {
 			paint.setColor(Color.GRAY);
 		}
-
+		//display info for above and below neighbor
 		if (m.get(Neighbor.ABOVE) != null
 				&& m.get(Neighbor.ABOVE).canAddActor()) {
 			movingOptions.add(mapping.get(m.get(Neighbor.ABOVE)));

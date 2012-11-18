@@ -60,7 +60,7 @@ public class WalkerActivity extends Activity {
 		elevator = sp.load(this,R.raw.elevator,1);
 	
 		setContentView(R.layout.activity_walker);
-		Location l = new DefaultLocation();
+
 
 		final TerrainView view = new TerrainView(this, levels, player);
 
@@ -77,8 +77,6 @@ public class WalkerActivity extends Activity {
 					GridCell down = gridMap.get(TerrainView.DOWN); //get down button
 					GridCell up = gridMap.get(TerrainView.UP); //get up button
 
-					Log.d(TAG, String.valueOf(view.isCanGoDown()));
-					Log.d(TAG, String.valueOf(view.isCanGoUp()));
 
 					if (view.isCanGoDown()&& clickX >= down.getLeft()&& clickX <= down.getRight() // if down button pressed
 							&& clickY <= down.getTop()
