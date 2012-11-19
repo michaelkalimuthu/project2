@@ -252,7 +252,8 @@ public class TerrainView extends View {
 	}
 
 	/* Colors are used to represent the accessibility of a location by the player 
-	   where green is a location the player can move into, red locations are not. The remaining locations in the level
+	   where green is a location the player can move into, blue locations are not. (blue is water)
+	    The remaining locations in the level
 	   are colored gray*/
 	private void setUpNeighbors(int i) {
 
@@ -273,7 +274,7 @@ public class TerrainView extends View {
 				movingOptions.add(mapping.get(m.get(Neighbor.SOUTH)));
 				paint.setColor(Color.GREEN);
 			} else {
-				paint.setColor(Color.RED);
+				paint.setColor(Color.BLUE);
 			}
 		}
 		//get display info for north neighbor
@@ -284,7 +285,7 @@ public class TerrainView extends View {
 				movingOptions.add(mapping.get(m.get(Neighbor.NORTH)));
 				paint.setColor(Color.GREEN);
 			} else {
-				paint.setColor(Color.RED);
+				paint.setColor(Color.BLUE);
 			}
 		}
 		//get display info for east neighbor
@@ -295,7 +296,7 @@ public class TerrainView extends View {
 				movingOptions.add(mapping.get(m.get(Neighbor.EAST)));
 				paint.setColor(Color.GREEN);
 			} else {
-				paint.setColor(Color.RED);
+				paint.setColor(Color.BLUE);
 			}
 		}
 		//get display info for west neighbor
@@ -306,7 +307,7 @@ public class TerrainView extends View {
 				movingOptions.add(mapping.get(m.get(Neighbor.WEST)));
 				paint.setColor(Color.GREEN);
 			} else {
-				paint.setColor(Color.RED);
+				paint.setColor(Color.BLUE);
 			}
 		}
 
