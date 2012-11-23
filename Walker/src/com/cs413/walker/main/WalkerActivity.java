@@ -81,17 +81,13 @@ public class WalkerActivity extends Activity {
 					GridCell up = gridMap.get(TerrainView.UP); //get up button
 
 
-					if (view.isCanGoDown()&& clickX >= down.getLeft()&& clickX <= down.getRight() // if down button pressed
-							&& clickY <= down.getTop()
-							&& clickY >= down.getBottom()) {
+					if (downButton(view, clickX, clickY, down)) {
 						sp.play(elevator, 1, 1, 0, 0, 1); // play elevator sound
 						player.move(player.getLocation().getNeighbors().get(Neighbor.BELOW)); //move player
 						view.changeLevel(-1); //let view know level is changing
 						view.notify(player.getLocation(), player); //tell view to notify
 						view.invalidate();
-					} else if (view.isCanGoUp()&& clickX >= up.getLeft()&& clickX <= up.getRight() // if up button pressed
-							&& clickY <= up.getTop()
-							&& clickY >= up.getBottom()) {
+					} else if (upButton(view, clickX, clickY, up)) {
 						sp.play(elevator, 1, 1, 0, 0, 1); // play elevator sound
 						player.move(player.getLocation().getNeighbors().get(Neighbor.ABOVE));
 						view.changeLevel(1);
@@ -125,6 +121,21 @@ public class WalkerActivity extends Activity {
 				}
 
 				return false;
+			}
+
+			private boolean upButton(TerrainView view, float clickX,
+					float clickY, GridCell up) {
+				return (view.isCanGoUp()&& clickX >= up.getLeft()&& clickX <= up.getRight() // if up button pressed
+						&& clickY <= up.getTop()
+						&& clickY >= up.getBottom());
+			}
+
+			private boolean downButton(TerrainView view, float clickX,
+					float clickY, GridCell down) {
+				
+				return (view.isCanGoDown()&& clickX >= down.getLeft()&& clickX <= down.getRight() // if down button pressed
+						&& clickY <= down.getTop()
+						&& clickY >= down.getBottom());
 			}
 
 		};
