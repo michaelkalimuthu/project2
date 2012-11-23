@@ -28,6 +28,6 @@ public interface Actor {
 	
 	public void addCoins(int addCoins);
 	public void addHealth(int addHealth);
-	public void addEnegery(int addEnergy);
+	public void addEnergy(int addEnergy);
 
 }

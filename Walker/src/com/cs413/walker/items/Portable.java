@@ -1,5 +1,6 @@
 package com.cs413.walker.items;
 
+import com.cs413.walker.actors.Actor;
 import com.cs413.walker.locations.Location;
 
 /**
@@ -12,7 +13,11 @@ public interface Portable {
 
 	String getName();
 
-	void useItem(Location location);
-
+	void useItem();
+	void pickUp(Actor actor);
 	void dropItem(Location location);
+	
+	Actor getActor();
+	void setActor(Actor actor);
+	
 }

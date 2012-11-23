@@ -2,6 +2,7 @@ package com.cs413.walker.items;
 
 import java.util.ArrayList;
 
+import com.cs413.walker.actors.Actor;
 import com.cs413.walker.locations.DefaultLocation;
 import com.cs413.walker.locations.Location;
 
@@ -49,9 +50,9 @@ public class Breadcrumb implements Portable {
 	}
 
 	@Override
-	public void useItem(Location location) {
-		currentLocation = location;
-		locationHolder.add(location);
+	public void useItem() {
+	//	currentLocation = location;
+	//	locationHolder.add(location);
 		drawDots();
 		// TODO Auto-generated method stub
 
@@ -67,6 +68,24 @@ public class Breadcrumb implements Portable {
 
 	public void drawDots() {
 
+	}
+
+	@Override
+	public Actor getActor() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setActor(Actor actor) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void pickUp(Actor actor) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

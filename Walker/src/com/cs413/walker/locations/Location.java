@@ -1,8 +1,10 @@
 package com.cs413.walker.locations;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.cs413.walker.actors.Actor;
+import com.cs413.walker.items.Portable;
 
 /***
  * Location interface that requires adding neighbors
@@ -46,5 +48,9 @@ public interface Location {
 	String getName();
 	
 	String toString();
+	
+	ArrayList<Portable> getItems();
+	void addItem(Portable item);
+	
 
 }

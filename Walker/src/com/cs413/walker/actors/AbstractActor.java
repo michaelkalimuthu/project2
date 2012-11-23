@@ -34,7 +34,7 @@ public abstract class AbstractActor implements Actor{
 	}
 
 	@Override
-	public void addEnegery(int addEnergy) {
+	public void addEnergy(int addEnergy) {
 		energy += addEnergy;
 	}
 

@@ -264,6 +264,7 @@ public class TerrainView extends View {
 		if (i == getCurrentLoc()) {
 			paint.setColor(Color.WHITE);
 			stroke = true;
+			
 			return;
 		}
 		//get display info for south neighbor
