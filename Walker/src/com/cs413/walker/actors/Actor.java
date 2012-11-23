@@ -21,5 +21,13 @@ public interface Actor {
 	String toString();
 	
 	public String getName();
+	
+	public int getHealth();
+	public int getEnergy();
+	public int getCoins();
+	
+	public void addCoins(int addCoins);
+	public void addHealth(int addHealth);
+	public void addEnegery(int addEnergy);
 
 }

@@ -357,7 +357,7 @@ public class TerrainView extends View {
 		TextView textView = new TextView(context);
 		textView.setVisibility(View.VISIBLE);
 		textView.setText("Location: " + player.getLocation().getName()
-				+ "\nItems:null \nHP:10");
+				+ "\nEnergy: " + player.getEnergy() + "\nHP: " + player.getHealth());
 		layout.addView(textView);
 
 		layout.measure(canvas.getWidth(), canvas.getHeight());

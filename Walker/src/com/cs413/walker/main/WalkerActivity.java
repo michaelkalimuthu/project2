@@ -26,6 +26,9 @@ import com.example.walker.R;
 
 public class WalkerActivity extends Activity {
 	private static final String TAG = "Activity";
+	
+	private final static int INIT_HEALTH = 100;
+	private final static int INIT_ENERGY = 10;
 
 	HashMap<Integer, ArrayList<Location>> levels;
 	ArrayList<Location> one;
@@ -195,7 +198,7 @@ public class WalkerActivity extends Activity {
 
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
-		player = new Person("Player", one.get(12));
+		player = new Person("Player", one.get(12), INIT_HEALTH, INIT_ENERGY);
 
 		levels.put(1, one);
 		levels.put(2, two);

@@ -8,11 +8,36 @@ public abstract class AbstractActor implements Actor{
 	
 	protected String name;
 	
-	public AbstractActor(String name, Location location){
+	protected int health, energy, coins;
+	
+	public AbstractActor(String name, Location location, int health, int energy){
 		this.name = name;
 		this.location = location;
+		this.health = health;
+		this.energy = energy;
+		coins = 0;
 	}
 	
+	@Override
+	public int getCoins() {
+		return coins;
+	}
+
+	@Override
+	public void addCoins(int addCoins) {
+		coins += addCoins;
+	}
+
+	@Override
+	public void addHealth(int addHealth) {
+		health += addHealth;
+	}
+
+	@Override
+	public void addEnegery(int addEnergy) {
+		energy += addEnergy;
+	}
+
 	@Override
 	public String getName(){
 		return name;
@@ -32,6 +57,17 @@ public abstract class AbstractActor implements Actor{
 	public String toString(){
 		return this.name;
 	}
+
+	@Override
+	public int getHealth() {
+		return health;
+	}
+
+	@Override
+	public int getEnergy() {
+		return energy;
+	}
+	
 	
 
 }
