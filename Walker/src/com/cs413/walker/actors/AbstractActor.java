@@ -1,5 +1,8 @@
 package com.cs413.walker.actors;
 
+import java.util.ArrayList;
+
+import com.cs413.walker.items.Portable;
 import com.cs413.walker.locations.Location;
 
 public abstract class AbstractActor implements Actor{
@@ -10,14 +13,28 @@ public abstract class AbstractActor implements Actor{
 	
 	protected int health, energy, coins;
 	
+	protected ArrayList<Portable> items;
+	
 	public AbstractActor(String name, Location location, int health, int energy){
 		this.name = name;
 		this.location = location;
 		this.health = health;
 		this.energy = energy;
 		coins = 0;
+		items = new ArrayList<Portable>();
 	}
 	
+	@Override
+	public void addItems(Portable item) {
+		items.add(item);
+		
+	}
+
+	@Override
+	public ArrayList<Portable> getItems() {
+		return items;
+	}
+
 	@Override
 	public int getCoins() {
 		return coins;

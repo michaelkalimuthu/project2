@@ -9,9 +9,9 @@ public class Food implements Portable {
 	Location currentLocation;
 	Actor actor;
 	
-	public Food(int addHealth, Location currentLocation){
+	public Food(int addHealth, String name){
 		this.addHealth = addHealth;
-		this.currentLocation = currentLocation;
+		this.name = name;
 	}
 
 
@@ -52,6 +52,10 @@ public class Food implements Portable {
 	public void pickUp(Actor actor) {
 		setActor(actor);
 		
+	}
+	@Override
+	public String toString(){
+		return getName() + " " + addHealth;
 	}
 
 }

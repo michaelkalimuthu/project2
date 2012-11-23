@@ -10,12 +10,15 @@ import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.actors.Person;
+import com.cs413.walker.items.Food;
+import com.cs413.walker.items.Portable;
 import com.cs413.walker.locations.DefaultLocation;
 import com.cs413.walker.locations.Location;
 import com.cs413.walker.locations.Neighbor;
@@ -116,10 +119,10 @@ public class WalkerActivity extends Activity {
 							}
 						}
 					}
-
+					invalidateOptionsMenu();
 					return true;
 				}
-
+				invalidateOptionsMenu();
 				return false;
 			}
 
@@ -209,6 +212,8 @@ public class WalkerActivity extends Activity {
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
 		player = new Person("Player", one.get(12), INIT_HEALTH, INIT_ENERGY);
+		Portable food = new Food(10, "bread");
+		one.get(12).addItem(food);
 
 		levels.put(1, one);
 		levels.put(2, two);
@@ -218,7 +223,21 @@ public class WalkerActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		menu.add("Use Item");	
+		
 		getMenuInflater().inflate(R.menu.activity_walker, menu);
 		return true;
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		
+
+		return super.onOptionsItemSelected(item);
+
+	}
+	
+	
 }

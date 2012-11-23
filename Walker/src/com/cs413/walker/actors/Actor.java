@@ -1,5 +1,8 @@
 package com.cs413.walker.actors;
 
+import java.util.ArrayList;
+
+import com.cs413.walker.items.Portable;
 import com.cs413.walker.locations.Location;
 
 /***
@@ -29,5 +32,8 @@ public interface Actor {
 	public void addCoins(int addCoins);
 	public void addHealth(int addHealth);
 	public void addEnergy(int addEnergy);
+	
+	public void addItems(Portable item);
+	public ArrayList<Portable> getItems();
 
 }

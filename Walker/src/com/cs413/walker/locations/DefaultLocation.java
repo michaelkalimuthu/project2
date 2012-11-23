@@ -43,6 +43,7 @@ public class DefaultLocation implements Location{
 		this.name = name;
 		map = new HashMap<Neighbor, Location>();
 		actors = new ArrayList<Actor>();
+		items = new ArrayList<Portable>();
 	}
 	
 	@Override
@@ -98,8 +99,7 @@ public class DefaultLocation implements Location{
 	}
 	@Override
 	public void addItem(Portable item) {
-		items.add(item);
-		
+		items.add(item);	
 	}
 
 	

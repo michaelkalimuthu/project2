@@ -20,4 +20,6 @@ public interface Portable {
 	Actor getActor();
 	void setActor(Actor actor);
 	
+	String toString();
+	
 }
