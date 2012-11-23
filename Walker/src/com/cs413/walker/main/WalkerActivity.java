@@ -131,8 +131,7 @@ public class WalkerActivity extends Activity {
 			}
 
 			private boolean downButton(TerrainView view, float clickX,
-					float clickY, GridCell down) {
-				
+					float clickY, GridCell down) {			
 				return (view.isCanGoDown()&& clickX >= down.getLeft()&& clickX <= down.getRight() // if down button pressed
 						&& clickY <= down.getTop()
 						&& clickY >= down.getBottom());

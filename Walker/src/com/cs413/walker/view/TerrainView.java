@@ -102,7 +102,7 @@ public class TerrainView extends View {
 	 */
 	@Override
 	protected void onDraw(Canvas canvas) {
-		// canvas.drawColor(Color.WHITE);
+		canvas.drawColor(Color.GRAY);
 		setCurrentLoc(mapping.get(actor.getLocation()));
 
 		paint = new Paint();
@@ -111,22 +111,12 @@ public class TerrainView extends View {
 
 		runGrid(canvas);
 
-		int countHeight = 0;
-		boolean first = true;
-		canvas.drawColor(Color.WHITE);
-		int left = 0;
-		int top = 0;
-		int right = canvas.getWidth() / 5;
-		int inc = canvas.getWidth() / 5;
-		int bottom = canvas.getHeight() / 10;
-		int bottomInc = canvas.getHeight() / 10;
-
-		int count = 0;
 
 		if (!initDraw) {
 			movingOptions.clear();
 		}
-
+		setUpNeighbors(getCurrentLoc(), canvas, rect);
+/*
 		for (int i = 0; i < 45; i++) {
 			setUpNeighbors(i);
 			paint.setStyle(Paint.Style.FILL);
@@ -153,6 +143,7 @@ public class TerrainView extends View {
 			canvas.drawRect(rect, paint);
 			if (i == getCurrentLoc()) {
 				canvas.drawBitmap(player, x - 20, y - 25, paint);
+				//drawItems(canvas);
 			}
 
 			left = right;
@@ -161,6 +152,13 @@ public class TerrainView extends View {
 			countHeight++;
 
 		}
+		*/
+		rect.set(gridMap.get(getCurrentLoc()).getLeft(), gridMap.get(getCurrentLoc()).getTop(),
+				gridMap.get(getCurrentLoc()).getRight(), gridMap.get(getCurrentLoc()).getBottom());
+		int x = (int) rect.exactCenterX();
+		int y = (int) rect.exactCenterY();
+		canvas.drawBitmap(player, x-20, y-25, paint);
+		
 		drawButtons(rect, canvas);
 
 		initDraw = false;
@@ -255,66 +253,97 @@ public class TerrainView extends View {
 	   where green is a location the player can move into, blue locations are not. (blue is water)
 	    The remaining locations in the level
 	   are colored gray*/
-	private void setUpNeighbors(int i) {
+	private void setUpNeighbors(int i, Canvas canvas, Rect rect) {
 
 		HashMap<Neighbor, Location> m = map.get(getLevel())
 				.get(getCurrentLoc()).getNeighbors();
 
-
+/*
 		if (i == getCurrentLoc()) {
 			paint.setColor(Color.WHITE);
 			stroke = true;
 			
 			return;
 		}
+		*/
+		
+		GridCell cell = null;
+		cell = gridMap.get(i);
+		paint.setColor(Color.WHITE);
+		rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+		canvas.drawRect(rect, paint);
+		
+		
 		//get display info for south neighbor
-		if (i == getCurrentLoc() + 5) {
-			if (m.get(Neighbor.SOUTH) == null) {
-				paint.setColor(Color.GRAY);
-			} else if (m.get(Neighbor.SOUTH).canAddActor()) {
-				movingOptions.add(mapping.get(m.get(Neighbor.SOUTH)));
-				paint.setColor(Color.GREEN);
-			} else {
-				paint.setColor(Color.BLUE);
-			}
+		cell = gridMap.get(getCurrentLoc() + 5);
+		if (m.get(Neighbor.SOUTH) == null) {
+			paint.setColor(Color.GRAY);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
+		} else if (m.get(Neighbor.SOUTH).canAddActor()) {
+			movingOptions.add(mapping.get(m.get(Neighbor.SOUTH)));
+			paint.setColor(Color.GREEN);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
+		} else {
+			paint.setColor(Color.BLUE);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
 		}
+		
 		//get display info for north neighbor
-		else if (i == getCurrentLoc() - 5) {
+		cell = gridMap.get(getCurrentLoc() - 5);
+
 			if (m.get(Neighbor.NORTH) == null) {
 				paint.setColor(Color.GRAY);
+				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+				canvas.drawRect(rect, paint);
 			} else if (m.get(Neighbor.NORTH).canAddActor()) {
 				movingOptions.add(mapping.get(m.get(Neighbor.NORTH)));
 				paint.setColor(Color.GREEN);
+				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+				canvas.drawRect(rect, paint);
 			} else {
 				paint.setColor(Color.BLUE);
+				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+				canvas.drawRect(rect, paint);
 			}
-		}
+
 		//get display info for east neighbor
-		else if (i == getCurrentLoc() + 1) {
+		cell = gridMap.get(getCurrentLoc() + 1);
 			if (m.get(Neighbor.EAST) == null) {
 				paint.setColor(Color.GRAY);
+				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+				canvas.drawRect(rect, paint);
 			} else if (m.get(Neighbor.EAST).canAddActor()) {
 				movingOptions.add(mapping.get(m.get(Neighbor.EAST)));
 				paint.setColor(Color.GREEN);
+				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+				canvas.drawRect(rect, paint);
 			} else {
 				paint.setColor(Color.BLUE);
+				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+				canvas.drawRect(rect, paint);
 			}
-		}
+		
 		//get display info for west neighbor
-		else if (i == getCurrentLoc() - 1) {
+		cell = gridMap.get(getCurrentLoc() - 1);
 			if (m.get(Neighbor.WEST) == null) {
 				paint.setColor(Color.GRAY);
+				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+				canvas.drawRect(rect, paint);
 			} else if (m.get(Neighbor.WEST).canAddActor()) {
 				movingOptions.add(mapping.get(m.get(Neighbor.WEST)));
 				paint.setColor(Color.GREEN);
+				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+				canvas.drawRect(rect, paint);
 			} else {
 				paint.setColor(Color.BLUE);
+				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+				canvas.drawRect(rect, paint);
 			}
-		}
+		
 
-		else {
-			paint.setColor(Color.GRAY);
-		}
 		//display info for above and below neighbor
 		if (m.get(Neighbor.ABOVE) != null
 				&& m.get(Neighbor.ABOVE).canAddActor()) {
