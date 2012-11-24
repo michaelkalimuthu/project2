@@ -27,6 +27,7 @@ public abstract class AbstractActor implements Actor{
 	@Override
 	public void addItems(Portable item) {
 		items.add(item);
+		item.setActor(this);
 		
 	}
 
@@ -85,6 +86,13 @@ public abstract class AbstractActor implements Actor{
 		return energy;
 	}
 	
+	@Override
+	public void useItem(Portable item){
+		if (getItems().contains(item)){
+			item.useItem();
+			getItems().remove(item);
+		}
+	}
 	
 
 }

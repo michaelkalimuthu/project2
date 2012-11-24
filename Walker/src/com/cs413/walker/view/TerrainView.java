@@ -32,6 +32,7 @@ public class TerrainView extends View {
 
 	public static final int UP = -1;
 	public static final int DOWN = -2;
+	public static final int INVENTORY = -3;
 
 	private Actor actor;
 	private Toast toast;
@@ -111,10 +112,10 @@ public class TerrainView extends View {
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Paint.Style.STROKE);
 
-		rect.set(0, bRow, canvas.getWidth() / 2, canvas.getHeight());
+		rect.set(0, bRow, canvas.getWidth() / 2 - 60, canvas.getHeight()); //left side, down button
 		gridMap.put(
 				DOWN,
-				new GridCell(0, canvas.getWidth() / 2, bRow, canvas.getHeight()));
+				new GridCell(0, canvas.getWidth() / 2 - 60, bRow, canvas.getHeight()));
 
 		int x = (int) rect.exactCenterX();
 		int y = (int) rect.exactCenterY();
@@ -125,10 +126,19 @@ public class TerrainView extends View {
 		}
 
 		canvas.drawRect(rect, paint);
+		
+		rect.set(canvas.getWidth()/2 -60, bRow, canvas.getWidth()/2 +60, canvas.getHeight()); //center, inventory
+		gridMap.put(INVENTORY, new GridCell(canvas.getWidth()/2 -60, bRow, canvas.getWidth()/2 +60, canvas.getHeight()));
+		x = (int) rect.exactCenterX();
+		y = (int) rect.exactCenterY();
+		paint.setTextSize(15);
+		paint.setFakeBoldText(true);
+		canvas.drawText("Inventory", x-35, y, paint);
+		canvas.drawRect(rect, paint);
 
-		rect.set(canvas.getWidth() / 2, bRow, canvas.getWidth(),
+		rect.set(canvas.getWidth() / 2 + 60, bRow, canvas.getWidth(),  //right side, up button
 				canvas.getHeight());
-		gridMap.put(UP, new GridCell(canvas.getWidth() / 2, canvas.getWidth(),
+		gridMap.put(UP, new GridCell(canvas.getWidth() / 2 + 60, canvas.getWidth(),
 				bRow, canvas.getHeight()));
 
 		x = (int) rect.exactCenterX();
@@ -141,6 +151,25 @@ public class TerrainView extends View {
 
 		canvas.drawRect(rect, paint);
 
+	}
+
+	// Draws a box of player stats for current location, obtained items and health
+	public void drawText(Location location, Actor player, Canvas canvas) {
+		LinearLayout layout = new LinearLayout(context);
+		TextView textView = new TextView(context);
+		textView.setVisibility(View.VISIBLE);
+		textView.setText("Location: " + player.getLocation().getName()
+				+ "\nEnergy: " + player.getEnergy() + "\nHP: " + player.getHealth()
+				+ "\nCoins: " + player.getCoins() + "\tItems: " + player.getItems().size());
+		layout.addView(textView);
+	
+		layout.measure(canvas.getWidth(), canvas.getHeight());
+		layout.layout(0, 0, canvas.getWidth(), canvas.getHeight());
+	
+		// To place the text view somewhere specific:
+		// canvas.translate(0, 0);
+	
+		layout.draw(canvas);
 	}
 
 	private int runGrid(Canvas canvas) {
@@ -407,26 +436,51 @@ public class TerrainView extends View {
 		});
 		builder.show();
 	}
+	public void showInventory(){
+		final ArrayList<Portable> mSelectedItems = new ArrayList<Portable>();
+		// Where we track the selected items
+		String[] arr = new String[actor.getItems().size()];
+		for (int i=0; i< arr.length; i ++){
+			arr[i] = actor.getItems().get(i).toString();
+		}
 
-	// Draws a box of player stats for current location, obtained items and health
-	public void drawText(Location location, Actor player, Canvas canvas) {
-		LinearLayout layout = new LinearLayout(context);
-		TextView textView = new TextView(context);
-		textView.setVisibility(View.VISIBLE);
-		textView.setText("Location: " + player.getLocation().getName()
-				+ "\nEnergy: " + player.getEnergy() + "\nHP: " + player.getHealth()
-				+ "\nCoins: " + player.getCoins() + "\tItems: " + player.getItems().size());
-		layout.addView(textView);
+		CharSequence[] list = new CharSequence[arr.length];
+		for (int i=0; i<arr.length; i++){
+			list[i] = arr[i];
+		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-		layout.measure(canvas.getWidth(), canvas.getHeight());
-		layout.layout(0, 0, canvas.getWidth(), canvas.getHeight());
-
-		// To place the text view somewhere specific:
-		// canvas.translate(0, 0);
-
-		layout.draw(canvas);
+		// Set the dialog title
+		builder.setTitle("Use")
+		// Specify the list array, the items to be selected by default (null for none),
+		// and the listener through which to receive callbacks when items are selected
+		.setMultiChoiceItems(list, null,
+				new DialogInterface.OnMultiChoiceClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which,
+					boolean isChecked) {
+				if (isChecked) {
+					// If the user checked the item, add it to the selected items
+					mSelectedItems.add(actor.getItems().get(which));
+				} 
+			}
+		}).setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				if (mSelectedItems.size() > 0){
+					actor.useItem(mSelectedItems.get(id+1));
+					
+				}
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				Log.d(TAG, "Cancelled");
+			}
+		});
+		builder.show();
 	}
-
 
 	private void setMapping() {
 		mapping.clear();

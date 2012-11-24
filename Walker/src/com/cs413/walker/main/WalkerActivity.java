@@ -79,14 +79,12 @@ public class WalkerActivity extends Activity {
 
 			@Override
 			public void pickedUpItem() {
-				view.invalidate();
-				
+				view.invalidate();				
 			}
 
 			@Override
 			public void moved() {
-				view.invalidate();
-				
+				view.invalidate();				
 			}
 			
 			
@@ -105,6 +103,7 @@ public class WalkerActivity extends Activity {
 
 					GridCell down = gridMap.get(TerrainView.DOWN); //get down button
 					GridCell up = gridMap.get(TerrainView.UP); //get up button
+					GridCell inventory = gridMap.get(TerrainView.INVENTORY);
 
 
 					if (downButton(view, clickX, clickY, down)) {
@@ -119,6 +118,8 @@ public class WalkerActivity extends Activity {
 						view.changeLevel(1);
 						view.notify(player.getLocation(), player);
 						
+					} else if (centerButton(view, clickX, clickY, inventory)){
+						view.showInventory();
 					} else {
 
 						for (Map.Entry<Integer, GridCell> cell : gridMap
@@ -147,6 +148,13 @@ public class WalkerActivity extends Activity {
 				}
 				invalidateOptionsMenu();
 				return false;
+			}
+
+			private boolean centerButton(TerrainView view, float clickX,
+					float clickY, GridCell inventory) {
+				return (clickX >= inventory.getLeft()&& clickX <= inventory.getRight() // if inventory button pressed
+						&& clickY <= inventory.getTop()
+						&& clickY >= inventory.getBottom());
 			}
 
 			private boolean upButton(TerrainView view, float clickX,

@@ -34,6 +34,14 @@ public class Person extends AbstractActor implements Actor {
 			listener.pickedUpItem();
 		}	
 	}
+	@Override
+	public void useItem(Portable item){
+		super.useItem(item);
+		for (PersonListener listener : listeners){
+			listener.pickedUpItem();
+		}
+	}
+	
 	
 	public void addListeners(PersonListener listener){
 		listeners.add(listener);
