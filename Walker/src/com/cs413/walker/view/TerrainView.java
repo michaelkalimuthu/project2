@@ -128,7 +128,7 @@ public class TerrainView extends View {
 		canvas.drawRect(rect, paint);
 		
 		rect.set(canvas.getWidth()/2 -60, bRow, canvas.getWidth()/2 +60, canvas.getHeight()); //center, inventory
-		gridMap.put(INVENTORY, new GridCell(canvas.getWidth()/2 -60, bRow, canvas.getWidth()/2 +60, canvas.getHeight()));
+		gridMap.put(INVENTORY, new GridCell(canvas.getWidth()/2 -60, canvas.getWidth()/2 +60, bRow, canvas.getHeight()));
 		x = (int) rect.exactCenterX();
 		y = (int) rect.exactCenterY();
 		paint.setTextSize(15);
@@ -138,7 +138,7 @@ public class TerrainView extends View {
 
 		rect.set(canvas.getWidth() / 2 + 60, bRow, canvas.getWidth(),  //right side, up button
 				canvas.getHeight());
-		gridMap.put(UP, new GridCell(canvas.getWidth() / 2 + 60, canvas.getWidth(),
+		gridMap.put(UP, new GridCell(canvas.getWidth() / 2 + 60,  canvas.getWidth(),
 				bRow, canvas.getHeight()));
 
 		x = (int) rect.exactCenterX();

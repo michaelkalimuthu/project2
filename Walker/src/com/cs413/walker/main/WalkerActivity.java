@@ -19,6 +19,7 @@ import android.view.View.OnTouchListener;
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.actors.Person;
 import com.cs413.walker.actors.PersonListener;
+import com.cs413.walker.items.EnergyBar;
 import com.cs413.walker.items.Food;
 import com.cs413.walker.items.Portable;
 import com.cs413.walker.locations.DefaultLocation;
@@ -244,6 +245,9 @@ public class WalkerActivity extends Activity {
 
 		player = new Person("Player", one.get(12), INIT_HEALTH, INIT_ENERGY);
 		Portable food = new Food(10, "bread");
+		Portable energy = new EnergyBar(2, "energybar");
+		
+		one.get(14).addItem(energy);
 		one.get(12).addItem(food);
 
 		levels.put(1, one);

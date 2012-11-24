@@ -9,9 +9,9 @@ public class EnergyBar implements Portable {
 	Location currentLocation;
 	Actor actor;
 	
-	public EnergyBar(int addEnergy, Location currentLocation){
+	public EnergyBar(int addEnergy, String name){
 		this.addEnergy = addEnergy;
-		this.currentLocation = currentLocation;
+		this.name = name;
 	}
 
 	@Override
@@ -50,6 +50,11 @@ public class EnergyBar implements Portable {
 	@Override
 	public void setActor(Actor actor) {
 		this.actor = actor;
+	}
+	
+	@Override
+	public String toString(){
+		return name + " " + addEnergy;
 	}
 
 }
