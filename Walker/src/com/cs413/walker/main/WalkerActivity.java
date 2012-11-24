@@ -19,6 +19,7 @@ import android.view.View.OnTouchListener;
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.actors.Person;
 import com.cs413.walker.actors.PersonListener;
+import com.cs413.walker.items.Coin;
 import com.cs413.walker.items.EnergyBar;
 import com.cs413.walker.items.Food;
 import com.cs413.walker.items.Portable;
@@ -249,6 +250,8 @@ public class WalkerActivity extends Activity {
 		
 		one.get(14).addItem(energy);
 		one.get(12).addItem(food);
+		one.get(12).addItem(new EnergyBar(4, "energybar"));
+		one.get(12).addRewards(new Coin(3));
 
 		levels.put(1, one);
 		levels.put(2, two);

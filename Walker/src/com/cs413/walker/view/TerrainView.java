@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.items.Portable;
+import com.cs413.walker.items.Reward;
 import com.cs413.walker.locations.Location;
 import com.cs413.walker.locations.Neighbor;
 import com.example.walker.R;
@@ -387,8 +388,59 @@ public class TerrainView extends View {
 			drawItemsBox();
 			newItem = false;
 		}
+		boolean newReward = true;
+		if (actor.getLocation().getRewards().size() > 0 && newReward){
+			drawRewards();
+			newReward = false;
+		}
 
 	}
+	void drawRewards(){
+		final ArrayList<Reward> mSelectedItems = new ArrayList<Reward>();
+		// Where we track the selected items
+		String[] arr = new String[actor.getLocation().getRewards().size()];
+		for (int i=0; i< arr.length; i ++){
+			arr[i] = actor.getLocation().getRewards().get(i).toString();
+		}
+
+		CharSequence[] list = new CharSequence[arr.length];
+		for (int i=0; i<arr.length; i++){
+			list[i] = arr[i];
+		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+		// Set the dialog title
+		builder.setTitle("Pick Up?")
+		// Specify the list array, the items to be selected by default (null for none),
+		// and the listener through which to receive callbacks when items are selected
+		.setMultiChoiceItems(list, null,
+				new DialogInterface.OnMultiChoiceClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which,
+					boolean isChecked) {
+				if (isChecked) {
+					// If the user checked the item, add it to the selected items
+					mSelectedItems.add(actor.getLocation().getRewards().get(which));
+				} 
+			}
+		}).setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				if (mSelectedItems.size() > 0){	
+					actor.addCoins(mSelectedItems.get(id+1).getValue());
+					actor.getLocation().getRewards().remove(id+1);
+				}
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				Log.d(TAG, "Cancelled");
+			}
+		});
+		builder.show();
+	}
+	
 
 	void drawItemsBox(){
 
@@ -409,24 +461,17 @@ public class TerrainView extends View {
 		builder.setTitle("Pick Up?")
 		// Specify the list array, the items to be selected by default (null for none),
 		// and the listener through which to receive callbacks when items are selected
-		.setMultiChoiceItems(list, null,
-				new DialogInterface.OnMultiChoiceClickListener() {
+		.setItems(list, 
+				new DialogInterface.OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which,
-					boolean isChecked) {
-				if (isChecked) {
+			public void onClick(DialogInterface dialog, int which) {
+				Portable item = actor.getLocation().getItems().get(which);
+				actor.getLocation().getItems().remove(which);
+				actor.addItems(item);
 					// If the user checked the item, add it to the selected items
-					mSelectedItems.add(actor.getLocation().getItems().get(which));
-				} 
-			}
-		}).setPositiveButton("Done", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				if (mSelectedItems.size() > 0){
-					actor.addItems(mSelectedItems.get(id+1));
-					actor.getLocation().getItems().remove(id+1);
+					//mSelectedItems.add(actor.getLocation().getItems().get(which));
 				}
-			}
+			
 		})
 		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 			@Override
@@ -454,23 +499,12 @@ public class TerrainView extends View {
 		builder.setTitle("Use")
 		// Specify the list array, the items to be selected by default (null for none),
 		// and the listener through which to receive callbacks when items are selected
-		.setMultiChoiceItems(list, null,
-				new DialogInterface.OnMultiChoiceClickListener() {
+		.setItems(list, 
+				new DialogInterface.OnClickListener() {
 			@Override
-			public void onClick(DialogInterface dialog, int which,
-					boolean isChecked) {
-				if (isChecked) {
-					// If the user checked the item, add it to the selected items
-					mSelectedItems.add(actor.getItems().get(which));
-				} 
-			}
-		}).setPositiveButton("Done", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				if (mSelectedItems.size() > 0){
-					actor.useItem(mSelectedItems.get(id+1));
-					
-				}
+			public void onClick(DialogInterface dialog, int which) {
+				Log.d(TAG, String.valueOf(which));
+				actor.useItem(actor.getItems().get(which));
 			}
 		})
 		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

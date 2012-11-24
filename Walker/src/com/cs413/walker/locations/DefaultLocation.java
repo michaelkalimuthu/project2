@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.items.Portable;
+import com.cs413.walker.items.Reward;
 
 /***
  * This class will be used to create locations for the terrain of the 
@@ -23,6 +24,7 @@ public class DefaultLocation implements Location{
 	List<Actor> actors;
 	LocationAbility ability;
 	ArrayList<Portable> items;
+	ArrayList<Reward> rewards;
 	
 	int tile;
 	
@@ -34,6 +36,7 @@ public class DefaultLocation implements Location{
 		map = new HashMap<Neighbor, Location>();
 		actors = new ArrayList<Actor>();
 		items = new ArrayList<Portable>();
+		rewards = new ArrayList<Reward>();
 	}
 	/**
 	 * Creates a location
@@ -44,6 +47,7 @@ public class DefaultLocation implements Location{
 		map = new HashMap<Neighbor, Location>();
 		actors = new ArrayList<Actor>();
 		items = new ArrayList<Portable>();
+		rewards = new ArrayList<Reward>();
 	}
 	
 	@Override
@@ -100,6 +104,15 @@ public class DefaultLocation implements Location{
 	@Override
 	public void addItem(Portable item) {
 		items.add(item);	
+	}
+	@Override
+	public ArrayList<Reward> getRewards() {
+		return rewards;
+	}
+	@Override
+	public void addRewards(Reward reward) {
+		rewards.add(reward);
+		
 	}
 
 	

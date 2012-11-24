@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.items.Portable;
+import com.cs413.walker.items.Reward;
 
 /***
  * Location interface that requires adding neighbors
@@ -51,6 +52,9 @@ public interface Location {
 	
 	ArrayList<Portable> getItems();
 	void addItem(Portable item);
+	
+	ArrayList<Reward> getRewards();
+	void addRewards(Reward reward);
 	
 
 }

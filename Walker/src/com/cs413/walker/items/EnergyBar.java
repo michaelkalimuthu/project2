@@ -3,27 +3,16 @@ package com.cs413.walker.items;
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.locations.Location;
 
-public class EnergyBar implements Portable {
+public class EnergyBar extends AbstractItem {
 	private int addEnergy;
 	String name;
 	Location currentLocation;
 	Actor actor;
 	
 	public EnergyBar(int addEnergy, String name){
+		super(name);
 		this.addEnergy = addEnergy;
-		this.name = name;
-	}
-
-	@Override
-	public void setName(String name) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	@Override
@@ -31,30 +20,10 @@ public class EnergyBar implements Portable {
 		getActor().addEnergy(addEnergy);
 	}
 
-	@Override
-	public void pickUp(Actor actor) {
-		setActor(actor);
-	}
-
-	@Override
-	public void dropItem(Location location) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Actor getActor() {
-		return actor;
-	}
-
-	@Override
-	public void setActor(Actor actor) {
-		this.actor = actor;
-	}
 	
 	@Override
 	public String toString(){
-		return name + " " + addEnergy;
+		return super.toString() + " " + addEnergy;
 	}
 
 }
