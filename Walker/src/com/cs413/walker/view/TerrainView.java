@@ -107,15 +107,15 @@ public class TerrainView extends View {
 
 	private void drawButtons(Rect rect, Canvas canvas) {
 		int bRow = canvas.getHeight() - (canvas.getHeight() / 10);
-	
+
 		paint.setColor(Color.BLACK);
 		paint.setStyle(Paint.Style.STROKE);
-	
+
 		rect.set(0, bRow, canvas.getWidth() / 2, canvas.getHeight());
 		gridMap.put(
 				DOWN,
 				new GridCell(0, canvas.getWidth() / 2, bRow, canvas.getHeight()));
-	
+
 		int x = (int) rect.exactCenterX();
 		int y = (int) rect.exactCenterY();
 		if (canGoDown) {
@@ -123,14 +123,14 @@ public class TerrainView extends View {
 		} else {
 			canvas.drawBitmap(downRed, x, y - 20, paint);
 		}
-	
+
 		canvas.drawRect(rect, paint);
-	
+
 		rect.set(canvas.getWidth() / 2, bRow, canvas.getWidth(),
 				canvas.getHeight());
 		gridMap.put(UP, new GridCell(canvas.getWidth() / 2, canvas.getWidth(),
 				bRow, canvas.getHeight()));
-	
+
 		x = (int) rect.exactCenterX();
 		y = (int) rect.exactCenterY();
 		if (canGoUp) {
@@ -138,18 +138,18 @@ public class TerrainView extends View {
 		} else {
 			canvas.drawBitmap(upRed, x, y - 20, paint);
 		}
-	
+
 		canvas.drawRect(rect, paint);
-	
+
 	}
 
 	private int runGrid(Canvas canvas) {
-	
+
 		int location = getCurrentLoc();
-	
+
 		setCanGoUp(false);
 		setCanGoDown(false);
-	
+
 		int countHeight = 0;
 		int left = 0;
 		int top = 0;
@@ -157,9 +157,9 @@ public class TerrainView extends View {
 		int inc = canvas.getWidth() / 5;
 		int bottom = canvas.getHeight() / 10;
 		int bottomInc = canvas.getHeight() / 10;
-	
+
 		for (int i = 0; i < 45; i++) {
-	
+
 			if (countHeight == 5) {
 				left = 0;
 				right = inc;
@@ -174,11 +174,11 @@ public class TerrainView extends View {
 			 */
 			left = right;
 			right += inc;
-	
+
 			countHeight++;
-	
+
 		}
-	
+
 		init = false;
 		return location;
 	}
@@ -187,137 +187,137 @@ public class TerrainView extends View {
 		return gridMap;
 	}
 
-		/* Colors are used to represent the accessibility of a location by the player 
+	/* Colors are used to represent the accessibility of a location by the player 
 		   where green is a location the player can move into, blue locations are not. (blue is water)
 		    The remaining locations in the level
 		   are colored gray*/
-		private void setUpNeighbors(int i, Canvas canvas, Rect rect) {
-	
-			HashMap<Neighbor, Location> m = map.get(getLevel())
-					.get(getCurrentLoc()).getNeighbors();
-	
-	/*
+	private void setUpNeighbors(int i, Canvas canvas, Rect rect) {
+
+		HashMap<Neighbor, Location> m = map.get(getLevel())
+				.get(getCurrentLoc()).getNeighbors();
+
+		/*
 			if (i == getCurrentLoc()) {
 				paint.setColor(Color.WHITE);
 				stroke = true;
-				
+
 				return;
 			}
-			*/
-			
-			GridCell cell = null;
-			cell = gridMap.get(i);
-			paint.setColor(Color.WHITE);
+		 */
+
+		GridCell cell = null;
+		cell = gridMap.get(i);
+		paint.setColor(Color.WHITE);
+		rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+		canvas.drawRect(rect, paint);
+
+
+		//get display info for south neighbor
+		cell = gridMap.get(getCurrentLoc() + 5);
+		if (m.get(Neighbor.SOUTH) == null) {
+			paint.setColor(Color.GRAY);
 			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
 			canvas.drawRect(rect, paint);
-			
-			
-			//get display info for south neighbor
-			cell = gridMap.get(getCurrentLoc() + 5);
-			if (m.get(Neighbor.SOUTH) == null) {
-				paint.setColor(Color.GRAY);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-				canvas.drawRect(rect, paint);
-			} else if (m.get(Neighbor.SOUTH).canAddActor()) {
-				movingOptions.add(mapping.get(m.get(Neighbor.SOUTH)));
-				paint.setColor(Color.GREEN);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-				canvas.drawRect(rect, paint);
-			} else {
-				paint.setColor(Color.BLUE);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-				canvas.drawRect(rect, paint);
-			}
-			
-			//get display info for north neighbor
-			cell = gridMap.get(getCurrentLoc() - 5);
-	
-				if (m.get(Neighbor.NORTH) == null) {
-					paint.setColor(Color.GRAY);
-					rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-					canvas.drawRect(rect, paint);
-				} else if (m.get(Neighbor.NORTH).canAddActor()) {
-					movingOptions.add(mapping.get(m.get(Neighbor.NORTH)));
-					paint.setColor(Color.GREEN);
-					rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-					canvas.drawRect(rect, paint);
-				} else {
-					paint.setColor(Color.BLUE);
-					rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-					canvas.drawRect(rect, paint);
-				}
-	
-			//get display info for east neighbor
-			cell = gridMap.get(getCurrentLoc() + 1);
-				if (m.get(Neighbor.EAST) == null) {
-					paint.setColor(Color.GRAY);
-					rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-					canvas.drawRect(rect, paint);
-				} else if (m.get(Neighbor.EAST).canAddActor()) {
-					movingOptions.add(mapping.get(m.get(Neighbor.EAST)));
-					paint.setColor(Color.GREEN);
-					rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-					canvas.drawRect(rect, paint);
-				} else {
-					paint.setColor(Color.BLUE);
-					rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-					canvas.drawRect(rect, paint);
-				}
-			
-			//get display info for west neighbor
-			cell = gridMap.get(getCurrentLoc() - 1);
-				if (m.get(Neighbor.WEST) == null) {
-					paint.setColor(Color.GRAY);
-					rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-					canvas.drawRect(rect, paint);
-				} else if (m.get(Neighbor.WEST).canAddActor()) {
-					movingOptions.add(mapping.get(m.get(Neighbor.WEST)));
-					paint.setColor(Color.GREEN);
-					rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-					canvas.drawRect(rect, paint);
-				} else {
-					paint.setColor(Color.BLUE);
-					rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
-					canvas.drawRect(rect, paint);
-				}
-			
-	
-			//display info for above and below neighbor
-			if (m.get(Neighbor.ABOVE) != null
-					&& m.get(Neighbor.ABOVE).canAddActor()) {
-				movingOptions.add(mapping.get(m.get(Neighbor.ABOVE)));
-				setCanGoUp(true);
-			} else if (m.get(Neighbor.BELOW) != null
-					&& m.get(Neighbor.BELOW).canAddActor()) {
-				movingOptions.add(mapping.get(m.get(Neighbor.BELOW)));
-				setCanGoDown(true);
-			} else {
-				setCanGoDown(false);
-				setCanGoUp(false);
-			}
-	
-	
-	
+		} else if (m.get(Neighbor.SOUTH).canAddActor()) {
+			movingOptions.add(mapping.get(m.get(Neighbor.SOUTH)));
+			paint.setColor(Color.GREEN);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
+		} else {
+			paint.setColor(Color.BLUE);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
 		}
 
-	public void notify(Location newLocation, Actor player) {
-			String text = "Location " + newLocation.toString()
-					+ " entered by actor " + player.toString();
-		
-			if (toast != null) {
-				toast.cancel();
-			}
-		
-			toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-			toast.show();
-			Vibrator v = (Vibrator) context
-					.getSystemService(Context.VIBRATOR_SERVICE);
-			// Vibrator v = (Vibrator)
-			// context.getSystemService(Context.VIBRATOR_SERVICE);
-			v.vibrate(20);
-			// Canvas canvas = this.canvas;
-		
+		//get display info for north neighbor
+		cell = gridMap.get(getCurrentLoc() - 5);
+
+		if (m.get(Neighbor.NORTH) == null) {
+			paint.setColor(Color.GRAY);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
+		} else if (m.get(Neighbor.NORTH).canAddActor()) {
+			movingOptions.add(mapping.get(m.get(Neighbor.NORTH)));
+			paint.setColor(Color.GREEN);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
+		} else {
+			paint.setColor(Color.BLUE);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
 		}
+
+		//get display info for east neighbor
+		cell = gridMap.get(getCurrentLoc() + 1);
+		if (m.get(Neighbor.EAST) == null) {
+			paint.setColor(Color.GRAY);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
+		} else if (m.get(Neighbor.EAST).canAddActor()) {
+			movingOptions.add(mapping.get(m.get(Neighbor.EAST)));
+			paint.setColor(Color.GREEN);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
+		} else {
+			paint.setColor(Color.BLUE);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
+		}
+
+		//get display info for west neighbor
+		cell = gridMap.get(getCurrentLoc() - 1);
+		if (m.get(Neighbor.WEST) == null) {
+			paint.setColor(Color.GRAY);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
+		} else if (m.get(Neighbor.WEST).canAddActor()) {
+			movingOptions.add(mapping.get(m.get(Neighbor.WEST)));
+			paint.setColor(Color.GREEN);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
+		} else {
+			paint.setColor(Color.BLUE);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(), cell.getBottom());
+			canvas.drawRect(rect, paint);
+		}
+
+
+		//display info for above and below neighbor
+		if (m.get(Neighbor.ABOVE) != null
+				&& m.get(Neighbor.ABOVE).canAddActor()) {
+			movingOptions.add(mapping.get(m.get(Neighbor.ABOVE)));
+			setCanGoUp(true);
+		} else if (m.get(Neighbor.BELOW) != null
+				&& m.get(Neighbor.BELOW).canAddActor()) {
+			movingOptions.add(mapping.get(m.get(Neighbor.BELOW)));
+			setCanGoDown(true);
+		} else {
+			setCanGoDown(false);
+			setCanGoUp(false);
+		}
+
+
+
+	}
+
+	public void notify(Location newLocation, Actor player) {
+		String text = "Location " + newLocation.toString()
+				+ " entered by actor " + player.toString();
+
+		if (toast != null) {
+			toast.cancel();
+		}
+
+		toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+		toast.show();
+		Vibrator v = (Vibrator) context
+				.getSystemService(Context.VIBRATOR_SERVICE);
+		// Vibrator v = (Vibrator)
+		// context.getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(20);
+		// Canvas canvas = this.canvas;
+
+	}
 
 	/*
 	 * @Override protected void onMeasure(int widthMeasureSpec, int
@@ -347,7 +347,7 @@ public class TerrainView extends View {
 		int y = (int) rect.exactCenterY();
 		canvas.drawBitmap(player, x-20, y-25, paint);
 		drawItems(canvas, gridMap.get(getCurrentLoc()));
-		
+
 		drawButtons(rect, canvas);
 
 		initDraw = false;
@@ -362,48 +362,50 @@ public class TerrainView extends View {
 	}
 
 	void drawItemsBox(){
-		
+
 		final ArrayList<Portable> mSelectedItems = new ArrayList<Portable>();
-		  // Where we track the selected items
+		// Where we track the selected items
 		String[] arr = new String[actor.getLocation().getItems().size()];
 		for (int i=0; i< arr.length; i ++){
 			arr[i] = actor.getLocation().getItems().get(i).toString();
 		}
-		
+
 		CharSequence[] list = new CharSequence[arr.length];
 		for (int i=0; i<arr.length; i++){
 			list[i] = arr[i];
 		}
-	    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-	   
-	    // Set the dialog title
-	    builder.setTitle("Pick Up?")
-	    // Specify the list array, the items to be selected by default (null for none),
-	    // and the listener through which to receive callbacks when items are selected
-	           .setMultiChoiceItems(list, null,
-	                      new DialogInterface.OnMultiChoiceClickListener() {
-	               @Override
-	               public void onClick(DialogInterface dialog, int which,
-	                       boolean isChecked) {
-	                   if (isChecked) {
-	                       // If the user checked the item, add it to the selected items
-	                       mSelectedItems.add(actor.getLocation().getItems().get(which));
-	                   } 
-	               }
-	           }).setPositiveButton("Done", new DialogInterface.OnClickListener() {
-	               @Override
-	               public void onClick(DialogInterface dialog, int id) {
-	                   actor.addItems(mSelectedItems.get(id+1));
-	                   actor.getLocation().getItems().remove(id+1);
-	                   }
-	           })
-	           .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	               @Override
-	               public void onClick(DialogInterface dialog, int id) {
-	                   Log.d(TAG, "Cancelled");
-	               }
-	           });
-	           builder.show();
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+		// Set the dialog title
+		builder.setTitle("Pick Up?")
+		// Specify the list array, the items to be selected by default (null for none),
+		// and the listener through which to receive callbacks when items are selected
+		.setMultiChoiceItems(list, null,
+				new DialogInterface.OnMultiChoiceClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which,
+					boolean isChecked) {
+				if (isChecked) {
+					// If the user checked the item, add it to the selected items
+					mSelectedItems.add(actor.getLocation().getItems().get(which));
+				} 
+			}
+		}).setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				if (mSelectedItems.size() > 0){
+					actor.addItems(mSelectedItems.get(id+1));
+					actor.getLocation().getItems().remove(id+1);
+				}
+			}
+		})
+		.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				Log.d(TAG, "Cancelled");
+			}
+		});
+		builder.show();
 	}
 
 	// Draws a box of player stats for current location, obtained items and health
@@ -412,7 +414,8 @@ public class TerrainView extends View {
 		TextView textView = new TextView(context);
 		textView.setVisibility(View.VISIBLE);
 		textView.setText("Location: " + player.getLocation().getName()
-				+ "\nEnergy: " + player.getEnergy() + "\nHP: " + player.getHealth());
+				+ "\nEnergy: " + player.getEnergy() + "\nHP: " + player.getHealth()
+				+ "\nCoins: " + player.getCoins() + "\tItems: " + player.getItems().size());
 		layout.addView(textView);
 
 		layout.measure(canvas.getWidth(), canvas.getHeight());
@@ -423,8 +426,8 @@ public class TerrainView extends View {
 
 		layout.draw(canvas);
 	}
-	
-	
+
+
 	private void setMapping() {
 		mapping.clear();
 		for (int i = 0; i < map.get(getLevel()).size(); i++) {

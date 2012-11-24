@@ -35,5 +35,7 @@ public interface Actor {
 	
 	public void addItems(Portable item);
 	public ArrayList<Portable> getItems();
+	
+	public void addListeners(PersonListener listener);
 
 }

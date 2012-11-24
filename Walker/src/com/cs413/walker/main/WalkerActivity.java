@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.View.OnTouchListener;
 
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.actors.Person;
+import com.cs413.walker.actors.PersonListener;
 import com.cs413.walker.items.Food;
 import com.cs413.walker.items.Portable;
 import com.cs413.walker.locations.DefaultLocation;
@@ -39,6 +41,8 @@ public class WalkerActivity extends Activity {
 	ArrayList<Location> three;
 	HashMap<Integer, GridCell> gridMap;
 	ArrayList<Integer> movingOptions;
+	
+	PersonListener personListener;
 
 	Actor player;
 	
@@ -58,6 +62,7 @@ public class WalkerActivity extends Activity {
 
 		gridMap = new HashMap<Integer, GridCell>();
 		movingOptions = new ArrayList<Integer>();
+		
 		setUpGame();
 		
 		// SoundPool object allows up to 3 simultaneous sounds to be played.0 represents normal audio quality.
@@ -69,6 +74,24 @@ public class WalkerActivity extends Activity {
 
 
 		final TerrainView view = new TerrainView(this, levels, player);
+		
+		personListener = new PersonListener() {
+
+			@Override
+			public void pickedUpItem() {
+				view.invalidate();
+				
+			}
+
+			@Override
+			public void moved() {
+				view.invalidate();
+				
+			}
+			
+			
+		};
+		player.addListeners(personListener);
 
 		OnTouchListener listener = new OnTouchListener() {
 
@@ -89,13 +112,13 @@ public class WalkerActivity extends Activity {
 						player.move(player.getLocation().getNeighbors().get(Neighbor.BELOW)); //move player
 						view.changeLevel(-1); //let view know level is changing
 						view.notify(player.getLocation(), player); //tell view to notify
-						view.invalidate();
+						
 					} else if (upButton(view, clickX, clickY, up)) {
 						sp.play(elevator, 1, 1, 0, 0, 1); // play elevator sound
 						player.move(player.getLocation().getNeighbors().get(Neighbor.ABOVE));
 						view.changeLevel(1);
 						view.notify(player.getLocation(), player);
-						view.invalidate();
+						
 					} else {
 
 						for (Map.Entry<Integer, GridCell> cell : gridMap
@@ -113,7 +136,7 @@ public class WalkerActivity extends Activity {
 										player.move(mapping.getKey());
 										sp.play(footsteps, 1, 1, 0, 0, 1); // play footsteps sound onTouch of accessible space
 										view.notify(mapping.getKey(), player);
-										view.invalidate();
+										
 									}
 								}
 							}
@@ -222,22 +245,27 @@ public class WalkerActivity extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		
-		menu.add("Use Item");	
-		
+	public boolean onCreateOptionsMenu(Menu menu) {	
 		getMenuInflater().inflate(R.menu.activity_walker, menu);
 		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle item selection
-		
-
-		return super.onOptionsItemSelected(item);
-
+		switch (item.getItemId()){
+		case R.id.use_item : 
+			Intent intent = new Intent("com.cs413.walker.main.USE_ITEM");
+			Bundle bundle = getIntent().getExtras();
+			intent.putExtras(bundle);
+			
+			
+			startActivity(intent);
+			break;
+		}
+		return true;
 	}
+	
+
 	
 	
 }
