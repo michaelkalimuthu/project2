@@ -11,15 +11,16 @@ public abstract class AbstractActor implements Actor{
 	
 	protected String name;
 	
-	protected int health, energy, coins;
+	protected int health, energy, coins, lives;
 	
 	protected ArrayList<Portable> items;
 	
-	public AbstractActor(String name, Location location, int health, int energy){
+	public AbstractActor(String name, Location location, int health, int energy, int lives){
 		this.name = name;
 		this.location = location;
 		this.health = health;
 		this.energy = energy;
+		this.lives = lives;
 		coins = 0;
 		items = new ArrayList<Portable>();
 	}

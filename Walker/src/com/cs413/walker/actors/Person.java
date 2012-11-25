@@ -8,8 +8,8 @@ import com.cs413.walker.locations.Location;
 public class Person extends AbstractActor implements Actor {
 	HashSet<PersonListener> listeners;
 	
-	public Person(String name, Location location, int health, int energy){
-		super(name, location, health, energy);
+	public Person(String name, Location location, int health, int energy, int lives){
+		super(name, location, health, energy, lives);
 		listeners = new HashSet<PersonListener>(); 
 	}
 	

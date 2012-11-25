@@ -36,6 +36,7 @@ public class WalkerActivity extends Activity {
 	
 	private final static int INIT_HEALTH = 100;
 	private final static int INIT_ENERGY = 10;
+	private final static int INIT_LIVES = 3;
 
 	HashMap<Integer, ArrayList<Location>> levels;
 	ArrayList<Location> one;
@@ -244,7 +245,7 @@ public class WalkerActivity extends Activity {
 
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
-		player = new Person("Player", one.get(12), INIT_HEALTH, INIT_ENERGY);
+		player = new Person("Player", one.get(12), INIT_HEALTH, INIT_ENERGY, INIT_LIVES);
 		Portable food = new Food(10, "bread");
 		Portable energy = new EnergyBar(2, "energybar");
 		
