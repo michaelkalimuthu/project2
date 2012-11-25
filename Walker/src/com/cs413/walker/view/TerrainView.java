@@ -154,14 +154,15 @@ public class TerrainView extends View {
 
 	}
 
-	// Draws a box of player stats for current location, obtained items and health
+	// Draws a box of player stats for current location, obtained items, health & lives
 	public void drawText(Location location, Actor player, Canvas canvas) {
 		LinearLayout layout = new LinearLayout(context);
 		TextView textView = new TextView(context);
 		textView.setVisibility(View.VISIBLE);
-		textView.setText("Location: " + player.getLocation().getName()
+		textView.setText("Current Location: " + player.getLocation().getName()
+				+ "\nLives: " + player.getLives() 
 				+ "\nEnergy: " + player.getEnergy() + "\nHP: " + player.getHealth()
-				+ "\nCoins: " + player.getCoins() + "\tItems: " + player.getItems().size());
+				+ "\nCoins: " + player.getCoins() + "\nItems: " + player.getItems().size());
 		layout.addView(textView);
 	
 		layout.measure(canvas.getWidth(), canvas.getHeight());

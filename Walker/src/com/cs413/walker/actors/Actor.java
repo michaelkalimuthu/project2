@@ -25,6 +25,7 @@ public interface Actor {
 	
 	public String getName();
 	
+	public int getLives();
 	public int getHealth();
 	public int getEnergy();
 	public int getCoins();

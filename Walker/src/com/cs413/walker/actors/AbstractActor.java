@@ -88,6 +88,11 @@ public abstract class AbstractActor implements Actor{
 	}
 	
 	@Override
+	public int getLives() {
+		return lives;
+	}
+	
+	@Override
 	public void useItem(Portable item){
 		if (getItems().contains(item)){
 			item.useItem();
