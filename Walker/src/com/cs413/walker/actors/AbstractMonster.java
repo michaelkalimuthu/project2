@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.cs413.walker.items.Portable;
 import com.cs413.walker.locations.Location;
 
-public abstract class AbstractActor implements Actor {
+public abstract class AbstractMonster implements Actor {
 
 	protected Location location;
 
@@ -15,7 +15,7 @@ public abstract class AbstractActor implements Actor {
 
 	protected ArrayList<Portable> items;
 
-	public AbstractActor(String name, Location location, int health,
+	public AbstractMonster(String name, Location location, int health,
 			int energy, int lives) {
 		this.name = name;
 		this.location = location;
@@ -23,7 +23,7 @@ public abstract class AbstractActor implements Actor {
 		this.energy = energy;
 		this.lives = lives;
 		armor = 1;
-		damage = 1;
+		damage = 5;
 		coins = 0;
 		items = new ArrayList<Portable>();
 	}
@@ -114,14 +114,6 @@ public abstract class AbstractActor implements Actor {
 	@Override
 	public int getDamage() {
 		return damage;
-	}
-
-	public void addArmor(int addArmor) {
-		armor += addArmor;
-	}
-
-	public void addDamage(int addDamage) {
-		damage += addDamage;
 	}
 
 	@Override

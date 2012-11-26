@@ -37,6 +37,10 @@ public interface Actor {
 
 	public int getCoins();
 
+	public int getArmor();
+
+	public int getDamage();
+
 	public void addCoins(int addCoins);
 
 	public void addHealth(int addHealth);
@@ -50,5 +54,7 @@ public interface Actor {
 	public ArrayList<Portable> getItems();
 
 	public void addListeners(PersonListener listener);
+
+	public int attack(Actor actor);
 
 }
