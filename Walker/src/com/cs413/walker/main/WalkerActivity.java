@@ -33,7 +33,7 @@ import com.example.walker.R;
 
 public class WalkerActivity extends Activity {
 	private static final String TAG = "Activity";
-	
+
 	private final static int INIT_HEALTH = 100;
 	private final static int INIT_ENERGY = 10;
 	private final static int INIT_LIVES = 3;
@@ -44,11 +44,11 @@ public class WalkerActivity extends Activity {
 	ArrayList<Location> three;
 	HashMap<Integer, GridCell> gridMap;
 	ArrayList<Integer> movingOptions;
-	
+
 	PersonListener personListener;
 
 	Actor player;
-	
+
 	SoundPool sp;
 	int footsteps;
 	int elevator;
@@ -58,39 +58,40 @@ public class WalkerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 
 		// this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		one = new ArrayList<Location>(); //level one
+		one = new ArrayList<Location>(); // level one
 		two = new ArrayList<Location>(); // level two
 		three = new ArrayList<Location>();
 		levels = new HashMap<Integer, ArrayList<Location>>();
 
 		gridMap = new HashMap<Integer, GridCell>();
 		movingOptions = new ArrayList<Integer>();
-		
+
 		setUpGame();
-		
-		// SoundPool object allows up to 3 simultaneous sounds to be played.0 represents normal audio quality.
-		sp = new SoundPool(1, AudioManager.STREAM_MUSIC,0);
-		footsteps = sp.load(this,R.raw.footsteps,1); // links footsteps variable to audio clip in raw folder
-		elevator = sp.load(this,R.raw.elevator,1);
-	
+
+		// SoundPool object allows up to 3 simultaneous sounds to be played.0
+		// represents normal audio quality.
+		sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+		footsteps = sp.load(this, R.raw.footsteps, 1); // links footsteps
+														// variable to audio
+														// clip in raw folder
+		elevator = sp.load(this, R.raw.elevator, 1);
+
 		setContentView(R.layout.activity_walker);
 
-
 		final TerrainView view = new TerrainView(this, levels, player);
-		
+
 		personListener = new PersonListener() {
 
 			@Override
 			public void pickedUpItem() {
-				view.invalidate();				
+				view.invalidate();
 			}
 
 			@Override
 			public void moved() {
-				view.invalidate();				
+				view.invalidate();
 			}
-			
-			
+
 		};
 		player.addListeners(personListener);
 
@@ -101,27 +102,37 @@ public class WalkerActivity extends Activity {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					float clickX = event.getX();
 					float clickY = event.getY();
-					gridMap = view.getGridMap(); //get the grid
-					movingOptions = view.getMovingOptions(); //get moving options
+					gridMap = view.getGridMap(); // get the grid
+					movingOptions = view.getMovingOptions(); // get moving
+																// options
 
-					GridCell down = gridMap.get(TerrainView.DOWN); //get down button
-					GridCell up = gridMap.get(TerrainView.UP); //get up button
+					GridCell down = gridMap.get(TerrainView.DOWN); // get down
+																	// button
+					GridCell up = gridMap.get(TerrainView.UP); // get up button
 					GridCell inventory = gridMap.get(TerrainView.INVENTORY);
 
-
 					if (downButton(view, clickX, clickY, down)) {
-						sp.play(elevator, 1, 1, 0, 0, 1); // play elevator sound
-						player.move(player.getLocation().getNeighbors().get(Neighbor.BELOW)); //move player
-						view.changeLevel(-1); //let view know level is changing
-						view.notify(player.getLocation(), player); //tell view to notify
-						
+						if (player.move(player.getLocation().getNeighbors()
+								.get(Neighbor.BELOW))) { // move player
+							view.changeLevel(-1); // let view know level is
+													// changing
+							view.notify(player.getLocation(), player); // tell
+																		// view
+																		// to
+																		// notify
+							sp.play(elevator, 1, 1, 0, 0, 1);
+						} // play elevator sound
+
 					} else if (upButton(view, clickX, clickY, up)) {
-						sp.play(elevator, 1, 1, 0, 0, 1); // play elevator sound
-						player.move(player.getLocation().getNeighbors().get(Neighbor.ABOVE));
-						view.changeLevel(1);
-						view.notify(player.getLocation(), player);
-						
-					} else if (centerButton(view, clickX, clickY, inventory)){
+						if (player.move(player.getLocation().getNeighbors()
+								.get(Neighbor.ABOVE))) {
+							sp.play(elevator, 1, 1, 0, 0, 1); // play elevator
+																// sound
+							view.changeLevel(1);
+							view.notify(player.getLocation(), player);
+						}
+
+					} else if (centerButton(view, clickX, clickY, inventory)) {
 						view.showInventory();
 					} else {
 
@@ -137,10 +148,18 @@ public class WalkerActivity extends Activity {
 									if (mapping.getValue() == cell.getKey()
 											&& movingOptions.contains(mapping
 													.getValue())) {
-										player.move(mapping.getKey());
-										sp.play(footsteps, 1, 1, 0, 0, 1); // play footsteps sound onTouch of accessible space
-										view.notify(mapping.getKey(), player);
-										
+										if (player.move(mapping.getKey())) {
+											sp.play(footsteps, 1, 1, 0, 0, 1); // play
+																				// footsteps
+																				// sound
+																				// onTouch
+																				// of
+																				// accessible
+																				// space
+											view.notify(mapping.getKey(),
+													player);
+										}
+
 									}
 								}
 							}
@@ -155,23 +174,26 @@ public class WalkerActivity extends Activity {
 
 			private boolean centerButton(TerrainView view, float clickX,
 					float clickY, GridCell inventory) {
-				return (clickX >= inventory.getLeft()&& clickX <= inventory.getRight() // if inventory button pressed
-						&& clickY <= inventory.getTop()
-						&& clickY >= inventory.getBottom());
+				return (clickX >= inventory.getLeft()
+						&& clickX <= inventory.getRight() // if inventory button
+															// pressed
+						&& clickY <= inventory.getTop() && clickY >= inventory
+						.getBottom());
 			}
 
 			private boolean upButton(TerrainView view, float clickX,
 					float clickY, GridCell up) {
-				return (view.isCanGoUp()&& clickX >= up.getLeft()&& clickX <= up.getRight() // if up button pressed
-						&& clickY <= up.getTop()
-						&& clickY >= up.getBottom());
+				return (view.isCanGoUp() && clickX >= up.getLeft()
+						&& clickX <= up.getRight() // if up button pressed
+						&& clickY <= up.getTop() && clickY >= up.getBottom());
 			}
 
 			private boolean downButton(TerrainView view, float clickX,
-					float clickY, GridCell down) {			
-				return (view.isCanGoDown()&& clickX >= down.getLeft()&& clickX <= down.getRight() // if down button pressed
-						&& clickY <= down.getTop()
-						&& clickY >= down.getBottom());
+					float clickY, GridCell down) {
+				return (view.isCanGoDown() && clickX >= down.getLeft()
+						&& clickX <= down.getRight() // if down button pressed
+						&& clickY <= down.getTop() && clickY >= down
+						.getBottom());
 			}
 
 		};
@@ -206,9 +228,9 @@ public class WalkerActivity extends Activity {
 				two.add(loc);
 			}
 		}
-		
-		for (int i= 0; i < 45; i++){
-			if (i == 5 || i == 6 || i == 7 || i == 8 || i == 9){
+
+		for (int i = 0; i < 45; i++) {
+			if (i == 5 || i == 6 || i == 7 || i == 8 || i == 9) {
 				three.add(new Water(String.valueOf(j++)));
 			} else {
 				three.add(new DefaultLocation(String.valueOf(j++)));
@@ -239,16 +261,23 @@ public class WalkerActivity extends Activity {
 			}
 		}
 
-		one.get(32).addNeighbor(Neighbor.ABOVE, two.get(5));  //32's above neighbor is now 5 and vice versa
-		
-		two.get(13).addNeighbor(Neighbor.ABOVE, three.get(0)); //13's above neighbor is now 0 and vice versa
+		one.get(32).addNeighbor(Neighbor.ABOVE, two.get(5)); // 32's above
+																// neighbor is
+																// now 5 and
+																// vice versa
+
+		two.get(13).addNeighbor(Neighbor.ABOVE, three.get(0)); // 13's above
+																// neighbor is
+																// now 0 and
+																// vice versa
 
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
-		player = new Person("Player", one.get(12), INIT_HEALTH, INIT_ENERGY, INIT_LIVES);
+		player = new Person("Player", one.get(12), INIT_HEALTH, INIT_ENERGY,
+				INIT_LIVES);
 		Portable food = new Food(10, "bread");
 		Portable energy = new EnergyBar(2, "energybar");
-		
+
 		one.get(14).addItem(energy);
 		one.get(12).addItem(food);
 		one.get(12).addItem(new EnergyBar(4, "energybar"));
@@ -261,27 +290,23 @@ public class WalkerActivity extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {	
+	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_walker, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()){
-		case R.id.use_item : 
+		switch (item.getItemId()) {
+		case R.id.use_item:
 			Intent intent = new Intent("com.cs413.walker.main.USE_ITEM");
 			Bundle bundle = getIntent().getExtras();
 			intent.putExtras(bundle);
-			
-			
+
 			startActivity(intent);
 			break;
 		}
 		return true;
 	}
-	
 
-	
-	
 }
