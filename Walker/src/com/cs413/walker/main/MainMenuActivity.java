@@ -18,7 +18,7 @@ import com.example.walker.R;
  */
 public class MainMenuActivity extends Activity {
 	// Initializing variables
-	Person player = new Person(null, null, 0, 0, 0);
+	Person player = new Person(null, null, 0, 0, 0, 0);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,7 @@ public class MainMenuActivity extends Activity {
 				walker_activity.putExtra("difficulty", difficulty.getValue());
 				walker_activity.putExtra("lives", lives.getValue());
 				walker_activity.putExtra("energy", energy.getValue());
+				walker_activity.putExtra("inventory", inventory.getValue());
 
 				startActivity(walker_activity);
 			}

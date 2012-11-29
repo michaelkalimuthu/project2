@@ -40,8 +40,8 @@ public interface Actor {
 	public int getArmor();
 
 	public int getDamage();
-	
-	//public int getCapacity();
+
+	public int getCapacity();
 
 	public void addCoins(int addCoins);
 

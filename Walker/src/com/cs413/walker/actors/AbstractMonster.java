@@ -11,7 +11,7 @@ public abstract class AbstractMonster implements Actor {
 
 	protected String name;
 
-	protected int health, energy, coins, lives, armor, damage;
+	protected int health, energy, coins, lives, armor, damage, capacity;
 
 	protected ArrayList<Portable> items;
 
@@ -22,6 +22,8 @@ public abstract class AbstractMonster implements Actor {
 		this.health = health;
 		this.energy = energy;
 		this.lives = lives;
+		this.capacity = 1;
+
 		armor = 1;
 		damage = 5;
 		coins = 0;
@@ -43,6 +45,11 @@ public abstract class AbstractMonster implements Actor {
 	@Override
 	public int getCoins() {
 		return coins;
+	}
+
+	@Override
+	public int getCapacity() {
+		return capacity;
 	}
 
 	@Override

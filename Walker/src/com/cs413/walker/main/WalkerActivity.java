@@ -39,6 +39,8 @@ public class WalkerActivity extends Activity {
 	private static int INIT_HEALTH = 100;
 	private static int INIT_ENERGY = 10;
 	private static int INIT_LIVES = 3;
+	private static int INIT_CAPACITY = 1;
+	private static int INIT_RATE = 1;
 
 	HashMap<Integer, ArrayList<Location>> levels;
 	ArrayList<Location> one;
@@ -48,7 +50,7 @@ public class WalkerActivity extends Activity {
 	ArrayList<Integer> movingOptions;
 	HashMap<Integer, ArrayList<Actor>> monsters;
 	ArrayList<Actor> levelOne;
-	
+
 	CountDownTimer movingTimer;
 	PersonListener personListener;
 
@@ -65,9 +67,9 @@ public class WalkerActivity extends Activity {
 		Intent i = getIntent();
 
 		INIT_ENERGY = i.getIntExtra("energy", 1);
-
+		INIT_CAPACITY = i.getIntExtra("inventory", 1);
 		INIT_LIVES = i.getIntExtra("lives", 1);
-
+		INIT_RATE = i.getIntExtra("difficulty", 1);
 		// Example of receiving parameter having key value as 'email'
 		// and storing the value in a variable named myemail
 		String myemail = i.getStringExtra("email");
@@ -289,13 +291,13 @@ public class WalkerActivity extends Activity {
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
 		player = new Person("Player", one.get(12), INIT_HEALTH, INIT_ENERGY,
-				INIT_LIVES);
-		Portable food = new Food(10, "bread");
-		Portable energy = new EnergyBar(2, "energybar");
+				INIT_LIVES, INIT_CAPACITY);
+		Portable food = new Food(10, "bread", 1);
+		Portable energy = new EnergyBar(2, "energybar", 1);
 
 		one.get(14).addItem(energy);
 		one.get(12).addItem(food);
-		one.get(12).addItem(new EnergyBar(4, "energybar"));
+		one.get(12).addItem(new EnergyBar(4, "energybar", 1));
 		one.get(12).addRewards(new Coin(3));
 
 		levels.put(1, one);
@@ -303,53 +305,60 @@ public class WalkerActivity extends Activity {
 		levels.put(3, three);
 
 		monster = new Pudge("Monster", one.get(1), 5, 5, 5);
-		levelOne.add(monster);
-		monsters.put(1, levelOne);
-		movingTimer(1);
+		// levelOne.add(monster);
+		// monsters.put(1, levelOne);
+		// movingTimer(1);
 
 	}
-	
+
 	public void movingTimer(int level) {
 		final ArrayList<Actor> levelMonsters = monsters.get(level);
-		
-		
-		movingTimer = new CountDownTimer(0, 5000){
+
+		movingTimer = new CountDownTimer(0, 5000) {
 			int min = 0;
 			int max = TerrainView.MAX_CELLS;
 
 			@Override
 			public void onFinish() {
-				for (Actor m : levelMonsters){
+				for (Actor m : levelMonsters) {
 					int choice = (int) (Math.random() * 4);
-					switch (choice){
-					case 0 : 
-						if (choice-1 > min)
-							m.move(m.getLocation().getNeighbors().get(Neighbor.WEST));
+					switch (choice) {
+					case 0:
+						if (choice - 1 > min) {
+							m.move(m.getLocation().getNeighbors()
+									.get(Neighbor.WEST));
+						}
 						break;
-					case 1 : 
-						if (choice+1 < max)
-							m.move(m.getLocation().getNeighbors().get(Neighbor.EAST)); 
+					case 1:
+						if (choice + 1 < max) {
+							m.move(m.getLocation().getNeighbors()
+									.get(Neighbor.EAST));
+						}
 						break;
-					case 2 : 
-						if (choice+5 < max)
-							m.move(m.getLocation().getNeighbors().get(Neighbor.SOUTH));
+					case 2:
+						if (choice + 5 < max) {
+							m.move(m.getLocation().getNeighbors()
+									.get(Neighbor.SOUTH));
+						}
 						break;
-					case 3 : 
-						if (choice-5 > min)
-							m.move(m.getLocation().getNeighbors().get(Neighbor.NORTH));
+					case 3:
+						if (choice - 5 > min) {
+							m.move(m.getLocation().getNeighbors()
+									.get(Neighbor.NORTH));
+						}
 						break;
 					}
 				}
 				Log.d(TAG, "MOVED");
 			}
+
 			@Override
 			public void onTick(long millisUntilFinished) {
-				
+
 			}
 
 		};
-		
-	}
+
 	}
 
 	@Override

@@ -62,6 +62,11 @@ public abstract class AbstractActor implements Actor {
 	}
 
 	@Override
+	public int getCapacity() {
+		return capacity;
+	}
+
+	@Override
 	public String getName() {
 		return name;
 	}

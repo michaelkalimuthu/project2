@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/energy"
         android:layout_toRightOf="@+id/energy"
-        android:text="packages"
+        android:text="inventory"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView

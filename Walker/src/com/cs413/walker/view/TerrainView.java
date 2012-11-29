@@ -177,7 +177,8 @@ public class TerrainView extends View {
 				+ "\nLives: " + player.getLives() + "\nEnergy: "
 				+ player.getEnergy() + "\nHP: " + player.getHealth()
 				+ "\nCoins: " + player.getCoins() + "\nItems: "
-				+ player.getItems().size());
+				+ player.getItems().size() + "/" + player.getCapacity()
+				+ "\nDifficulty: not a attribute of actor");
 		layout.addView(textView);
 
 		layout.measure(canvas.getWidth(), canvas.getHeight());
