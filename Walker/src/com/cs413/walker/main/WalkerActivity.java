@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,11 +16,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-import com.cs413.walker.actors.AbstractMonster;
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.actors.Person;
 import com.cs413.walker.actors.PersonListener;
-import com.cs413.walker.actors.Pudge;
 import com.cs413.walker.items.Coin;
 import com.cs413.walker.items.EnergyBar;
 import com.cs413.walker.items.Food;
@@ -37,9 +34,9 @@ import com.example.walker.R;
 public class WalkerActivity extends Activity {
 	private static final String TAG = "Activity";
 
-	private final static int INIT_HEALTH = 100;
-	private final static int INIT_ENERGY = 10;
-	private final static int INIT_LIVES = 3;
+	private static int INIT_HEALTH = 100;
+	private static int INIT_ENERGY = 10;
+	private static int INIT_LIVES = 3;
 
 	HashMap<Integer, ArrayList<Location>> levels;
 	ArrayList<Location> one;
@@ -47,14 +44,10 @@ public class WalkerActivity extends Activity {
 	ArrayList<Location> three;
 	HashMap<Integer, GridCell> gridMap;
 	ArrayList<Integer> movingOptions;
-	HashMap<Integer, ArrayList<Actor>> monsters;
-	ArrayList<Actor> levelOne;
-	
-	CountDownTimer movingTimer;
 
 	PersonListener personListener;
 
-	Actor player, monster;
+	Actor player;
 
 	SoundPool sp;
 	int footsteps;
@@ -64,6 +57,16 @@ public class WalkerActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Intent i = getIntent();
+
+		INIT_ENERGY = i.getIntExtra("energy", 1);
+
+		INIT_LIVES = i.getIntExtra("lives", 1);
+
+		// Example of receiving parameter having key value as 'email'
+		// and storing the value in a variable named myemail
+		String myemail = i.getStringExtra("email");
+
 		// this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		one = new ArrayList<Location>(); // level one
 		two = new ArrayList<Location>(); // level two
@@ -72,8 +75,6 @@ public class WalkerActivity extends Activity {
 
 		gridMap = new HashMap<Integer, GridCell>();
 		movingOptions = new ArrayList<Integer>();
-		monsters = new HashMap<Integer, ArrayList<Actor>>();
-		levelOne = new ArrayList<Actor>();
 
 		setUpGame();
 
@@ -208,7 +209,6 @@ public class WalkerActivity extends Activity {
 		};
 
 		view.setOnTouchListener(listener);
-		movingTimer.start();
 
 		setContentView(view);
 	}
@@ -296,54 +296,7 @@ public class WalkerActivity extends Activity {
 		levels.put(1, one);
 		levels.put(2, two);
 		levels.put(3, three);
-		
-		monster = new Pudge("Monster", one.get(1), 5, 5, 5);
-		levelOne.add(monster);
-		monsters.put(1, levelOne);
-		movingTimer(1);
 
-	}
-	
-	public void movingTimer(int level) {
-		final ArrayList<Actor> levelMonsters = monsters.get(level);
-		
-		
-		movingTimer = new CountDownTimer(0, 5000){
-			int min = 0;
-			int max = TerrainView.MAX_CELLS;
-
-			@Override
-			public void onFinish() {
-				for (Actor m : levelMonsters){
-					int choice = (int) (Math.random() * 4);
-					switch (choice){
-					case 0 : 
-						if (choice-1 > min)
-							m.move(m.getLocation().getNeighbors().get(Neighbor.WEST));
-						break;
-					case 1 : 
-						if (choice+1 < max)
-							m.move(m.getLocation().getNeighbors().get(Neighbor.EAST)); 
-						break;
-					case 2 : 
-						if (choice+5 < max)
-							m.move(m.getLocation().getNeighbors().get(Neighbor.SOUTH));
-						break;
-					case 3 : 
-						if (choice-5 > min)
-							m.move(m.getLocation().getNeighbors().get(Neighbor.NORTH));
-						break;
-					}
-				}
-				Log.d(TAG, "MOVED");
-			}
-			@Override
-			public void onTick(long millisUntilFinished) {
-				
-			}
-
-		};
-		
 	}
 
 	@Override
