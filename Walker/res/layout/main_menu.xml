@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/credits"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Credits" />
+
+    <Button
+        android:id="@+id/help"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/credits"
+        android:layout_alignParentLeft="true"
+        android:text="Help" />
+
+    <Button
+        android:id="@+id/resume"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/help"
+        android:layout_alignParentLeft="true"
+        android:enabled="false"
+        android:text="Resume" />
+
+    <Button
+        android:id="@+id/play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/resume"
+        android:layout_alignParentLeft="true"
+        android:text="New Game" />
+
+    <NumberPicker
+        android:id="@+id/NumberPicker03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/play"
+        android:layout_alignParentLeft="true"
+        android:width="100dip" />
+
+    <NumberPicker
+        android:id="@+id/np"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/play"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="60dp"
+        android:width="100dip" />
+
+    <NumberPicker
+        android:id="@+id/NumberPicker02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/NumberPicker03"
+        android:layout_toRightOf="@+id/NumberPicker03"
+        android:width="100dip" />
+
+    <NumberPicker
+        android:id="@+id/NumberPicker01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/play"
+        android:layout_toRightOf="@+id/NumberPicker02"
+        android:width="100dip" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/NumberPicker03"
+        android:layout_alignParentLeft="true"
+        android:text="lives"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/NumberPicker02"
+        android:layout_alignLeft="@+id/NumberPicker02"
+        android:text="energy"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/TextView01"
+        android:layout_alignBottom="@+id/TextView01"
+        android:layout_toRightOf="@+id/NumberPicker02"
+        android:text="packages"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/TextView03"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/np"
+        android:layout_alignParentRight="true"
+        android:text="difficulty"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

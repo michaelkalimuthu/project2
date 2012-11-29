@@ -21,11 +21,25 @@ public final class R {
         public static final int up_red=0x7f020007;
     }
     public static final class id {
-        public static final int new_game=0x7f080000;
-        public static final int use_item=0x7f080001;
+        public static final int NumberPicker01=0x7f080008;
+        public static final int NumberPicker02=0x7f080007;
+        public static final int NumberPicker03=0x7f080005;
+        public static final int RelativeLayout1=0x7f080000;
+        public static final int TextView01=0x7f08000a;
+        public static final int TextView02=0x7f08000b;
+        public static final int TextView03=0x7f08000c;
+        public static final int credits=0x7f080001;
+        public static final int help=0x7f080002;
+        public static final int new_game=0x7f08000d;
+        public static final int np=0x7f080006;
+        public static final int play=0x7f080004;
+        public static final int resume=0x7f080003;
+        public static final int textView5=0x7f080009;
+        public static final int use_item=0x7f08000e;
     }
     public static final class layout {
         public static final int activity_walker=0x7f030000;
+        public static final int main_menu=0x7f030001;
     }
     public static final class menu {
         public static final int activity_walker=0x7f070000;
@@ -38,6 +52,7 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f050000;
         public static final int hello_world=0x7f050001;
+        public static final int lives=0x7f050004;
         public static final int menu_settings=0x7f050002;
         public static final int title_activity_walker=0x7f050003;
     }

@@ -4,7 +4,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="11"
         android:targetSdkVersion="15" />
 
     <application
@@ -15,11 +15,7 @@
             android:screenOrientation="portrait"
             android:name="com.cs413.walker.main.WalkerActivity"
             android:label="@string/title_activity_walker" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:screenOrientation="portrait"
@@ -30,6 +26,18 @@
  				<category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name="com.cs413.walker.main.MainMenuActivity">
+                        <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+                <activity android:name="com.cs413.walker.main.Help"></activity>
+                <activity android:name="com.cs413.walker.main.Credit"></activity>
+                        <activity android:name="com.cs413.walker.main.resume"></activity>
+                
         
     </application>
 <uses-permission android:name="android.permission.VIBRATE"></uses-permission>
