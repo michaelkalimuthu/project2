@@ -3,18 +3,24 @@ package com.cs413.walker.items;
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.locations.Location;
 
-public class Food extends AbstractItem {
+/*
+ * Armor class contains method for actor to add health after using armor item
+ */
+
+public class Armor extends AbstractItem{
+	
 	private int addHealth;
 	String name;
 	Location currentLocation;
 	Actor actor;
 	
-	public Food(int addHealth, String name, int volume){
+	public Armor(int addHealth, String name, int volume){
 		super(name, volume);
 		this.addHealth = addHealth;
 	}
 
 
+	// using Armor adds to an actor's health attribute
 	@Override
 	public void useItem() {
 		getActor().addHealth(addHealth);

@@ -9,8 +9,8 @@ public class EnergyBar extends AbstractItem {
 	Location currentLocation;
 	Actor actor;
 	
-	public EnergyBar(int addEnergy, String name){
-		super(name);
+	public EnergyBar(int addEnergy, String name, int volume){
+		super(name,volume);
 		this.addEnergy = addEnergy;
 		
 	}

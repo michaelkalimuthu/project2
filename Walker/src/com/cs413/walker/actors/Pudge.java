@@ -40,5 +40,8 @@ public class Pudge extends AbstractMonster implements Actor {
 	public void addListeners(PersonListener listener) {
 		listeners.add(listener);
 	}
+	
+
+	
 
 }
