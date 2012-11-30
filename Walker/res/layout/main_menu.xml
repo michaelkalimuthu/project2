@@ -39,45 +39,46 @@
 
         <NumberPicker
             android:id="@+id/lives"
-			android:layout_width="80dp"
-            android:layout_weight="1"            
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:layout_weight="1"
             android:width="100dip" />
 
         <NumberPicker
             android:id="@+id/energy"
-			android:layout_width="80dp"
-            android:layout_weight="1"           
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/lives"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/lives"
+            android:layout_weight="1"
             android:width="100dip" />
 
         <NumberPicker
             android:id="@+id/inventory"
-			android:layout_width="80dp"
-			android:layout_weight="1"            
-			android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/lives"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/energy"
+            android:layout_weight="1"
             android:width="100dip" />
 
         <NumberPicker
             android:id="@+id/difficulty"
-			android:layout_width="80dp"
-			android:layout_weight="1"
-			android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/lives"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/inventory"
+            android:layout_weight="1"
             android:width="100dip" />
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/RelativeLayout2"
@@ -90,6 +91,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="lives"
+            android:textAllCaps="true"
+            android:textSize="13dp" 
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -98,6 +101,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="energy"
+            android:textAllCaps="true"
+                        android:textSize="13dp" 
+            
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -106,6 +112,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="inventory"
+            android:textSize="13dp" 
+            android:textAllCaps="true"
+            
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
@@ -114,8 +123,21 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="difficulty"
+            android:textAllCaps="true"
+            android:textSize="13dp" 
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Walker"
+        android:textAllCaps="false"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="100dp" />
 
 </RelativeLayout>

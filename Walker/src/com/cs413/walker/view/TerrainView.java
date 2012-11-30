@@ -364,6 +364,19 @@ public class TerrainView extends View {
 
 	}
 
+	public void notify(String string) {
+
+		if (toast != null) {
+			toast.cancel();
+		}
+		toast = Toast.makeText(context, string, Toast.LENGTH_SHORT);
+		toast.show();
+		Vibrator v = (Vibrator) context
+				.getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(20);
+
+	}
+
 	public void notify(Location newLocation, Actor player) {
 		String text = "Location " + newLocation.toString()
 				+ " entered by actor " + player.toString();

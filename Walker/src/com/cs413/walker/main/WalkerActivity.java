@@ -152,6 +152,9 @@ public class WalkerActivity extends Activity {
 																		// notify
 							sp.play(elevator, 1, 1, 0, 0, 1);
 						} // play elevator sound
+						else {
+							view.notify("You can not go there!");
+						}
 
 					} else if (upButton(view, clickX, clickY, up)) {
 						if (player.move(player.getLocation().getNeighbors()
@@ -160,6 +163,8 @@ public class WalkerActivity extends Activity {
 																// sound
 							view.changeLevel(1);
 							view.notify(player.getLocation(), player);
+						} else {
+							view.notify("You can not go there!");
 						}
 
 					} else if (centerButton(view, clickX, clickY, inventory)) {
@@ -175,9 +180,7 @@ public class WalkerActivity extends Activity {
 									&& clickY <= cell.getValue().getBottom()) {
 								for (Map.Entry<Location, Integer> mapping : view
 										.getMapping().entrySet()) {
-									if (mapping.getValue() == cell.getKey()
-											&& movingOptions.contains(mapping
-													.getValue())) {
+									if (mapping.getValue() == cell.getKey()) {
 										if (player.move(mapping.getKey())) {
 											sp.play(footsteps, 1, 1, 0, 0, 1); // play
 																				// footsteps
@@ -188,6 +191,8 @@ public class WalkerActivity extends Activity {
 																				// space
 											view.notify(mapping.getKey(),
 													player);
+										} else {
+											view.notify("You can not go there!");
 										}
 
 									}
