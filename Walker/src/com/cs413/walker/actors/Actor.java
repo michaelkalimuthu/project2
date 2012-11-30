@@ -49,7 +49,7 @@ public interface Actor {
 
 	public void addEnergy(int addEnergy);
 
-	public void addItems(Portable item);
+	public Boolean addItems(Portable item);
 
 	public void useItem(Portable item);
 

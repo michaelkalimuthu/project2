@@ -512,11 +512,20 @@ public class TerrainView extends View {
 					public void onClick(DialogInterface dialog, int which) {
 						Portable item = actor.getLocation().getItems()
 								.get(which);
-						actor.getLocation().getItems().remove(which);
-						actor.addItems(item);
-						// If the user checked the item, add it to the selected
-						// items
-						// mSelectedItems.add(actor.getLocation().getItems().get(which));
+						if (actor.addItems(item)) {
+							actor.getLocation().getItems().remove(which);
+							// If the user checked the item, add it to the
+							// selected
+							// items
+							// mSelectedItems.add(actor.getLocation().getItems().get(which));
+						} else {
+							AlertDialog.Builder alert = new AlertDialog.Builder(
+									context);
+
+							alert.setTitle("You inventory is full!");
+							alert.show();
+
+						}
 					}
 
 				})

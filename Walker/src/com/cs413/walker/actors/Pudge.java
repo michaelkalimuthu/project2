@@ -21,11 +21,18 @@ public class Pudge extends AbstractMonster implements Actor {
 	}
 
 	@Override
-	public void addItems(Portable item) {
-		super.addItems(item);
-		for (PersonListener listener : listeners) {
-			listener.pickedUpItem();
+	public Boolean addItems(Portable item) {
+
+		if (items.size() < capacity) {
+			items.add(item);
+			item.setActor(this);
+			for (PersonListener listener : listeners) {
+				listener.pickedUpItem();
+			}
+			return true;
 		}
+		return false;
+
 	}
 
 	@Override
@@ -40,8 +47,5 @@ public class Pudge extends AbstractMonster implements Actor {
 	public void addListeners(PersonListener listener) {
 		listeners.add(listener);
 	}
-	
-
-	
 
 }

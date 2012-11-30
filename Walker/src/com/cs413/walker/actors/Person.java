@@ -33,13 +33,18 @@ public class Person extends AbstractActor implements Actor {
 	}
 
 	@Override
-	public void addItems(Portable item) {
+	public Boolean addItems(Portable item) {
 
-		super.addItems(item);
-
-		for (PersonListener listener : listeners) {
-			listener.pickedUpItem();
+		if (items.size() < capacity) {
+			items.add(item);
+			item.setActor(this);
+			for (PersonListener listener : listeners) {
+				listener.pickedUpItem();
+			}
+			return true;
 		}
+		return false;
+
 	}
 
 	@Override

@@ -29,13 +29,13 @@ public abstract class AbstractActor implements Actor {
 	}
 
 	@Override
-	public void addItems(Portable item) {
+	public Boolean addItems(Portable item) {
 		if (items.size() < capacity) {
-
 			items.add(item);
 			item.setActor(this);
+			return true;
 		}
-
+		return false;
 	}
 
 	@Override
