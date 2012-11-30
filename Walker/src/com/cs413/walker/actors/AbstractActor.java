@@ -12,7 +12,6 @@ public abstract class AbstractActor implements Actor {
 	protected String name;
 
 	protected int health, energy, coins, lives, armor, damage, capacity;
-
 	protected ArrayList<Portable> items;
 
 	public AbstractActor(String name, Location location, int health,
@@ -31,8 +30,11 @@ public abstract class AbstractActor implements Actor {
 
 	@Override
 	public void addItems(Portable item) {
-		items.add(item);
-		item.setActor(this);
+		if (items.size() < capacity) {
+
+			items.add(item);
+			item.setActor(this);
+		}
 
 	}
 

@@ -24,7 +24,15 @@ public class MainMenuActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_menu);
-		Button play_button = (Button) findViewById(R.id.play);
+
+		int GAME_IS_ON = getIntent().getIntExtra("GAME_IS_ON", 0);
+		if (GAME_IS_ON == 1) {
+			findViewById(R.id.resume).setEnabled(true);
+		}
+
+		final Button play_button = (Button) findViewById(R.id.play);
+		final Button resume_button = (Button) findViewById(R.id.resume);
+
 		final NumberPicker difficulty = (NumberPicker) findViewById(R.id.difficulty);
 		difficulty.setMaxValue(100);
 		difficulty.setMinValue(1);
@@ -41,21 +49,51 @@ public class MainMenuActivity extends Activity {
 		energy.setMaxValue(100);
 		energy.setMinValue(10);
 
+		final Intent walker_activity = new Intent(getApplicationContext(),
+				WalkerActivity.class);
+
 		// new game button
 		play_button.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
-				Intent walker_activity = new Intent(getApplicationContext(),
-						WalkerActivity.class);
+
 				walker_activity.putExtra("difficulty", difficulty.getValue());
 				walker_activity.putExtra("lives", lives.getValue());
 				walker_activity.putExtra("energy", energy.getValue());
 				walker_activity.putExtra("inventory", inventory.getValue());
+				startActivityForResult(walker_activity, 0);
 
-				startActivity(walker_activity);
 			}
 		});
 
+		resume_button.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+
+	}
+
+	//
+	// @Override
+	// protected void onActivityResult(int requestCode, int resultCode, Intent
+	// data) {
+	// // TODO Auto-generated method stub
+	// super.onActivityResult(requestCode, resultCode, data);
+	//
+	// if (requestCode == RESULT_OK) {
+	//
+	// }
+	// }
+
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 	}
 }

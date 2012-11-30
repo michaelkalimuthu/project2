@@ -35,7 +35,6 @@
         </activity>
         
                 <activity android:name="com.cs413.walker.main.Help"></activity>
-                <activity android:name="com.cs413.walker.main.Credit"></activity>
                         <activity android:name="com.cs413.walker.main.resume"></activity>
                 
         

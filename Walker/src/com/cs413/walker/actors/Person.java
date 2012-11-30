@@ -7,8 +7,6 @@ import com.cs413.walker.locations.Location;
 
 public class Person extends AbstractActor implements Actor {
 	HashSet<PersonListener> listeners;
-	
-	int MAXCAPACITY = 10;
 
 	public Person(String name, Location location, int health, int energy,
 			int lives, int capacity) {
@@ -36,10 +34,9 @@ public class Person extends AbstractActor implements Actor {
 
 	@Override
 	public void addItems(Portable item) {
-		
-		if (capacity < MAXCAPACITY){	
-			super.addItems(item);
-		}
+
+		super.addItems(item);
+
 		for (PersonListener listener : listeners) {
 			listener.pickedUpItem();
 		}

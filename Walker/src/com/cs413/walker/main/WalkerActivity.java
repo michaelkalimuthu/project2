@@ -61,15 +61,28 @@ public class WalkerActivity extends Activity {
 	int elevator;
 
 	@Override
+	public void onBackPressed() {
+		// super.onBackPresse ();
+		final Intent MainMenuActivity = new Intent(getApplicationContext(),
+				MainMenuActivity.class);
+
+		MainMenuActivity.putExtra("GAME_IS_ON", 1);
+		// setResult(RESULT_OK, i);
+		startActivityForResult(MainMenuActivity, 0);
+		// finish();
+
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		Intent i = getIntent();
 
 		INIT_ENERGY = i.getIntExtra("energy", 1);
 		INIT_CAPACITY = i.getIntExtra("inventory", 1);
 		INIT_LIVES = i.getIntExtra("lives", 1);
 		INIT_RATE = i.getIntExtra("difficulty", 1);
+
 		// Example of receiving parameter having key value as 'email'
 		// and storing the value in a variable named myemail
 		String myemail = i.getStringExtra("email");
