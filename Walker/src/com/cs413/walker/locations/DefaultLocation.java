@@ -21,7 +21,7 @@ public class DefaultLocation implements Location{
 	 */
 	String name;
 	HashMap<Neighbor, Location> map;
-	List<Actor> actors;
+	ArrayList<Actor> actors;
 	LocationAbility ability;
 	ArrayList<Portable> items;
 	ArrayList<Reward> rewards;
@@ -81,9 +81,9 @@ public class DefaultLocation implements Location{
 	}
 
 	@Override
-	public void releaseActor() {
-		if (actors.contains(this) && ability.isExitLocation()){
-			actors.remove(this);
+	public void releaseActor(Actor actor) {
+		if (actors.contains(actor)){
+			actors.remove(actor);
 		}
 		
 	}
@@ -113,6 +113,11 @@ public class DefaultLocation implements Location{
 	public void addRewards(Reward reward) {
 		rewards.add(reward);
 		
+	}
+	@Override
+	public ArrayList<Actor> getActors() {
+		// TODO Auto-generated method stub
+		return actors;
 	}
 
 	

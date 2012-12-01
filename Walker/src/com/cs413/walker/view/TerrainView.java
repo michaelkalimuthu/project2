@@ -75,12 +75,15 @@ public class TerrainView extends View {
 			R.drawable.down_green);
 	Bitmap chest = BitmapFactory.decodeResource(getResources(),
 			R.drawable.chest);
+	Bitmap monster = BitmapFactory.decodeResource(getResources(),
+			R.drawable.monster);
 
 	public TerrainView(Context context,
 			HashMap<Integer, ArrayList<Location>> map, Actor actor) {
 
 		super(context);
 		this.context = context;
+		
 		canGoUp = false;
 		canGoDown = false;
 		this.start = actor.getLocation();
@@ -95,7 +98,7 @@ public class TerrainView extends View {
 		mapping = new HashMap<Location, Integer>();
 		setMapping();
 
-		Log.d(TAG, String.valueOf(mapping.containsKey(start)));
+		
 
 		setCurrentLoc(mapping.get(actor.getLocation()));
 
@@ -261,6 +264,9 @@ public class TerrainView extends View {
 
 		// get display info for south neighbor
 		if (getCurrentLoc() + 5 < MAX_CELLS) {
+			drawCell(m.get(Neighbor.SOUTH), gridMap.get(getCurrentLoc() + 5), rect, canvas);
+		}
+			/*
 			cell = gridMap.get(getCurrentLoc() + 5);
 			if (m.get(Neighbor.SOUTH) == null) {
 				paint.setColor(Color.GRAY);
@@ -279,74 +285,28 @@ public class TerrainView extends View {
 						cell.getBottom());
 				canvas.drawRect(rect, paint);
 			}
-		}
-
-		// get display info for north neighbor
-		if (getCurrentLoc() - 5 >= 0) {
-			cell = gridMap.get(getCurrentLoc() - 5);
-
-			if (m.get(Neighbor.NORTH) == null) {
-				paint.setColor(Color.GRAY);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
-			} else if (m.get(Neighbor.NORTH).canAddActor()) {
-				movingOptions.add(mapping.get(m.get(Neighbor.NORTH)));
-				paint.setColor(Color.GREEN);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
-			} else {
-				paint.setColor(Color.BLUE);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
+			if (m.get(Neighbor.SOUTH).getActors().size() > 0){
+				drawMonster(cell, canvas);
 			}
 		}
+	*/
+		// get display info for north neighbor
+		if (getCurrentLoc() - 5 >= 0) {
+			drawCell(m.get(Neighbor.NORTH), gridMap.get(getCurrentLoc() - 5), rect, canvas);
+		}
+
 
 		// get display info for east neighbor
 		if (getCurrentLoc() + 1 < MAX_CELLS) {
-			cell = gridMap.get(getCurrentLoc() + 1);
-			if (m.get(Neighbor.EAST) == null) {
-				paint.setColor(Color.GRAY);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
-			} else if (m.get(Neighbor.EAST).canAddActor()) {
-				movingOptions.add(mapping.get(m.get(Neighbor.EAST)));
-				paint.setColor(Color.GREEN);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
-			} else {
-				paint.setColor(Color.BLUE);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
-			}
+			drawCell(m.get(Neighbor.EAST), gridMap.get(getCurrentLoc() + 1), rect, canvas);
 		}
+		
 
 		// get display info for west neighbor
 		if (getCurrentLoc() - 1 >= 0) {
-			cell = gridMap.get(getCurrentLoc() - 1);
-			if (m.get(Neighbor.WEST) == null) {
-				paint.setColor(Color.GRAY);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
-			} else if (m.get(Neighbor.WEST).canAddActor()) {
-				movingOptions.add(mapping.get(m.get(Neighbor.WEST)));
-				paint.setColor(Color.GREEN);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
-			} else {
-				paint.setColor(Color.BLUE);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
-			}
+			drawCell(m.get(Neighbor.WEST), gridMap.get(getCurrentLoc() - 1), rect, canvas);
 		}
+			
 
 		// display info for above and below neighbor
 		if (m.get(Neighbor.ABOVE) != null
@@ -362,6 +322,34 @@ public class TerrainView extends View {
 			setCanGoUp(false);
 		}
 
+	}
+	
+	private void drawCell(Location location, GridCell cell, Rect rect, Canvas canvas){
+		if (location == null) {
+			paint.setColor(Color.GRAY);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
+					cell.getBottom());
+			canvas.drawRect(rect, paint);
+		} else if (location.canAddActor()) {
+			movingOptions.add(mapping.get(location));
+			paint.setColor(Color.GREEN);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
+					cell.getBottom());
+			canvas.drawRect(rect, paint);
+		} else {
+			paint.setColor(Color.BLUE);
+			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
+					cell.getBottom());
+			canvas.drawRect(rect, paint);
+		}
+		if (location.getActors().size() > 0){
+			drawMonster(cell, canvas);
+		}
+	}
+
+	private void drawMonster(GridCell cell, Canvas canvas ) {
+		canvas.drawBitmap(monster, cell.getRight()-45, cell.getTop(),
+				paint);	
 	}
 
 	public void notify(String string) {
@@ -415,6 +403,7 @@ public class TerrainView extends View {
 		if (!initDraw) {
 			movingOptions.clear();
 		}
+		
 		setUpNeighbors(getCurrentLoc(), canvas, rect);
 
 		rect.set(gridMap.get(getCurrentLoc()).getLeft(),
@@ -441,6 +430,8 @@ public class TerrainView extends View {
 			drawRewards();
 			newReward = false;
 		}
+		
+		
 
 	}
 
@@ -594,6 +585,22 @@ public class TerrainView extends View {
 		for (int i = 0; i < map.get(getLevel()).size(); i++) {
 			mapping.put(map.get(getLevel()).get(i), i);
 		}
+	}
+	
+	private Bitmap fixBmp(Bitmap bmp){
+		Bitmap bmp2 = bmp.copy(bmp.getConfig(), true);
+		int width = bmp.getWidth();
+		int height = bmp.getHeight();
+		for(int x = 0; x < width; x++){
+		    for(int y = 0; y < height; y++)
+		    {
+		        if(bmp.getPixel(x, y) == Color.WHITE)
+		        {
+		            bmp2.setPixel(x, y, paint.getColor());
+		        }
+		    }
+		}
+		return bmp2;
 	}
 
 	public HashMap<Location, Integer> getMapping() {

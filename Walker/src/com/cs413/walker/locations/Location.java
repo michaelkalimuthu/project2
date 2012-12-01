@@ -31,7 +31,7 @@ public interface Location {
 	/**
 	 * Allow actor to leave
 	 */
-	void releaseActor();
+	void releaseActor(Actor actor);
 	/**
 	 * Sets neighbor to be opposite from addNeighbor's location.
 	 * Called in addNeighbor.
@@ -45,6 +45,8 @@ public interface Location {
 	void setOppositeNeighbor(Location location, Location opposite, Neighbor neighbor);
 	
 	boolean canAddActor();
+	
+	ArrayList<Actor> getActors();
 	
 	String getName();
 	

@@ -11,12 +11,19 @@ public class Pudge extends AbstractMonster implements Actor {
 	public Pudge(String name, Location location, int health, int energy,
 			int lives) {
 		super(name, location, health, energy, lives);
+		location.addActor(this);
 		listeners = new HashSet<ActorListener>();
 	}
 
 	@Override
 	public boolean move(Location newLocation) {
-		return false;
+		location.releaseActor(this);
+		location = newLocation;
+		newLocation.addActor(this);
+		for (ActorListener listener : listeners){
+			listener.moved();
+		}
+		return true;
 
 	}
 

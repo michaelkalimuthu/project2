@@ -52,7 +52,7 @@ public class WalkerActivity extends Activity {
 	ArrayList<Actor> levelOne;
 
 	CountDownTimer movingTimer;
-	ActorListener personListener;
+	ActorListener personListener, monsterListener;
 
 	Actor player, monster;
 
@@ -326,13 +326,13 @@ public class WalkerActivity extends Activity {
 		levels.put(2, two);
 		levels.put(3, three);
 
-		monster = new Pudge("Monster", one.get(1), 5, 5, 5);
+		monster = new Pudge("Monster", one.get(17), 5, 5, 5);
 		
 		levelOne.add(monster);
 		monsters.put(1, levelOne);
 	    movingTimer(1);
 	    
-	    movingTimer.start();
+	   // movingTimer.start();
 
 	}
 
@@ -425,16 +425,14 @@ public class WalkerActivity extends Activity {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
-		movingTimer.cancel();
+		movingTimer.cancel();     // stop the monster moving timer
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
-		movingTimer.start();
+		movingTimer.start();    // start the monster moving timer
 	}
 
 }
