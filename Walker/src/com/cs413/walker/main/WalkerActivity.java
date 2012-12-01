@@ -19,7 +19,7 @@ import android.view.View.OnTouchListener;
 
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.actors.Person;
-import com.cs413.walker.actors.PersonListener;
+import com.cs413.walker.actors.ActorListener;
 import com.cs413.walker.actors.Pudge;
 import com.cs413.walker.items.Coin;
 import com.cs413.walker.items.EnergyBar;
@@ -52,7 +52,7 @@ public class WalkerActivity extends Activity {
 	ArrayList<Actor> levelOne;
 
 	CountDownTimer movingTimer;
-	PersonListener personListener;
+	ActorListener personListener;
 
 	Actor player, monster;
 
@@ -92,6 +92,10 @@ public class WalkerActivity extends Activity {
 		two = new ArrayList<Location>(); // level two
 		three = new ArrayList<Location>();
 		levels = new HashMap<Integer, ArrayList<Location>>();
+		
+		monsters = new HashMap<Integer, ArrayList<Actor>>();
+		
+		levelOne = new ArrayList<Actor>();
 
 		gridMap = new HashMap<Integer, GridCell>();
 		movingOptions = new ArrayList<Integer>();
@@ -110,7 +114,7 @@ public class WalkerActivity extends Activity {
 
 		final TerrainView view = new TerrainView(this, levels, player);
 
-		personListener = new PersonListener() {
+		personListener = new ActorListener() {
 
 			@Override
 			public void pickedUpItem() {
@@ -323,16 +327,19 @@ public class WalkerActivity extends Activity {
 		levels.put(3, three);
 
 		monster = new Pudge("Monster", one.get(1), 5, 5, 5);
-		// levelOne.add(monster);
-		// monsters.put(1, levelOne);
-		// movingTimer(1);
+		
+		levelOne.add(monster);
+		monsters.put(1, levelOne);
+	    movingTimer(1);
+	    
+	    movingTimer.start();
 
 	}
 
-	public void movingTimer(int level) {
+	public void movingTimer(final int level) {
 		final ArrayList<Actor> levelMonsters = monsters.get(level);
 
-		movingTimer = new CountDownTimer(0, 5000) {
+		movingTimer = new CountDownTimer(5000, 1000) {
 			int min = 0;
 			int max = TerrainView.MAX_CELLS;
 
@@ -367,16 +374,25 @@ public class WalkerActivity extends Activity {
 						break;
 					}
 				}
+				restartTimer(level);
 				Log.d(TAG, "MOVED");
 			}
 
+
 			@Override
 			public void onTick(long millisUntilFinished) {
-
+				Log.d(TAG, "ONE SECOND");
 			}
 
 		};
 
+	}
+	
+	public void restartTimer(int level){
+		if (monsters.get(level).size() > 0){
+			movingTimer.cancel(); //prevents timer from overlapping 
+			movingTimer.start();
+		}
 	}
 
 	@Override
@@ -405,6 +421,20 @@ public class WalkerActivity extends Activity {
 		}
 		return true;
 
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		movingTimer.cancel();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		movingTimer.start();
 	}
 
 }

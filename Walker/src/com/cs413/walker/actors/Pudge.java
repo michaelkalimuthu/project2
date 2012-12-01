@@ -6,12 +6,12 @@ import com.cs413.walker.items.Portable;
 import com.cs413.walker.locations.Location;
 
 public class Pudge extends AbstractMonster implements Actor {
-	HashSet<PersonListener> listeners;
+	HashSet<ActorListener> listeners;
 
 	public Pudge(String name, Location location, int health, int energy,
 			int lives) {
 		super(name, location, health, energy, lives);
-		listeners = new HashSet<PersonListener>();
+		listeners = new HashSet<ActorListener>();
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class Pudge extends AbstractMonster implements Actor {
 		if (items.size() < capacity) {
 			items.add(item);
 			item.setActor(this);
-			for (PersonListener listener : listeners) {
+			for (ActorListener listener : listeners) {
 				listener.pickedUpItem();
 			}
 			return true;
@@ -38,13 +38,13 @@ public class Pudge extends AbstractMonster implements Actor {
 	@Override
 	public void useItem(Portable item) {
 		super.useItem(item);
-		for (PersonListener listener : listeners) {
+		for (ActorListener listener : listeners) {
 			listener.pickedUpItem();
 		}
 	}
 
 	@Override
-	public void addListeners(PersonListener listener) {
+	public void addListeners(ActorListener listener) {
 		listeners.add(listener);
 	}
 
