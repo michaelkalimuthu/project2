@@ -342,7 +342,7 @@ public class TerrainView extends View {
 					cell.getBottom());
 			canvas.drawRect(rect, paint);
 		}
-		if (location.getActors().size() > 0){
+		if (location != null && location.getActors().size() > 0){
 			drawMonster(cell, canvas);
 		}
 	}

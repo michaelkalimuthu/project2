@@ -128,7 +128,30 @@ public class WalkerActivity extends Activity {
 
 		};
 		player.addListeners(personListener);
+		
+		monsterListener = new ActorListener(){
 
+			@Override
+			public void pickedUpItem() {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void moved() {
+				for (Location loc: player.getLocation().getNeighbors().values()){
+					if (loc.getActors().contains(this)){
+						view.invalidate();
+						view.notify("near");
+					}
+					
+				}
+				
+			}
+			
+		};
+		monster.addListeners(monsterListener);
+		
 		OnTouchListener listener = new OnTouchListener() {
 
 			@Override
@@ -373,9 +396,10 @@ public class WalkerActivity extends Activity {
 						}
 						break;
 					}
+					Log.d(TAG, "MOVED " + m.getLocation().getName());
 				}
 				restartTimer(level);
-				Log.d(TAG, "MOVED");
+				
 			}
 
 
