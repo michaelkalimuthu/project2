@@ -372,25 +372,29 @@ public class WalkerActivity extends Activity {
 					int choice = (int) (Math.random() * 4);
 					switch (choice) {
 					case 0:
-						if (choice - 1 > min) {
+						if (choice - 1 > min && m.getLocation().getNeighbors()
+								.get(Neighbor.WEST) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.WEST));
 						}
 						break;
 					case 1:
-						if (choice + 1 < max) {
+						if (choice + 1 < max && m.getLocation().getNeighbors()
+								.get(Neighbor.EAST) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.EAST));
 						}
 						break;
 					case 2:
-						if (choice + 5 < max) {
+						if (choice + 5 < max && m.getLocation().getNeighbors()
+								.get(Neighbor.SOUTH) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.SOUTH));
 						}
 						break;
 					case 3:
-						if (choice - 5 > min) {
+						if (choice - 5 > min && m.getLocation().getNeighbors()
+								.get(Neighbor.NORTH) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.NORTH));
 						}
