@@ -180,7 +180,7 @@ public class WalkerActivity extends Activity {
 									&& clickY <= cell.getValue().getBottom()) {
 								for (Map.Entry<Location, Integer> mapping : view
 										.getMapping().entrySet()) {
-									if (mapping.getValue() == cell.getKey()) {
+									if (mapping.getValue() == cell.getKey()  && movingOptions.contains(mapping.getValue())) {
 										if (player.move(mapping.getKey())) {
 											sp.play(footsteps, 1, 1, 0, 0, 1); // play
 																				// footsteps
