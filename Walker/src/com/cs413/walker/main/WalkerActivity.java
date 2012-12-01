@@ -140,7 +140,9 @@ public class WalkerActivity extends Activity {
 			@Override
 			public void moved() {
 				for (Location loc: player.getLocation().getNeighbors().values()){
+					Log.d(TAG, String.valueOf(loc.getActors().size()));
 					if (loc.getActors().contains(this)){
+						
 						view.invalidate();
 						view.notify("near");
 					}
@@ -409,7 +411,7 @@ public class WalkerActivity extends Activity {
 
 			@Override
 			public void onTick(long millisUntilFinished) {
-				Log.d(TAG, "ONE SECOND");
+			//	Log.d(TAG, "ONE SECOND");
 			}
 
 		};
