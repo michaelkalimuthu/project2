@@ -342,6 +342,13 @@ public class TerrainView extends View {
 		canvas.drawBitmap(monster, cell.getRight() - 45, cell.getTop(), paint);
 	}
 
+	public void alert(String s) {
+		AlertDialog.Builder alert = new AlertDialog.Builder(context);
+
+		alert.setTitle(s);
+		alert.show();
+	}
+
 	public void notify(String string) {
 
 		if (toast != null) {
@@ -484,12 +491,7 @@ public class TerrainView extends View {
 							// items
 							// mSelectedItems.add(actor.getLocation().getItems().get(which));
 						} else {
-							AlertDialog.Builder alert = new AlertDialog.Builder(
-									context);
-
-							alert.setTitle("You inventory is full!");
-							alert.show();
-
+							alert("You inventory is full!");
 						}
 					}
 
