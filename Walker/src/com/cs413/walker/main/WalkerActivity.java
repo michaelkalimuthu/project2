@@ -59,6 +59,7 @@ public class WalkerActivity extends Activity {
 	SoundPool sp;
 	int footsteps;
 	int elevator;
+	int growl;
 
 	@Override
 	public void onBackPressed() {
@@ -109,6 +110,7 @@ public class WalkerActivity extends Activity {
 														// variable to audio
 														// clip in raw folder
 		elevator = sp.load(this, R.raw.elevator, 1);
+		growl    = sp.load(this, R.raw.growl, 1);
 
 		setContentView(R.layout.activity_walker);
 
@@ -149,6 +151,7 @@ public class WalkerActivity extends Activity {
 					if (loc.getActors().contains(monster)) {
 						Log.d(TAG, "MONSTER HERE");
 						view.invalidate();
+						sp.play(growl, 1, 1, 0, 0, 1);
 						view.notify("near");
 					}
 
