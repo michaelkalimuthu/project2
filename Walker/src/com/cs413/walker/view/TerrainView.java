@@ -29,6 +29,8 @@ public class TerrainView extends View {
 
 	private static final String TAG = "VIEW";
 	private final Location start;
+	// set iniLocation for monster
+	public static String monsterLocation = "17";
 
 	public final static int MAX_CELLS = 45;
 
@@ -175,11 +177,12 @@ public class TerrainView extends View {
 		TextView textView = new TextView(context);
 		textView.setVisibility(View.VISIBLE);
 		textView.setText("Name: " + actor.getName() + "\nCurrent Location: "
-				+ actor.getLocation().getName() + "\nLives: "
-				+ actor.getLives() + "\nEnergy: " + actor.getEnergy()
-				+ "\nHP: " + actor.getHealth() + "\nCoins: " + actor.getCoins()
+				+ actor.getLocation().getName() + "\nMonster Location: "
+				+ monsterLocation + "\nLives: " + actor.getLives() + "  HP: "
+				+ actor.getHealth() + "\nEnergy: " + actor.getEnergy()
 				+ "\nItems: " + actor.getCurrentCapacity() + "/"
-				+ actor.getCapacity() + "\nDifficulty: " + rate);
+				+ actor.getCapacity() + "  Coins: " + actor.getCoins()
+				+ "\nDifficulty: " + rate);
 		layout.addView(textView);
 
 		layout.measure(canvas.getWidth(), canvas.getHeight());
@@ -637,4 +640,5 @@ public class TerrainView extends View {
 	public void setRate(int rate) {
 		this.rate = rate;
 	}
+
 }

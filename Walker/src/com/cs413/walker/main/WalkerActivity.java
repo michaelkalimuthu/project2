@@ -386,6 +386,8 @@ public class WalkerActivity extends Activity {
 										.get(Neighbor.WEST) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.WEST));
+							TerrainView.monsterLocation = m.getLocation()
+									.getName();
 						}
 						break;
 					case 1:
@@ -394,6 +396,9 @@ public class WalkerActivity extends Activity {
 										.get(Neighbor.EAST) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.EAST));
+							TerrainView.monsterLocation = m.getLocation()
+									.getName();
+
 						}
 						break;
 					case 2:
@@ -402,6 +407,9 @@ public class WalkerActivity extends Activity {
 										.get(Neighbor.SOUTH) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.SOUTH));
+							TerrainView.monsterLocation = m.getLocation()
+									.getName();
+
 						}
 						break;
 					case 3:
@@ -410,6 +418,9 @@ public class WalkerActivity extends Activity {
 										.get(Neighbor.NORTH) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.NORTH));
+							TerrainView.monsterLocation = m.getLocation()
+									.getName();
+
 						}
 						break;
 					}
