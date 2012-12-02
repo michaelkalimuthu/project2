@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 
 import com.cs413.walker.actors.Person;
@@ -34,23 +35,28 @@ public class MainMenuActivity extends Activity {
 		final Button resume_button = (Button) findViewById(R.id.resume);
 
 		final NumberPicker difficulty = (NumberPicker) findViewById(R.id.difficulty);
-		difficulty.setMaxValue(100);
+		difficulty.setMaxValue(5);
 		difficulty.setMinValue(1);
+		difficulty.setValue(1);
 
 		final NumberPicker lives = (NumberPicker) findViewById(R.id.lives);
 		lives.setMaxValue(100);
 		lives.setMinValue(1);
+		lives.setValue(3);
 
 		final NumberPicker inventory = (NumberPicker) findViewById(R.id.inventory);
 		inventory.setMaxValue(100);
 		inventory.setMinValue(1);
-
+		inventory.setValue(5);
 		final NumberPicker energy = (NumberPicker) findViewById(R.id.energy);
 		energy.setMaxValue(100);
-		energy.setMinValue(10);
+		energy.setMinValue(1);
+		energy.setValue(20);
 
 		final Intent walker_activity = new Intent(getApplicationContext(),
 				WalkerActivity.class);
+
+		final EditText play_name = (EditText) findViewById(R.id.playername);
 
 		// new game button
 		play_button.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +68,9 @@ public class MainMenuActivity extends Activity {
 				walker_activity.putExtra("lives", lives.getValue());
 				walker_activity.putExtra("energy", energy.getValue());
 				walker_activity.putExtra("inventory", inventory.getValue());
+				walker_activity.putExtra("playername", play_name.getText()
+						.toString());
+
 				startActivityForResult(walker_activity, 0);
 
 			}

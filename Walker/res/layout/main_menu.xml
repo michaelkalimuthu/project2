@@ -92,8 +92,8 @@
             android:layout_weight="1"
             android:text="lives"
             android:textAllCaps="true"
-            android:textSize="13dp" 
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="13dp" />
 
         <TextView
             android:id="@+id/TextView01"
@@ -102,9 +102,8 @@
             android:layout_weight="1"
             android:text="energy"
             android:textAllCaps="true"
-                        android:textSize="13dp" 
-            
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="13dp" />
 
         <TextView
             android:id="@+id/TextView02"
@@ -112,10 +111,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="inventory"
-            android:textSize="13dp" 
             android:textAllCaps="true"
-            
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="13dp" />
 
         <TextView
             android:id="@+id/TextView03"
@@ -124,9 +122,8 @@
             android:layout_weight="1"
             android:text="difficulty"
             android:textAllCaps="true"
-            android:textSize="13dp" 
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="13dp" />
     </LinearLayout>
 
     <TextView
@@ -138,6 +135,23 @@
         android:text="Walker"
         android:textAllCaps="false"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="100dp" />
+        android:textSize="70dp" />
+
+    <EditText
+        android:id="@+id/playername"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="false"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerHorizontal="false"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="false"
+        android:ems="10"
+        android:hint="Enter your name">
+
+        <requestFocus />
+    </EditText>
 
 </RelativeLayout>

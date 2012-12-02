@@ -18,8 +18,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 
 import com.cs413.walker.actors.Actor;
-import com.cs413.walker.actors.Person;
 import com.cs413.walker.actors.ActorListener;
+import com.cs413.walker.actors.Person;
 import com.cs413.walker.actors.Pudge;
 import com.cs413.walker.items.Coin;
 import com.cs413.walker.items.EnergyBar;
@@ -38,10 +38,10 @@ public class WalkerActivity extends Activity {
 
 	private static int INIT_HEALTH = 100;
 	private static int INIT_ENERGY = 10;
-	private static int INIT_LIVES = 3;
+	private static int INIT_LIVES = 1;
 	private static int INIT_CAPACITY = 1;
-	private static int INIT_RATE = 1;
-
+	private static int INIT_RATE;
+	private static String PLAY_NAME = "";
 	HashMap<Integer, ArrayList<Location>> levels;
 	ArrayList<Location> one;
 	ArrayList<Location> two;
@@ -82,19 +82,19 @@ public class WalkerActivity extends Activity {
 		INIT_CAPACITY = i.getIntExtra("inventory", 1);
 		INIT_LIVES = i.getIntExtra("lives", 1);
 		INIT_RATE = i.getIntExtra("difficulty", 1);
-
+		PLAY_NAME = i.getExtras().getString("playername");
 		// Example of receiving parameter having key value as 'email'
 		// and storing the value in a variable named myemail
-		String myemail = i.getStringExtra("email");
+		// String myemail = i.getStringExtra("email");
 
 		// this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		one = new ArrayList<Location>(); // level one
 		two = new ArrayList<Location>(); // level two
 		three = new ArrayList<Location>();
 		levels = new HashMap<Integer, ArrayList<Location>>();
-		
+
 		monsters = new HashMap<Integer, ArrayList<Actor>>();
-		
+
 		levelOne = new ArrayList<Actor>();
 
 		gridMap = new HashMap<Integer, GridCell>();
@@ -113,47 +113,52 @@ public class WalkerActivity extends Activity {
 		setContentView(R.layout.activity_walker);
 
 		final TerrainView view = new TerrainView(this, levels, player);
+		view.setRate(INIT_RATE);
 
 		personListener = new ActorListener() {
 
 			@Override
 			public void pickedUpItem() {
 				view.invalidate();
+				// view.setRate(INIT_RATE);
+
 			}
 
 			@Override
 			public void moved() {
 				view.invalidate();
+
 			}
 
 		};
 		player.addListeners(personListener);
-		
-		monsterListener = new ActorListener(){
+
+		monsterListener = new ActorListener() {
 
 			@Override
 			public void pickedUpItem() {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void moved() {
-				for (Location loc: player.getLocation().getNeighbors().values()){
-				Log.d(TAG, String.valueOf(loc.getActors().size()));
-					if (loc.getActors().contains(monster)){
+				for (Location loc : player.getLocation().getNeighbors()
+						.values()) {
+					Log.d(TAG, String.valueOf(loc.getActors().size()));
+					if (loc.getActors().contains(monster)) {
 						Log.d(TAG, "MONSTER HERE");
 						view.invalidate();
 						view.notify("near");
 					}
-					
+
 				}
-				
+
 			}
-			
+
 		};
 		monster.addListeners(monsterListener);
-		
+
 		OnTouchListener listener = new OnTouchListener() {
 
 			@Override
@@ -209,7 +214,9 @@ public class WalkerActivity extends Activity {
 									&& clickY <= cell.getValue().getBottom()) {
 								for (Map.Entry<Location, Integer> mapping : view
 										.getMapping().entrySet()) {
-									if (mapping.getValue() == cell.getKey()  && movingOptions.contains(mapping.getValue())) {
+									if (mapping.getValue() == cell.getKey()
+											&& movingOptions.contains(mapping
+													.getValue())) {
 										if (player.move(mapping.getKey())) {
 											sp.play(footsteps, 1, 1, 0, 0, 1); // play
 																				// footsteps
@@ -229,10 +236,10 @@ public class WalkerActivity extends Activity {
 							}
 						}
 					}
-					
+
 					return true;
 				}
-				
+
 				return false;
 			}
 
@@ -337,7 +344,7 @@ public class WalkerActivity extends Activity {
 
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
-		player = new Person("Player", one.get(12), INIT_HEALTH, INIT_ENERGY,
+		player = new Person(PLAY_NAME, one.get(12), INIT_HEALTH, INIT_ENERGY,
 				INIT_LIVES, INIT_CAPACITY);
 		Portable food = new Food(10, "bread", 1);
 		Portable energy = new EnergyBar(2, "energybar", 1);
@@ -352,20 +359,19 @@ public class WalkerActivity extends Activity {
 		levels.put(3, three);
 
 		monster = new Pudge("Monster", one.get(17), 5, 5, 5);
-		
+
 		levelOne.add(monster);
 		monsters.put(1, levelOne);
-	    movingTimer(1);
-	    
-	   // movingTimer.start();
-	   
+		movingTimer(1, INIT_RATE);
+
+		// movingTimer.start();
 
 	}
 
-	public void movingTimer(final int level) {
+	public void movingTimer(final int level, int rate) {
 		final ArrayList<Actor> levelMonsters = monsters.get(level);
 
-		movingTimer = new CountDownTimer(5000, 1000) {
+		movingTimer = new CountDownTimer(6000 - rate * 1000, 1000) {
 			int min = 0;
 			int max = TerrainView.MAX_CELLS;
 
@@ -375,29 +381,33 @@ public class WalkerActivity extends Activity {
 					int choice = (int) (Math.random() * 4);
 					switch (choice) {
 					case 0:
-						if (choice - 1 > min && m.getLocation().getNeighbors()
-								.get(Neighbor.WEST) != null) {
+						if (choice - 1 > min
+								&& m.getLocation().getNeighbors()
+										.get(Neighbor.WEST) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.WEST));
 						}
 						break;
 					case 1:
-						if (choice + 1 < max && m.getLocation().getNeighbors()
-								.get(Neighbor.EAST) != null) {
+						if (choice + 1 < max
+								&& m.getLocation().getNeighbors()
+										.get(Neighbor.EAST) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.EAST));
 						}
 						break;
 					case 2:
-						if (choice + 5 < max && m.getLocation().getNeighbors()
-								.get(Neighbor.SOUTH) != null) {
+						if (choice + 5 < max
+								&& m.getLocation().getNeighbors()
+										.get(Neighbor.SOUTH) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.SOUTH));
 						}
 						break;
 					case 3:
-						if (choice - 5 > min && m.getLocation().getNeighbors()
-								.get(Neighbor.NORTH) != null) {
+						if (choice - 5 > min
+								&& m.getLocation().getNeighbors()
+										.get(Neighbor.NORTH) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.NORTH));
 						}
@@ -406,22 +416,21 @@ public class WalkerActivity extends Activity {
 					Log.d(TAG, "MOVED " + m.getLocation().getName());
 				}
 				restartTimer(level);
-				
-			}
 
+			}
 
 			@Override
 			public void onTick(long millisUntilFinished) {
-			//	Log.d(TAG, "ONE SECOND");
+				// Log.d(TAG, "ONE SECOND");
 			}
 
 		};
 
 	}
-	
-	public void restartTimer(int level){
-		if (monsters.get(level).size() > 0){
-			movingTimer.cancel(); //prevents timer from overlapping 
+
+	public void restartTimer(int level) {
+		if (monsters.get(level).size() > 0) {
+			movingTimer.cancel(); // prevents timer from overlapping
 			movingTimer.start();
 		}
 	}
@@ -457,13 +466,13 @@ public class WalkerActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		movingTimer.cancel();     // stop the monster moving timer
+		movingTimer.cancel(); // stop the monster moving timer
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		movingTimer.start();    // start the monster moving timer
+		movingTimer.start(); // start the monster moving timer
 	}
 
 }

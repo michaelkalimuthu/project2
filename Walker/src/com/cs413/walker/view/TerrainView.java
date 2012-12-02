@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.items.Portable;
-import com.cs413.walker.items.Reward;
 import com.cs413.walker.locations.Location;
 import com.cs413.walker.locations.Neighbor;
 import com.example.walker.R;
@@ -45,9 +44,8 @@ public class TerrainView extends View {
 	private final HashMap<Integer, GridCell> gridMap;
 	private final ArrayList<Integer> movingOptions;
 
-
 	int currentLoc;
-
+	int rate;
 	int level;
 
 	float placeHolderX;
@@ -78,13 +76,14 @@ public class TerrainView extends View {
 			R.drawable.chest);
 	Bitmap monster = BitmapFactory.decodeResource(getResources(),
 			R.drawable.monster);
+	private Bitmap canvas;
 
 	public TerrainView(Context context,
 			HashMap<Integer, ArrayList<Location>> map, Actor actor) {
 
 		super(context);
 		this.context = context;
-		
+
 		canGoUp = false;
 		canGoDown = false;
 		this.start = actor.getLocation();
@@ -98,8 +97,6 @@ public class TerrainView extends View {
 		movingOptions = new ArrayList<Integer>();
 		mapping = new HashMap<Location, Integer>();
 		setMapping();
-
-		
 
 		setCurrentLoc(mapping.get(actor.getLocation()));
 
@@ -173,16 +170,16 @@ public class TerrainView extends View {
 
 	// Draws a box of player stats for current location, obtained items, health
 	// & lives
-	public void drawText(Location location, Actor actor, Canvas canvas) {
+	public void drawText(Actor actor, int rate, Canvas canvas) {
 		LinearLayout layout = new LinearLayout(context);
 		TextView textView = new TextView(context);
 		textView.setVisibility(View.VISIBLE);
-		textView.setText("Current Location: " + actor.getLocation().getName()
-				+ "\nLives: " + actor.getLives() + "\nEnergy: "
-				+ actor.getEnergy() + "\nHP: " + actor.getHealth()
-				+ "\nCoins: " + actor.getCoins() + "\nItems: "
-				+ actor.getCurrentCapacity() + "/" + actor.getCapacity()
-				+ "\nDifficulty: not a attribute of actor");
+		textView.setText("Name: " + actor.getName() + "\nCurrent Location: "
+				+ actor.getLocation().getName() + "\nLives: "
+				+ actor.getLives() + "\nEnergy: " + actor.getEnergy()
+				+ "\nHP: " + actor.getHealth() + "\nCoins: " + actor.getCoins()
+				+ "\nItems: " + actor.getCurrentCapacity() + "/"
+				+ actor.getCapacity() + "\nDifficulty: " + rate);
 		layout.addView(textView);
 
 		layout.measure(canvas.getWidth(), canvas.getHeight());
@@ -262,49 +259,41 @@ public class TerrainView extends View {
 
 		// get display info for south neighbor
 		if (getCurrentLoc() + 5 < MAX_CELLS) {
-			drawCell(m.get(Neighbor.SOUTH), gridMap.get(getCurrentLoc() + 5), rect, canvas);
+			drawCell(m.get(Neighbor.SOUTH), gridMap.get(getCurrentLoc() + 5),
+					rect, canvas);
 		}
-			/*
-			cell = gridMap.get(getCurrentLoc() + 5);
-			if (m.get(Neighbor.SOUTH) == null) {
-				paint.setColor(Color.GRAY);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
-			} else if (m.get(Neighbor.SOUTH).canAddActor()) {
-				movingOptions.add(mapping.get(m.get(Neighbor.SOUTH)));
-				paint.setColor(Color.GREEN);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
-			} else {
-				paint.setColor(Color.BLUE);
-				rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
-						cell.getBottom());
-				canvas.drawRect(rect, paint);
-			}
-			if (m.get(Neighbor.SOUTH).getActors().size() > 0){
-				drawMonster(cell, canvas);
-			}
-		}
-	*/
+		/*
+		 * cell = gridMap.get(getCurrentLoc() + 5); if (m.get(Neighbor.SOUTH) ==
+		 * null) { paint.setColor(Color.GRAY); rect.set(cell.getLeft(),
+		 * cell.getTop(), cell.getRight(), cell.getBottom());
+		 * canvas.drawRect(rect, paint); } else if
+		 * (m.get(Neighbor.SOUTH).canAddActor()) {
+		 * movingOptions.add(mapping.get(m.get(Neighbor.SOUTH)));
+		 * paint.setColor(Color.GREEN); rect.set(cell.getLeft(), cell.getTop(),
+		 * cell.getRight(), cell.getBottom()); canvas.drawRect(rect, paint); }
+		 * else { paint.setColor(Color.BLUE); rect.set(cell.getLeft(),
+		 * cell.getTop(), cell.getRight(), cell.getBottom());
+		 * canvas.drawRect(rect, paint); } if
+		 * (m.get(Neighbor.SOUTH).getActors().size() > 0){ drawMonster(cell,
+		 * canvas); } }
+		 */
 		// get display info for north neighbor
 		if (getCurrentLoc() - 5 >= 0) {
-			drawCell(m.get(Neighbor.NORTH), gridMap.get(getCurrentLoc() - 5), rect, canvas);
+			drawCell(m.get(Neighbor.NORTH), gridMap.get(getCurrentLoc() - 5),
+					rect, canvas);
 		}
-
 
 		// get display info for east neighbor
 		if (getCurrentLoc() + 1 < MAX_CELLS) {
-			drawCell(m.get(Neighbor.EAST), gridMap.get(getCurrentLoc() + 1), rect, canvas);
+			drawCell(m.get(Neighbor.EAST), gridMap.get(getCurrentLoc() + 1),
+					rect, canvas);
 		}
-		
 
 		// get display info for west neighbor
 		if (getCurrentLoc() - 1 >= 0) {
-			drawCell(m.get(Neighbor.WEST), gridMap.get(getCurrentLoc() - 1), rect, canvas);
+			drawCell(m.get(Neighbor.WEST), gridMap.get(getCurrentLoc() - 1),
+					rect, canvas);
 		}
-			
 
 		// display info for above and below neighbor
 		if (m.get(Neighbor.ABOVE) != null
@@ -321,8 +310,9 @@ public class TerrainView extends View {
 		}
 
 	}
-	
-	private void drawCell(Location location, GridCell cell, Rect rect, Canvas canvas){
+
+	private void drawCell(Location location, GridCell cell, Rect rect,
+			Canvas canvas) {
 		if (location == null) {
 			paint.setColor(Color.GRAY);
 			rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
@@ -340,14 +330,13 @@ public class TerrainView extends View {
 					cell.getBottom());
 			canvas.drawRect(rect, paint);
 		}
-		if (location != null && location.getActors().size() > 0){
+		if (location != null && location.getActors().size() > 0) {
 			drawMonster(cell, canvas);
 		}
 	}
 
-	private void drawMonster(GridCell cell, Canvas canvas ) {
-		canvas.drawBitmap(monster, cell.getRight()-45, cell.getTop(),
-				paint);	
+	private void drawMonster(GridCell cell, Canvas canvas) {
+		canvas.drawBitmap(monster, cell.getRight() - 45, cell.getTop(), paint);
 	}
 
 	public void notify(String string) {
@@ -401,7 +390,7 @@ public class TerrainView extends View {
 		if (!initDraw) {
 			movingOptions.clear();
 		}
-		
+
 		setUpNeighbors(getCurrentLoc(), canvas, rect);
 
 		rect.set(gridMap.get(getCurrentLoc()).getLeft(),
@@ -417,70 +406,48 @@ public class TerrainView extends View {
 
 		initDraw = false;
 		// canvas.drawRect(10, 10, 10, 10, paint);
-		drawText(actor.getLocation(), actor, canvas);
+		drawText(actor, rate, canvas);
 		boolean newItem = true;
 		if (actor.getLocation().getItems().size() > 0 && newItem) {
 			drawItemsBox();
 			newItem = false;
 		}
 	}
-/* Not needed for this version. Could be used it Rewards that are not items are implemented in later versions
-	void drawRewards() {
-		final ArrayList<Reward> mSelectedItems = new ArrayList<Reward>();
-		// Where we track the selected items
-		String[] arr = new String[actor.getLocation().getRewards().size()];
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = actor.getLocation().getRewards().get(i).toString();
-		}
 
-		CharSequence[] list = new CharSequence[arr.length];
-		for (int i = 0; i < arr.length; i++) {
-			list[i] = arr[i];
-		}
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-		// Set the dialog title
-		builder.setTitle("Pick Up Rewards?")
-				// Specify the list array, the items to be selected by default
-				// (null for none),
-				// and the listener through which to receive callbacks when
-				// items are selected
-				.setItems(list,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								actor.addCoins(actor.getLocation().getRewards().get(which).getValue());
-								actor.getLocation().getRewards()
-										.remove(which);
-									// If the user checked the item, add it to the
-									// selected
-									// items
-									// mSelectedItems.add(actor.getLocation().getItems().get(which));
-									// If the user checked the item, add it to
-									// the selected items
-									//mSelectedItems.add(actor.getLocation()
-									//		.getRewards().get(which));
-								}
-							}
-						)
-				.setPositiveButton("Done",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
-								
-							}
-						})
-				.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
-								Log.d(TAG, "Cancelled");
-							}
-						});
-		builder.show();
-	}
-*/
+	/*
+	 * Not needed for this version. Could be used it Rewards that are not items
+	 * are implemented in later versions void drawRewards() { final
+	 * ArrayList<Reward> mSelectedItems = new ArrayList<Reward>(); // Where we
+	 * track the selected items String[] arr = new
+	 * String[actor.getLocation().getRewards().size()]; for (int i = 0; i <
+	 * arr.length; i++) { arr[i] =
+	 * actor.getLocation().getRewards().get(i).toString(); }
+	 * 
+	 * CharSequence[] list = new CharSequence[arr.length]; for (int i = 0; i <
+	 * arr.length; i++) { list[i] = arr[i]; } AlertDialog.Builder builder = new
+	 * AlertDialog.Builder(context);
+	 * 
+	 * // Set the dialog title builder.setTitle("Pick Up Rewards?") // Specify
+	 * the list array, the items to be selected by default // (null for none),
+	 * // and the listener through which to receive callbacks when // items are
+	 * selected .setItems(list, new DialogInterface.OnClickListener() {
+	 * 
+	 * @Override public void onClick(DialogInterface dialog, int which) {
+	 * actor.addCoins(actor.getLocation().getRewards().get(which).getValue());
+	 * actor.getLocation().getRewards() .remove(which); // If the user checked
+	 * the item, add it to the // selected // items //
+	 * mSelectedItems.add(actor.getLocation().getItems().get(which)); // If the
+	 * user checked the item, add it to // the selected items
+	 * //mSelectedItems.add(actor.getLocation() // .getRewards().get(which)); }
+	 * } ) .setPositiveButton("Done", new DialogInterface.OnClickListener() {
+	 * 
+	 * @Override public void onClick(DialogInterface dialog, int id) {
+	 * 
+	 * } }) .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	 * 
+	 * @Override public void onClick(DialogInterface dialog, int id) {
+	 * Log.d(TAG, "Cancelled"); } }); builder.show(); }
+	 */
 	void drawItemsBox() {
 
 		final ArrayList<Portable> mSelectedItems = new ArrayList<Portable>();
@@ -577,19 +544,17 @@ public class TerrainView extends View {
 			mapping.put(map.get(getLevel()).get(i), i);
 		}
 	}
-	
-	private Bitmap fixBmp(Bitmap bmp){
+
+	private Bitmap fixBmp(Bitmap bmp) {
 		Bitmap bmp2 = bmp.copy(bmp.getConfig(), true);
 		int width = bmp.getWidth();
 		int height = bmp.getHeight();
-		for(int x = 0; x < width; x++){
-		    for(int y = 0; y < height; y++)
-		    {
-		        if(bmp.getPixel(x, y) == Color.WHITE)
-		        {
-		            bmp2.setPixel(x, y, paint.getColor());
-		        }
-		    }
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				if (bmp.getPixel(x, y) == Color.WHITE) {
+					bmp2.setPixel(x, y, paint.getColor());
+				}
+			}
 		}
 		return bmp2;
 	}
@@ -669,4 +634,7 @@ public class TerrainView extends View {
 		this.canGoDown = canGoDown;
 	}
 
+	public void setRate(int rate) {
+		this.rate = rate;
+	}
 }
