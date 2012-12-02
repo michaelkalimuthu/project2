@@ -59,7 +59,6 @@ public class WalkerActivity extends Activity {
 	SoundPool sp;
 	int footsteps;
 	int elevator;
-	int growl;
 
 	@Override
 	public void onBackPressed() {
@@ -110,7 +109,6 @@ public class WalkerActivity extends Activity {
 														// variable to audio
 														// clip in raw folder
 		elevator = sp.load(this, R.raw.elevator, 1);
-		growl    = sp.load(this, R.raw.growl, 1);
 
 		setContentView(R.layout.activity_walker);
 
@@ -145,13 +143,14 @@ public class WalkerActivity extends Activity {
 
 			@Override
 			public void moved() {
+				TerrainView.monsterLocation = monster.getLocation().getName();
+				view.invalidate();
 				for (Location loc : player.getLocation().getNeighbors()
 						.values()) {
 					Log.d(TAG, String.valueOf(loc.getActors().size()));
 					if (loc.getActors().contains(monster)) {
 						Log.d(TAG, "MONSTER HERE");
 						view.invalidate();
-						sp.play(growl, 1, 1, 0, 0, 1);
 						view.notify("near");
 					}
 
@@ -377,14 +376,14 @@ public class WalkerActivity extends Activity {
 		movingTimer = new CountDownTimer(6000 - rate * 1000, 1000) {
 			int min = 0;
 			int max = TerrainView.MAX_CELLS;
-			
 
 			@Override
 			public void onFinish() {
 				for (Actor m : levelMonsters) {
 					int choice = (int) (Math.random() * 4);
-					if (choice == (max-1))     //prevents monster from being in bottom right corner for a long time
+					if (choice == (max - 1)) {
 						choice = 0;
+					}
 					switch (choice) {
 					case 0:
 						if (choice - 1 > min
@@ -392,8 +391,7 @@ public class WalkerActivity extends Activity {
 										.get(Neighbor.WEST) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.WEST));
-							TerrainView.monsterLocation = m.getLocation()
-									.getName();
+
 						}
 						break;
 					case 1:
@@ -402,8 +400,6 @@ public class WalkerActivity extends Activity {
 										.get(Neighbor.EAST) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.EAST));
-							TerrainView.monsterLocation = m.getLocation()
-									.getName();
 
 						}
 						break;
@@ -413,8 +409,6 @@ public class WalkerActivity extends Activity {
 										.get(Neighbor.SOUTH) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.SOUTH));
-							TerrainView.monsterLocation = m.getLocation()
-									.getName();
 
 						}
 						break;
@@ -424,8 +418,6 @@ public class WalkerActivity extends Activity {
 										.get(Neighbor.NORTH) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.NORTH));
-							TerrainView.monsterLocation = m.getLocation()
-									.getName();
 
 						}
 						break;
