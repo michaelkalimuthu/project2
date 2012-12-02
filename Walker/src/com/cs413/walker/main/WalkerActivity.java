@@ -59,6 +59,7 @@ public class WalkerActivity extends Activity {
 	SoundPool sp;
 	int footsteps;
 	int elevator;
+	int growl;
 
 	@Override
 	public void onBackPressed() {
@@ -109,6 +110,7 @@ public class WalkerActivity extends Activity {
 														// variable to audio
 														// clip in raw folder
 		elevator = sp.load(this, R.raw.elevator, 1);
+		growl    = sp.load(this, R.raw.growl, 1);
 
 		setContentView(R.layout.activity_walker);
 
@@ -151,6 +153,7 @@ public class WalkerActivity extends Activity {
 					if (loc.getActors().contains(monster)) {
 						Log.d(TAG, "MONSTER HERE");
 						view.invalidate();
+						sp.play(growl, 1, 1, 0, 0, 1);
 						view.notify("near");
 					}
 
@@ -376,18 +379,15 @@ public class WalkerActivity extends Activity {
 		movingTimer = new CountDownTimer(6000 - rate * 1000, 1000) {
 			int min = 0;
 			int max = TerrainView.MAX_CELLS;
-
+			
 			@Override
 			public void onFinish() {
 				for (Actor m : levelMonsters) {
 					int choice = (int) (Math.random() * 4);
-					if (choice == (max - 1)) {
-						choice = 0;
-					}
+
 					switch (choice) {
 					case 0:
-						if (choice - 1 > min
-								&& m.getLocation().getNeighbors()
+						if ( m.getLocation().getNeighbors()
 										.get(Neighbor.WEST) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.WEST));
@@ -395,8 +395,7 @@ public class WalkerActivity extends Activity {
 						}
 						break;
 					case 1:
-						if (choice + 1 < max
-								&& m.getLocation().getNeighbors()
+						if ( m.getLocation().getNeighbors()
 										.get(Neighbor.EAST) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.EAST));
@@ -404,8 +403,7 @@ public class WalkerActivity extends Activity {
 						}
 						break;
 					case 2:
-						if (choice + 5 < max
-								&& m.getLocation().getNeighbors()
+						if ( m.getLocation().getNeighbors()
 										.get(Neighbor.SOUTH) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.SOUTH));
@@ -413,8 +411,7 @@ public class WalkerActivity extends Activity {
 						}
 						break;
 					case 3:
-						if (choice - 5 > min
-								&& m.getLocation().getNeighbors()
+						if (m.getLocation().getNeighbors()
 										.get(Neighbor.NORTH) != null) {
 							m.move(m.getLocation().getNeighbors()
 									.get(Neighbor.NORTH));
