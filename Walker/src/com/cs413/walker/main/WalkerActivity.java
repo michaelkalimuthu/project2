@@ -374,11 +374,14 @@ public class WalkerActivity extends Activity {
 		movingTimer = new CountDownTimer(6000 - rate * 1000, 1000) {
 			int min = 0;
 			int max = TerrainView.MAX_CELLS;
+			
 
 			@Override
 			public void onFinish() {
 				for (Actor m : levelMonsters) {
 					int choice = (int) (Math.random() * 4);
+					if (choice == (max-1))     //prevents monster from being in bottom right corner for a long time
+						choice = 0;
 					switch (choice) {
 					case 0:
 						if (choice - 1 > min
