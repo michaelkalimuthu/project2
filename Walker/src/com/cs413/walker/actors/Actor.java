@@ -42,6 +42,8 @@ public interface Actor {
 	public int getDamage();
 
 	public int getCapacity();
+	
+	public int getCurrentCapacity();
 
 	public void addCoins(int addCoins);
 

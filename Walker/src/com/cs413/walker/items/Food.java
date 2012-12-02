@@ -19,7 +19,10 @@ public class Food extends AbstractItem {
 	public void useItem() {
 		getActor().addHealth(addHealth);
 	}
-
+	@Override
+	public int getValue(){
+		return addHealth;
+	}
 	
 	@Override
 	public String toString(){

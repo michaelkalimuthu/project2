@@ -87,5 +87,13 @@ public class Breadcrumb implements Portable {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public int getValue(){
+		return -1;
+	}
+	@Override
+	public int getVolume(){
+		return -1;
+	}
 
 }

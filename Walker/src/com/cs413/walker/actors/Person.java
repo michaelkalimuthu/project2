@@ -2,6 +2,7 @@ package com.cs413.walker.actors;
 
 import java.util.HashSet;
 
+import com.cs413.walker.items.Coin;
 import com.cs413.walker.items.Portable;
 import com.cs413.walker.locations.Location;
 
@@ -34,6 +35,13 @@ public class Person extends AbstractActor implements Actor {
 
 	@Override
 	public Boolean addItems(Portable item) {
+		if (item instanceof Coin){
+			addCoins(item.getValue());
+			for (ActorListener listener : listeners) {
+				listener.pickedUpItem();
+			}
+			return true;
+		}
 
 		if (items.size() < capacity) {
 			items.add(item);
@@ -60,4 +68,13 @@ public class Person extends AbstractActor implements Actor {
 		listeners.add(listener);
 	}
 
+	@Override
+	public void addCoins(int addCoins){
+		super.addCoins(addCoins);
+		for (ActorListener listener : listeners) {
+			listener.pickedUpItem();
+		}
+	}
+	
+	
 }

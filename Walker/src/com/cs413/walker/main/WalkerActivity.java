@@ -140,9 +140,9 @@ public class WalkerActivity extends Activity {
 			@Override
 			public void moved() {
 				for (Location loc: player.getLocation().getNeighbors().values()){
-					Log.d(TAG, String.valueOf(loc.getActors().size()));
-					if (loc.getActors().contains(this)){
-						
+				Log.d(TAG, String.valueOf(loc.getActors().size()));
+					if (loc.getActors().contains(monster)){
+						Log.d(TAG, "MONSTER HERE");
 						view.invalidate();
 						view.notify("near");
 					}
@@ -229,10 +229,10 @@ public class WalkerActivity extends Activity {
 							}
 						}
 					}
-					invalidateOptionsMenu();
+					
 					return true;
 				}
-				invalidateOptionsMenu();
+				
 				return false;
 			}
 
@@ -344,8 +344,8 @@ public class WalkerActivity extends Activity {
 
 		one.get(14).addItem(energy);
 		one.get(12).addItem(food);
-		one.get(12).addItem(new EnergyBar(4, "energybar", 1));
-		one.get(12).addRewards(new Coin(3));
+		one.get(12).addItem(new EnergyBar(4, "energybar", 4));
+		one.get(12).addItem(new Coin(3));
 
 		levels.put(1, one);
 		levels.put(2, two);
@@ -358,6 +358,7 @@ public class WalkerActivity extends Activity {
 	    movingTimer(1);
 	    
 	   // movingTimer.start();
+	   
 
 	}
 

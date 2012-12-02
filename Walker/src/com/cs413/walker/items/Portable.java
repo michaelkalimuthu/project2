@@ -22,4 +22,8 @@ public interface Portable {
 	
 	String toString();
 	
+	int getValue();
+	
+	int getVolume();
+	
 }

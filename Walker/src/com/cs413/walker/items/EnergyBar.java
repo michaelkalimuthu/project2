@@ -25,5 +25,9 @@ public class EnergyBar extends AbstractItem {
 	public String toString(){
 		return super.toString() + " " + addEnergy;
 	}
+	@Override
+	public int getValue(){
+		return addEnergy;
+	}
 
 }

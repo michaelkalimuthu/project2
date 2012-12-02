@@ -50,11 +50,11 @@ public abstract class AbstractItem implements Portable {
 	@Override
 	public void pickUp(Actor actor) {
 		setActor(actor);
-		
 	}
 	@Override
 	public String toString(){
 		return getName() ;
 	}
+
 
 }

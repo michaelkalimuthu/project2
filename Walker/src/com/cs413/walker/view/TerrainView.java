@@ -45,6 +45,7 @@ public class TerrainView extends View {
 	private final HashMap<Integer, GridCell> gridMap;
 	private final ArrayList<Integer> movingOptions;
 
+
 	int currentLoc;
 
 	int level;
@@ -180,7 +181,7 @@ public class TerrainView extends View {
 				+ "\nLives: " + actor.getLives() + "\nEnergy: "
 				+ actor.getEnergy() + "\nHP: " + actor.getHealth()
 				+ "\nCoins: " + actor.getCoins() + "\nItems: "
-				+ actor.getItems().size() + "/" + actor.getCapacity()
+				+ actor.getCurrentCapacity() + "/" + actor.getCapacity()
 				+ "\nDifficulty: not a attribute of actor");
 		layout.addView(textView);
 
@@ -218,10 +219,7 @@ public class TerrainView extends View {
 				countHeight = 0;
 			}
 			gridMap.put(i, new GridCell(left, right, bottom, top));
-			/*
-			 * if (!init && clickX >= left && clickX <=right && clickY>=top &&
-			 * clickY <=bottom){ setCurrentLoc(i); location = i; }
-			 */
+
 			left = right;
 			right += inc;
 
@@ -425,16 +423,8 @@ public class TerrainView extends View {
 			drawItemsBox();
 			newItem = false;
 		}
-		boolean newReward = true;
-		if (actor.getLocation().getRewards().size() > 0 && newReward) {
-			drawRewards();
-			newReward = false;
-		}
-		
-		
-
 	}
-
+/* Not needed for this version. Could be used it Rewards that are not items are implemented in later versions
 	void drawRewards() {
 		final ArrayList<Reward> mSelectedItems = new ArrayList<Reward>();
 		// Where we track the selected items
@@ -450,34 +440,35 @@ public class TerrainView extends View {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
 		// Set the dialog title
-		builder.setTitle("Pick Up?")
+		builder.setTitle("Pick Up Rewards?")
 				// Specify the list array, the items to be selected by default
 				// (null for none),
 				// and the listener through which to receive callbacks when
 				// items are selected
-				.setMultiChoiceItems(list, null,
-						new DialogInterface.OnMultiChoiceClickListener() {
+				.setItems(list,
+						new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog,
-									int which, boolean isChecked) {
-								if (isChecked) {
+									int which) {
+								actor.addCoins(actor.getLocation().getRewards().get(which).getValue());
+								actor.getLocation().getRewards()
+										.remove(which);
+									// If the user checked the item, add it to the
+									// selected
+									// items
+									// mSelectedItems.add(actor.getLocation().getItems().get(which));
 									// If the user checked the item, add it to
 									// the selected items
-									mSelectedItems.add(actor.getLocation()
-											.getRewards().get(which));
+									//mSelectedItems.add(actor.getLocation()
+									//		.getRewards().get(which));
 								}
 							}
-						})
+						)
 				.setPositiveButton("Done",
 						new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int id) {
-								if (mSelectedItems.size() > 0) {
-									actor.addCoins(mSelectedItems.get(id + 1)
-											.getValue());
-									actor.getLocation().getRewards()
-											.remove(id + 1);
-								}
+								
 							}
 						})
 				.setNegativeButton("Cancel",
@@ -489,7 +480,7 @@ public class TerrainView extends View {
 						});
 		builder.show();
 	}
-
+*/
 	void drawItemsBox() {
 
 		final ArrayList<Portable> mSelectedItems = new ArrayList<Portable>();

@@ -1,9 +1,15 @@
 package com.cs413.walker.items;
 
-public class Coin implements Reward {
+import com.cs413.walker.actors.Actor;
+import com.cs413.walker.locations.Location;
+
+public class Coin extends AbstractItem {
 	int value;
+	String name;
+	int volume;
 	
 	public Coin(int value){
+		super("Coin", 0);
 		this.value = value;
 	}
 
@@ -13,7 +19,12 @@ public class Coin implements Reward {
 	}
 	@Override
 	public String toString(){
-		return "Coin " + getValue();
+		return getName() + " x" + getValue();
+	}
+
+	@Override
+	public int getVolume() {
+		return volume;
 	}
 
 

@@ -30,7 +30,7 @@ public abstract class AbstractActor implements Actor {
 
 	@Override
 	public Boolean addItems(Portable item) {
-		if (items.size() < capacity) {
+		if (getCurrentCapacity() < getCapacity()) {
 			items.add(item);
 			item.setActor(this);
 			return true;
@@ -139,6 +139,15 @@ public abstract class AbstractActor implements Actor {
 		}
 		return actor.getHealth();
 
+	}
+
+	@Override
+	public int getCurrentCapacity() {
+		int sum = 0;
+		for (Portable p : items){
+			sum += p.getVolume();
+		}
+		return sum;
 	}
 
 }

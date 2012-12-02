@@ -134,5 +134,9 @@ public abstract class AbstractMonster implements Actor {
 		return actor.getHealth();
 
 	}
+	@Override
+	public int getCurrentCapacity() {
+		return -1;
+	}
 
 }
