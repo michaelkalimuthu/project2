@@ -258,6 +258,14 @@ public class TerrainView extends View {
 		rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
 				cell.getBottom());
 		canvas.drawRect(rect, paint);
+		
+		int x = (int) rect.exactCenterX();
+		int y = (int) rect.exactCenterY();
+		canvas.drawBitmap(player, x - 20, y - 25, paint);
+		if (actor.getLocation().getActors().size() > 0) {
+			drawMonster(cell, canvas);
+		}
+
 
 		// get display info for south neighbor
 		if (getCurrentLoc() + 5 < MAX_CELLS) {
@@ -399,16 +407,14 @@ public class TerrainView extends View {
 		if (!initDraw) {
 			movingOptions.clear();
 		}
+		
 
+		
 		setUpNeighbors(getCurrentLoc(), canvas, rect);
+		
+		
 
-		rect.set(gridMap.get(getCurrentLoc()).getLeft(),
-				gridMap.get(getCurrentLoc()).getTop(),
-				gridMap.get(getCurrentLoc()).getRight(),
-				gridMap.get(getCurrentLoc()).getBottom());
-		int x = (int) rect.exactCenterX();
-		int y = (int) rect.exactCenterY();
-		canvas.drawBitmap(player, x - 20, y - 25, paint);
+		
 		drawItems(canvas, gridMap.get(getCurrentLoc()));
 
 		drawButtons(rect, canvas);
