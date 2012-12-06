@@ -300,6 +300,10 @@ public class WalkerActivity extends Activity {
 		view.setOnTouchListener(listener);
 
 		setContentView(view);
+		
+		if (player.getLocation().getItems().size() > 0) {
+			itemsPresent(view);
+		}
 	}
 
 	protected boolean checkToRemoveMonster(Location location) {
