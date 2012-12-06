@@ -506,7 +506,7 @@ public class WalkerActivity extends Activity {
 			if (loc == player.getLocation().getNeighbors().get(Neighbor.ABOVE) ||
 					loc == player.getLocation().getNeighbors().get(Neighbor.BELOW))
 				continue;
-			Log.d(TAG, String.valueOf(loc.getActors().size()));
+			//Log.d(TAG, String.valueOf(loc.getActors().size()));
 			if (loc.getActors().contains(monsters.get(view.getLevel()))) {
 				tempMonster = (AbstractMonster) monsters.get(view.getLevel());
 				tempMonster.setChasing(true);
@@ -515,7 +515,7 @@ public class WalkerActivity extends Activity {
 				Log.d(TAG, "MONSTER HERE");
 				view.invalidate();
 				sp.play(growl, 1, 1, 0, 0, 1);
-				view.alert("Monster has spotted you! Equip a weapon before moving!");
+				view.alert("Monster has spotted you! It will now chase and attack you!");
 			}
 		}
 	}
