@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1"
-        android:text="instruction"
+        android:text="instruction is here"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView

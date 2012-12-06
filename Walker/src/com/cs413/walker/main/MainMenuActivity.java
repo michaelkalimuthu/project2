@@ -33,6 +33,7 @@ public class MainMenuActivity extends Activity {
 
 		final Button play_button = (Button) findViewById(R.id.play);
 		final Button resume_button = (Button) findViewById(R.id.resume);
+		final Button help_button = (Button) findViewById(R.id.help);
 
 		final NumberPicker difficulty = (NumberPicker) findViewById(R.id.difficulty);
 		difficulty.setMaxValue(3);
@@ -84,19 +85,16 @@ public class MainMenuActivity extends Activity {
 			}
 		});
 
-	}
+		help_button.setOnClickListener(new View.OnClickListener() {
 
-	//
-	// @Override
-	// protected void onActivityResult(int requestCode, int resultCode, Intent
-	// data) {
-	// // TODO Auto-generated method stub
-	// super.onActivityResult(requestCode, resultCode, data);
-	//
-	// if (requestCode == RESULT_OK) {
-	//
-	// }
-	// }
+			@Override
+			public void onClick(View v) {
+				Intent help = new Intent(getApplicationContext(), Help.class);
+				startActivity(help);
+			}
+		});
+
+	}
 
 	@Override
 	public void onBackPressed() {
