@@ -115,15 +115,11 @@ public class WalkerActivity extends Activity {
 		setContentView(R.layout.activity_walker);
 
 		final TerrainView view = new TerrainView(this, levels, player);
-		view.setRate(INIT_RATE);
-
 		personListener = new ActorListener() {
 
 			@Override
 			public void pickedUpItem() {
 				view.invalidate();
-				// view.setRate(INIT_RATE);
-
 			}
 
 			@Override
@@ -366,7 +362,7 @@ public class WalkerActivity extends Activity {
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
 		player = new Person(PLAY_NAME, one.get(12), INIT_HEALTH, INIT_ENERGY,
-				INIT_LIVES, INIT_CAPACITY);
+				INIT_LIVES, INIT_CAPACITY, INIT_RATE);
 		Portable food = new Food(10, "bread", 1);
 		Portable energy = new EnergyBar(2, "energybar", 1);
 
@@ -383,7 +379,7 @@ public class WalkerActivity extends Activity {
 
 		levelOne.add(monster);
 		monsters.put(1, levelOne);
-		movingTimer(1, INIT_RATE);
+		movingTimer(1, 4);
 
 		// movingTimer.start();
 

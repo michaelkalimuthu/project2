@@ -20,7 +20,7 @@ public class Pudge extends AbstractMonster implements Actor {
 		location.releaseActor(this);
 		location = newLocation;
 		newLocation.addActor(this);
-		for (ActorListener listener : listeners){
+		for (ActorListener listener : listeners) {
 			listener.moved();
 		}
 		return true;
@@ -53,6 +53,12 @@ public class Pudge extends AbstractMonster implements Actor {
 	@Override
 	public void addListeners(ActorListener listener) {
 		listeners.add(listener);
+	}
+
+	@Override
+	public int getRate() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

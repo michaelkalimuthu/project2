@@ -10,8 +10,8 @@ public class Person extends AbstractActor implements Actor {
 	HashSet<ActorListener> listeners;
 
 	public Person(String name, Location location, int health, int energy,
-			int lives, int capacity) {
-		super(name, location, health, energy, lives, capacity);
+			int lives, int capacity, int rate) {
+		super(name, location, health, energy, lives, capacity, rate);
 		listeners = new HashSet<ActorListener>();
 	}
 
@@ -19,7 +19,7 @@ public class Person extends AbstractActor implements Actor {
 	public boolean move(Location newLocation) {
 		if (newLocation.canAddActor() && energy > 0) {
 			location = newLocation;
-			energy -= 1;
+			energy -= 1 * rate;
 			for (ActorListener listener : listeners) {
 				listener.moved();
 			}
@@ -35,7 +35,7 @@ public class Person extends AbstractActor implements Actor {
 
 	@Override
 	public Boolean addItems(Portable item) {
-		if (item instanceof Coin){
+		if (item instanceof Coin) {
 			addCoins(item.getValue());
 			for (ActorListener listener : listeners) {
 				listener.pickedUpItem();
@@ -69,12 +69,11 @@ public class Person extends AbstractActor implements Actor {
 	}
 
 	@Override
-	public void addCoins(int addCoins){
+	public void addCoins(int addCoins) {
 		super.addCoins(addCoins);
 		for (ActorListener listener : listeners) {
 			listener.pickedUpItem();
 		}
 	}
-	
-	
+
 }

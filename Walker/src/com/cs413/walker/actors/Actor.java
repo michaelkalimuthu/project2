@@ -42,7 +42,7 @@ public interface Actor {
 	public int getDamage();
 
 	public int getCapacity();
-	
+
 	public int getCurrentCapacity();
 
 	public void addCoins(int addCoins);
@@ -60,5 +60,7 @@ public interface Actor {
 	public void addListeners(ActorListener listener);
 
 	public int attack(Actor actor);
+
+	public int getRate();
 
 }

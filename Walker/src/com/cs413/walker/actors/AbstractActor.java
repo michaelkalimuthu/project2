@@ -11,17 +11,18 @@ public abstract class AbstractActor implements Actor {
 
 	protected String name;
 
-	protected int health, energy, coins, lives, armor, damage, capacity;
+	protected int health, energy, coins, lives, armor, damage, capacity, rate;
 	protected ArrayList<Portable> items;
 
 	public AbstractActor(String name, Location location, int health,
-			int energy, int lives, int capacity) {
+			int energy, int lives, int capacity, int rate) {
 		this.name = name;
 		this.location = location;
 		this.health = health;
 		this.energy = energy;
 		this.lives = lives;
 		this.capacity = capacity;
+		this.rate = rate;
 		armor = 1;
 		damage = 1;
 		coins = 0;
@@ -144,10 +145,15 @@ public abstract class AbstractActor implements Actor {
 	@Override
 	public int getCurrentCapacity() {
 		int sum = 0;
-		for (Portable p : items){
+		for (Portable p : items) {
 			sum += p.getVolume();
 		}
 		return sum;
+	}
+
+	@Override
+	public int getRate() {
+		return rate;
 	}
 
 }

@@ -47,7 +47,6 @@ public class TerrainView extends View {
 	private final ArrayList<Integer> movingOptions;
 
 	int currentLoc;
-	int rate;
 	int level;
 
 	float placeHolderX;
@@ -172,7 +171,7 @@ public class TerrainView extends View {
 
 	// Draws a box of player stats for current location, obtained items, health
 	// & lives
-	public void drawText(Actor actor, int rate, Canvas canvas) {
+	public void drawText(Actor actor, Canvas canvas) {
 		LinearLayout layout = new LinearLayout(context);
 		TextView textView = new TextView(context);
 		textView.setVisibility(View.VISIBLE);
@@ -182,7 +181,7 @@ public class TerrainView extends View {
 				+ actor.getHealth() + "\nEnergy: " + actor.getEnergy()
 				+ "\nItems: " + actor.getCurrentCapacity() + "/"
 				+ actor.getCapacity() + "  Coins: " + actor.getCoins()
-				+ "\nDifficulty: " + rate);
+				+ "\nDifficulty: " + actor.getRate());
 		layout.addView(textView);
 
 		layout.measure(canvas.getWidth(), canvas.getHeight());
@@ -416,7 +415,7 @@ public class TerrainView extends View {
 
 		initDraw = false;
 		// canvas.drawRect(10, 10, 10, 10, paint);
-		drawText(actor, rate, canvas);
+		drawText(actor, canvas);
 		boolean newItem = true;
 		if (actor.getLocation().getItems().size() > 0 && newItem) {
 			drawItemsBox();
@@ -637,10 +636,6 @@ public class TerrainView extends View {
 
 	private void setCanGoDown(boolean canGoDown) {
 		this.canGoDown = canGoDown;
-	}
-
-	public void setRate(int rate) {
-		this.rate = rate;
 	}
 
 }

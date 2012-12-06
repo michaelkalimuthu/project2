@@ -19,7 +19,7 @@ import com.example.walker.R;
  */
 public class MainMenuActivity extends Activity {
 	// Initializing variables
-	Person player = new Person(null, null, 0, 0, 0, 0);
+	Person player = new Person(null, null, 0, 0, 0, 0, 0);
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class MainMenuActivity extends Activity {
 		final Button resume_button = (Button) findViewById(R.id.resume);
 
 		final NumberPicker difficulty = (NumberPicker) findViewById(R.id.difficulty);
-		difficulty.setMaxValue(5);
+		difficulty.setMaxValue(10);
 		difficulty.setMinValue(1);
 		difficulty.setValue(1);
 
