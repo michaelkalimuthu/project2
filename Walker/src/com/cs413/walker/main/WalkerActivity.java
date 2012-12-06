@@ -25,6 +25,7 @@ import com.cs413.walker.items.Coin;
 import com.cs413.walker.items.EnergyBar;
 import com.cs413.walker.items.Food;
 import com.cs413.walker.items.Portable;
+import com.cs413.walker.items.Weapon;
 import com.cs413.walker.locations.DefaultLocation;
 import com.cs413.walker.locations.Location;
 import com.cs413.walker.locations.Neighbor;
@@ -370,6 +371,7 @@ public class WalkerActivity extends Activity {
 		one.get(12).addItem(food);
 		one.get(12).addItem(new EnergyBar(4, "energybar", 4));
 		one.get(12).addItem(new Coin(3));
+		one.get(13).addItem(new Weapon("Axe",2));
 
 		levels.put(1, one);
 		levels.put(2, two);
