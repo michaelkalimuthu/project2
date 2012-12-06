@@ -4,17 +4,21 @@ import java.util.ArrayList;
 
 import com.cs413.walker.items.Coin;
 import com.cs413.walker.items.Portable;
+import com.cs413.walker.items.Weapon;
 import com.cs413.walker.locations.Location;
 
 public class Person extends AbstractActor implements Actor {
 	ArrayList<ActorListener> listeners;
 
 	int initEnergy;
+	int initHealth;
+	
 
 	public Person(String name, Location location, int health, int energy,
 			int lives, int capacity, int rate) {
 		super(name, location, health, energy, lives, capacity, rate);
 		initEnergy = energy;
+		initHealth = health;
 		listeners = new ArrayList<ActorListener>();
 	}
 
@@ -43,7 +47,13 @@ public class Person extends AbstractActor implements Actor {
 			if (item instanceof Coin) {
 				addCoins(item.getValue());
 				getLocation().getItems().remove(item);
-			}else if (getCurrentCapacity() + item.getVolume() <= getCapacity()) {
+			} else if (item instanceof Weapon) {
+				addDamagePoints(item.getValue());
+				getLocation().getItems().remove(item);
+				additionalCapacity += item.getVolume();
+			}
+			
+			else if (getCurrentCapacity() + item.getVolume() <= getCapacity()) {
 				items.add(item);
 				item.setActor(this);
 				getLocation().getItems().remove(item);
@@ -86,7 +96,10 @@ public class Person extends AbstractActor implements Actor {
 	@Override
 	public void attacked(int damage){
 		super.attacked(damage);
-		if (health <= 0){
+		if (health <= 0 && lives > 0){
+			health = initHealth;
+			lives -= 1;
+		}else if (health <= 0 && lives == 0){
 			health = 0;
 			for (ActorListener listener : listeners) {
 				listener.death();

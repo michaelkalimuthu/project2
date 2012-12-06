@@ -390,7 +390,7 @@ public class WalkerActivity extends Activity {
 		one.get(12).addItem(food);
 		one.get(12).addItem(new EnergyBar(4, "energybar", 4));
 		one.get(12).addItem(new Coin(3));
-		one.get(13).addItem(new Weapon("Axe",2));
+		one.get(13).addItem(new Weapon("Axe",2, 2));
 
 		levels.put(1, one);
 		levels.put(2, two);

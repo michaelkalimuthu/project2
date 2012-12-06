@@ -52,6 +52,8 @@ public interface Actor {
 	public void addEnergy(int addEnergy);
 	
 	public void attacked(int damage);
+	
+	public void addDamagePoints(int damage);
 
 	public Boolean addItems(ArrayList<Portable> list);
 

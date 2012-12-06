@@ -13,7 +13,7 @@ public abstract class AbstractActor implements Actor {
 	protected boolean armed;
 	protected String name;
 
-	protected int health, energy, coins, lives, armor, damage, capacity, rate;
+	protected int health, energy, coins, lives, armor, damage, capacity, rate, additionalCapacity;
 	protected ArrayList<Portable> items;
 
 	public AbstractActor(String name, Location location, int health,
@@ -28,6 +28,7 @@ public abstract class AbstractActor implements Actor {
 		armor = 1;
 		damage = 1;
 		coins = 0;
+		additionalCapacity = 0;
 		items = new ArrayList<Portable>();
 	}
 
@@ -150,7 +151,7 @@ public abstract class AbstractActor implements Actor {
 		for (Portable p : items) {
 			sum += p.getVolume();
 		}
-		return sum;
+		return sum + additionalCapacity;
 	}
 
 	@Override
@@ -171,6 +172,10 @@ public abstract class AbstractActor implements Actor {
 	public void setArmed(boolean armed) {
 		this.armed = armed;
 
+	}
+	@Override
+	public void addDamagePoints(int damage){
+		this.damage += damage;
 	}
 
 }

@@ -177,12 +177,14 @@ public class TerrainView extends View {
 		TextView textView = new TextView(context);
 		textView.setVisibility(View.VISIBLE);
 		textView.setText("Name: " + actor.getName() + "\nCurrent Location: "
-				+ actor.getLocation().getName() + "\nMonster Location: "
-				+ actor.getLives() + "  HP: "
-				+ actor.getHealth() + "\nEnergy: " + actor.getEnergy()
+				+ actor.getLocation().getName() + "\nLives: "
+				+ actor.getLives() + "\nAttackPower " + actor.getDamage()  
+				+ "  HP: " + actor.getHealth() 
+				+ "\nEnergy: " + actor.getEnergy()
 				+ "\nItems: " + actor.getCurrentCapacity() + "/"
 				+ actor.getCapacity() + "  Coins: " + actor.getCoins()
 				+ "\nDifficulty: " + actor.getRate());
+				
 		layout.addView(textView);
 
 		layout.measure(canvas.getWidth(), canvas.getHeight());

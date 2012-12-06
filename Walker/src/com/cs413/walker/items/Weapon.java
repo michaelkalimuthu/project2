@@ -9,10 +9,11 @@ public class Weapon extends AbstractItem {
 	String name;
 	Location currentLocation;
 	Actor actor;
+	int value;
 	
-	
-	public Weapon(String name, int volume){
+	public Weapon(String name, int volume, int value){
 		super(name, volume);
+		this.value = value;
 		
 	}
 

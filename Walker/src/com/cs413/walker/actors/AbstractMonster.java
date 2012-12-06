@@ -158,6 +158,7 @@ public abstract class AbstractMonster implements Actor {
 	public boolean isChasing(){
 		return chase;
 	}
+	public void addDamagePoints(int damage){}
 
 }
 
