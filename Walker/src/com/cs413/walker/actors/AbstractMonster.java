@@ -139,4 +139,5 @@ public abstract class AbstractMonster implements Actor {
 		return -1;
 	}
 
+
 }

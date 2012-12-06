@@ -43,7 +43,7 @@ public class Person extends AbstractActor implements Actor {
 			return true;
 		}
 
-		if (items.size() < capacity) {
+		if (getCurrentCapacity() + item.getVolume() < getCapacity()) {
 			items.add(item);
 			item.setActor(this);
 			for (ActorListener listener : listeners) {

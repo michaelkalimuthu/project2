@@ -31,7 +31,7 @@ public abstract class AbstractActor implements Actor {
 
 	@Override
 	public Boolean addItems(Portable item) {
-		if (getCurrentCapacity() < getCapacity()) {
+		if (getCurrentCapacity() + item.getVolume() < getCapacity()) {
 			items.add(item);
 			item.setActor(this);
 			return true;

@@ -388,7 +388,7 @@ public class WalkerActivity extends Activity {
 	public void movingTimer(final int level, int rate) {
 		final ArrayList<Actor> levelMonsters = monsters.get(level);
 
-		movingTimer = new CountDownTimer(6000 - rate * 1000, 1000) {
+		movingTimer = new CountDownTimer(5000, 5000) {
 			int min = 0;
 			int max = TerrainView.MAX_CELLS;
 
