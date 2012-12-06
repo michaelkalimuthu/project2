@@ -50,6 +50,8 @@ public interface Actor {
 	public void addHealth(int addHealth);
 
 	public void addEnergy(int addEnergy);
+	
+	public void attacked(int damage);
 
 	public Boolean addItems(Portable item);
 
@@ -61,7 +63,7 @@ public interface Actor {
 	
 	public void removeListeners(ActorListener listener);
 
-	public int attack(Actor actor);
+	public void attack(Actor actor);
 
 	public int getRate();
 	

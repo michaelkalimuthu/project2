@@ -135,12 +135,8 @@ public abstract class AbstractActor implements Actor {
 	}
 
 	@Override
-	public int attack(Actor actor) {
-		if (damage > actor.getArmor()) {
-			actor.addHealth(-(damage - actor.getArmor()));
-		}
-		return actor.getHealth();
-
+	public void attack(Actor actor) {
+		actor.attacked(getDamage());
 	}
 
 	@Override
@@ -156,16 +152,20 @@ public abstract class AbstractActor implements Actor {
 	public int getRate() {
 		return rate;
 	}
-	
+
 	@Override
 	public boolean isArmed() {
 		return armed;
+	}
+	@Override
+	public void attacked(int damage){
+		this.health -= damage;
 	}
 
 	@Override
 	public void setArmed(boolean armed) {
 		this.armed = armed;
-		
+
 	}
 
 }

@@ -174,6 +174,7 @@ public class WalkerActivity extends Activity {
 			@Override
 			public void moved() {
 				monsters.get(view.getLevel()).move(player.getLocation());
+				monsters.get(view.getLevel()).attack(player);
 
 			}
 
@@ -197,35 +198,24 @@ public class WalkerActivity extends Activity {
 					GridCell inventory = gridMap.get(TerrainView.INVENTORY);
 
 					if (downButton(view, clickX, clickY, down)) {
+						if (checkToRemoveMonster(player.getLocation().getNeighbors()
+								.get(Neighbor.BELOW))) { player.removeListeners(chaseListener); }
 						if (player.move(player.getLocation().getNeighbors()
 								.get(Neighbor.BELOW))) {
-							// move player
-							movingTimer.cancel();
-							view.changeLevel(-1);             // let view know level is
-							movingTimer(view.getLevel(), 4);
-							movingTimer.start();
-							player.removeListeners(chaseListener);		// changing
-							view.notify(player.getLocation(), player); // tell
-							// view
-							// to
-							// notify
-							sp.play(elevator, 1, 1, 0, 0, 1);
+							change(view, -1);
 						} // play elevator sound
 						else {
 							view.notify("You can not go there!");
 						}
 
 					} else if (upButton(view, clickX, clickY, up)) {
+						if (checkToRemoveMonster(player.getLocation().getNeighbors()
+								.get(Neighbor.ABOVE))) { player.removeListeners(chaseListener); }
 						if (player.move(player.getLocation().getNeighbors()
 								.get(Neighbor.ABOVE))) {
-							player.removeListeners(chaseListener);	
-							sp.play(elevator, 1, 1, 0, 0, 1); // play elevator
-							// sound
-							movingTimer.cancel();
-							view.changeLevel(1);
-							movingTimer(view.getLevel(), 4);
-							movingTimer.start();
-							view.notify(player.getLocation(), player);
+							
+							change(view, 1);
+
 						} else {
 							view.notify("You can not go there!");
 						}
@@ -272,35 +262,17 @@ public class WalkerActivity extends Activity {
 				return false;
 			}
 
-			private boolean centerButton(TerrainView view, float clickX,
-					float clickY, GridCell inventory) {
-				return (clickX >= inventory.getLeft()
-						&& clickX <= inventory.getRight() // if inventory button
-						// pressed
-						&& clickY <= inventory.getTop() && clickY >= inventory
-						.getBottom());
-			}
-
-			private boolean upButton(TerrainView view, float clickX,
-					float clickY, GridCell up) {
-				return (view.isCanGoUp() && clickX >= up.getLeft()
-						&& clickX <= up.getRight() // if up button pressed
-						&& clickY <= up.getTop() && clickY >= up.getBottom());
-			}
-
-			private boolean downButton(TerrainView view, float clickX,
-					float clickY, GridCell down) {
-				return (view.isCanGoDown() && clickX >= down.getLeft()
-						&& clickX <= down.getRight() // if down button pressed
-						&& clickY <= down.getTop() && clickY >= down
-						.getBottom());
-			}
 
 		};
 
 		view.setOnTouchListener(listener);
 
 		setContentView(view);
+	}
+
+	protected boolean checkToRemoveMonster(Location location) {
+		if (location != null) {return true;}
+		return false;
 	}
 
 	private void setUpGame() {
@@ -407,7 +379,7 @@ public class WalkerActivity extends Activity {
 
 			@Override
 			public void onFinish() {
-
+				if (currentMonster != null){
 				int choice = (int) (Math.random() * 4);
 
 				switch (choice) {
@@ -443,7 +415,7 @@ public class WalkerActivity extends Activity {
 				Log.d(TAG, "MOVED " + currentMonster.getLocation().getName());
 
 				restartTimer(level);
-
+				}
 			}
 
 			@Override
@@ -508,6 +480,41 @@ public class WalkerActivity extends Activity {
 				view.alert("Monster has spotted you! Equip a weapon before moving!");
 			}
 		}
+	}
+
+	public void change(TerrainView view, int way) {
+		player.removeListeners(chaseListener);	
+		sp.play(elevator, 1, 1, 0, 0, 1); // play elevator sound
+		movingTimer.cancel();
+		view.changeLevel(way);
+		movingTimer(view.getLevel(), 4);
+		movingTimer.start();
+		view.notify(player.getLocation(), player);
+		
+	}
+
+	public boolean centerButton(TerrainView view, float clickX,
+			float clickY, GridCell inventory) {
+		return (clickX >= inventory.getLeft()
+				&& clickX <= inventory.getRight() // if inventory button
+				// pressed
+				&& clickY <= inventory.getTop() && clickY >= inventory
+				.getBottom());
+	}
+
+	public boolean upButton(TerrainView view, float clickX,
+			float clickY, GridCell up) {
+		return (view.isCanGoUp() && clickX >= up.getLeft()
+				&& clickX <= up.getRight() // if up button pressed
+				&& clickY <= up.getTop() && clickY >= up.getBottom());
+	}
+
+	public boolean downButton(TerrainView view, float clickX,
+			float clickY, GridCell down) {
+		return (view.isCanGoDown() && clickX >= down.getLeft()
+				&& clickX <= down.getRight() // if down button pressed
+				&& clickY <= down.getTop() && clickY >= down
+				.getBottom());
 	}
 
 	@Override

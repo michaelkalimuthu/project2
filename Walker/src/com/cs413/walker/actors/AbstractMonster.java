@@ -12,7 +12,7 @@ public abstract class AbstractMonster implements Actor {
 	protected String name;
 
 	protected int health, energy, coins, lives, armor, damage, capacity;
-	
+
 	protected boolean chase;
 
 	protected ArrayList<Portable> items;
@@ -25,7 +25,7 @@ public abstract class AbstractMonster implements Actor {
 		this.energy = energy;
 		this.lives = lives;
 		this.capacity = 1;
-		
+
 		armor = 1;
 		damage = 5;
 		coins = 0;
@@ -129,12 +129,8 @@ public abstract class AbstractMonster implements Actor {
 	}
 
 	@Override
-	public int attack(Actor actor) {
-		if (damage > actor.getArmor()) {
-			actor.addHealth(-(damage - actor.getArmor()));
-		}
-		return actor.getHealth();
-
+	public void attack(Actor actor) {
+		actor.attacked(getDamage());
 	}
 	@Override
 	public int getCurrentCapacity() {
@@ -150,11 +146,15 @@ public abstract class AbstractMonster implements Actor {
 	public void setArmed(boolean armed){
 		//
 	}
-	
+	@Override
+	public void attacked(int damage){
+		this.health -= damage;
+	}
+
 	public void setChasing(boolean chase){ 
 		this.chase = chase;
 	}
-	
+
 	public boolean isChasing(){
 		return chase;
 	}
