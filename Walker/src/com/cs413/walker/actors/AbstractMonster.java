@@ -10,7 +10,7 @@ public abstract class AbstractMonster implements Actor {
 	protected Location location;
 
 	protected String name;
-
+	
 	protected int health, energy, coins, lives, armor, damage, capacity;
 
 	protected ArrayList<Portable> items;
@@ -139,5 +139,15 @@ public abstract class AbstractMonster implements Actor {
 		return -1;
 	}
 
+	@Override
+	public boolean isArmed(){
+		return false;
+	}
+	
+	@Override
+	public void setArmed(boolean armed){
+	//
+	}
+	}
 
-}
+

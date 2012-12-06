@@ -62,5 +62,9 @@ public interface Actor {
 	public int attack(Actor actor);
 
 	public int getRate();
+	
+	public boolean isArmed();
+	
+	public void setArmed(boolean armed);
 
 }

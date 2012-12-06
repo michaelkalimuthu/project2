@@ -9,6 +9,7 @@ public abstract class AbstractActor implements Actor {
 
 	protected Location location;
 
+	protected boolean armed;
 	protected String name;
 
 	protected int health, energy, coins, lives, armor, damage, capacity, rate;
@@ -154,6 +155,17 @@ public abstract class AbstractActor implements Actor {
 	@Override
 	public int getRate() {
 		return rate;
+	}
+	
+	@Override
+	public boolean isArmed() {
+		return armed;
+	}
+
+	@Override
+	public void setArmed(boolean armed) {
+		this.armed = armed;
+		
 	}
 
 }
