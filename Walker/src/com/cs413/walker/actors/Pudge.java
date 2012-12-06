@@ -60,5 +60,14 @@ public class Pudge extends AbstractMonster implements Actor {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+
+	@Override
+	public void removeListeners(ActorListener listener) {
+		if (listeners.contains(listener)){
+			listeners.remove(listener);
+		}
+		
+	}
 
 }

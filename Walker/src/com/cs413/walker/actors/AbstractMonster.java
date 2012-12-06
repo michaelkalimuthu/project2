@@ -10,8 +10,10 @@ public abstract class AbstractMonster implements Actor {
 	protected Location location;
 
 	protected String name;
-	
+
 	protected int health, energy, coins, lives, armor, damage, capacity;
+	
+	protected boolean chase;
 
 	protected ArrayList<Portable> items;
 
@@ -23,7 +25,7 @@ public abstract class AbstractMonster implements Actor {
 		this.energy = energy;
 		this.lives = lives;
 		this.capacity = 1;
-
+		
 		armor = 1;
 		damage = 5;
 		coins = 0;
@@ -143,11 +145,20 @@ public abstract class AbstractMonster implements Actor {
 	public boolean isArmed(){
 		return false;
 	}
-	
+
 	@Override
 	public void setArmed(boolean armed){
-	//
+		//
 	}
+	
+	public void setChasing(boolean chase){ 
+		this.chase = chase;
 	}
+	
+	public boolean isChasing(){
+		return chase;
+	}
+
+}
 
 

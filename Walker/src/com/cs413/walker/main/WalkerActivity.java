@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+import com.cs413.walker.actors.AbstractMonster;
 import com.cs413.walker.actors.Actor;
 import com.cs413.walker.actors.ActorListener;
 import com.cs413.walker.actors.Person;
@@ -49,13 +50,15 @@ public class WalkerActivity extends Activity {
 	ArrayList<Location> three;
 	HashMap<Integer, GridCell> gridMap;
 	ArrayList<Integer> movingOptions;
-	HashMap<Integer, ArrayList<Actor>> monsters;
+	HashMap<Integer, Actor> monsters;
 	ArrayList<Actor> levelOne;
 
 	CountDownTimer movingTimer;
-	ActorListener personListener, monsterListener;
+	ActorListener personListener, monsterListener, chaseListener;
 
 	Actor player, monster;
+
+	AbstractMonster tempMonster;
 
 	SoundPool sp;
 	int footsteps;
@@ -95,7 +98,7 @@ public class WalkerActivity extends Activity {
 		three = new ArrayList<Location>();
 		levels = new HashMap<Integer, ArrayList<Location>>();
 
-		monsters = new HashMap<Integer, ArrayList<Actor>>();
+		monsters = new HashMap<Integer, Actor>();
 
 		levelOne = new ArrayList<Actor>();
 
@@ -108,8 +111,8 @@ public class WalkerActivity extends Activity {
 		// represents normal audio quality.
 		sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		footsteps = sp.load(this, R.raw.footsteps, 1); // links footsteps
-														// variable to audio
-														// clip in raw folder
+		// variable to audio
+		// clip in raw folder
 		elevator = sp.load(this, R.raw.elevator, 1);
 		growl = sp.load(this, R.raw.growl, 1);
 
@@ -125,23 +128,14 @@ public class WalkerActivity extends Activity {
 
 			@Override
 			public void moved() {
-				if (player.getEnergy() == 0) {
+				if (player.getEnergy() == 0 || player.getHealth() == 0) {
 					view.alert("You are dead.");
 				}
-
-				for (Location loc : player.getLocation().getNeighbors()
-						.values()) {
-					Log.d(TAG, String.valueOf(loc.getActors().size()));
-					if (loc.getActors().contains(monster)) {
-						Log.d(TAG, "MONSTER HERE");
-						view.invalidate();
-						sp.play(growl, 1, 1, 0, 0, 1);
-						view.alert("Monster is near!");
-					}
-
+				if (monsters.get(view.getLevel()) != null &&
+						!((AbstractMonster)monsters.get(view.getLevel())).isChasing()){
+					chase(view);
 				}
-
-				view.invalidate();
+				view.invalidate(); //always invalidate when player moves
 
 			}
 
@@ -158,24 +152,33 @@ public class WalkerActivity extends Activity {
 
 			@Override
 			public void moved() {
-				TerrainView.monsterLocation = monster.getLocation().getName();
-				view.invalidate();
-				for (Location loc : player.getLocation().getNeighbors()
-						.values()) {
-					Log.d(TAG, String.valueOf(loc.getActors().size()));
-					if (loc.getActors().contains(monster)) {
-						Log.d(TAG, "MONSTER HERE");
-						view.invalidate();
-						sp.play(growl, 1, 1, 0, 0, 1);
-						view.alert("Monster is near!");
-					}
-
+				//	TerrainView.monsterLocation = monster.getLocation().getName();
+				//	view.invalidate();
+				if (monsters.get(view.getLevel()) != null &&
+						!((AbstractMonster)monsters.get(view.getLevel())).isChasing()){
+					chase(view);
 				}
 
 			}
 
 		};
 		monster.addListeners(monsterListener);
+
+		chaseListener = new ActorListener(){
+			@Override
+			public void pickedUpItem() {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void moved() {
+				monsters.get(view.getLevel()).move(player.getLocation());
+
+			}
+
+		};
+
 
 		OnTouchListener listener = new OnTouchListener() {
 
@@ -186,22 +189,26 @@ public class WalkerActivity extends Activity {
 					float clickY = event.getY();
 					gridMap = view.getGridMap(); // get the grid
 					movingOptions = view.getMovingOptions(); // get moving
-																// options
+					// options
 
 					GridCell down = gridMap.get(TerrainView.DOWN); // get down
-																	// button
+					// button
 					GridCell up = gridMap.get(TerrainView.UP); // get up button
 					GridCell inventory = gridMap.get(TerrainView.INVENTORY);
 
 					if (downButton(view, clickX, clickY, down)) {
 						if (player.move(player.getLocation().getNeighbors()
-								.get(Neighbor.BELOW))) { // move player
-							view.changeLevel(-1); // let view know level is
-													// changing
+								.get(Neighbor.BELOW))) {
+							// move player
+							movingTimer.cancel();
+							view.changeLevel(-1);             // let view know level is
+							movingTimer(view.getLevel(), 4);
+							movingTimer.start();
+							player.removeListeners(chaseListener);		// changing
 							view.notify(player.getLocation(), player); // tell
-																		// view
-																		// to
-																		// notify
+							// view
+							// to
+							// notify
 							sp.play(elevator, 1, 1, 0, 0, 1);
 						} // play elevator sound
 						else {
@@ -211,9 +218,13 @@ public class WalkerActivity extends Activity {
 					} else if (upButton(view, clickX, clickY, up)) {
 						if (player.move(player.getLocation().getNeighbors()
 								.get(Neighbor.ABOVE))) {
+							player.removeListeners(chaseListener);	
 							sp.play(elevator, 1, 1, 0, 0, 1); // play elevator
-																// sound
+							// sound
+							movingTimer.cancel();
 							view.changeLevel(1);
+							movingTimer(view.getLevel(), 4);
+							movingTimer.start();
 							view.notify(player.getLocation(), player);
 						} else {
 							view.notify("You can not go there!");
@@ -237,12 +248,12 @@ public class WalkerActivity extends Activity {
 													.getValue())) {
 										if (player.move(mapping.getKey())) {
 											sp.play(footsteps, 1, 1, 0, 0, 1); // play
-																				// footsteps
-																				// sound
-																				// onTouch
-																				// of
-																				// accessible
-																				// space
+											// footsteps
+											// sound
+											// onTouch
+											// of
+											// accessible
+											// space
 											view.notify(mapping.getKey(),
 													player);
 										} else {
@@ -265,7 +276,7 @@ public class WalkerActivity extends Activity {
 					float clickY, GridCell inventory) {
 				return (clickX >= inventory.getLeft()
 						&& clickX <= inventory.getRight() // if inventory button
-															// pressed
+						// pressed
 						&& clickY <= inventory.getTop() && clickY >= inventory
 						.getBottom());
 			}
@@ -351,14 +362,14 @@ public class WalkerActivity extends Activity {
 		}
 
 		one.get(32).addNeighbor(Neighbor.ABOVE, two.get(5)); // 32's above
-																// neighbor is
-																// now 5 and
-																// vice versa
+		// neighbor is
+		// now 5 and
+		// vice versa
 
 		two.get(13).addNeighbor(Neighbor.ABOVE, three.get(0)); // 13's above
-																// neighbor is
-																// now 0 and
-																// vice versa
+		// neighbor is
+		// now 0 and
+		// vice versa
 
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
@@ -379,8 +390,8 @@ public class WalkerActivity extends Activity {
 
 		monster = new Pudge("Monster", one.get(17), 5, 5, 5);
 
-		levelOne.add(monster);
-		monsters.put(1, levelOne);
+
+		monsters.put(1, monster);
 		movingTimer(1, 4);
 
 		// movingTimer.start();
@@ -388,7 +399,7 @@ public class WalkerActivity extends Activity {
 	}
 
 	public void movingTimer(final int level, int rate) {
-		final ArrayList<Actor> levelMonsters = monsters.get(level);
+		final Actor currentMonster = monsters.get(level);
 
 		movingTimer = new CountDownTimer(5000, 5000) {
 			int min = 0;
@@ -396,41 +407,41 @@ public class WalkerActivity extends Activity {
 
 			@Override
 			public void onFinish() {
-				for (Actor m : levelMonsters) {
-					int choice = (int) (Math.random() * 4);
 
-					switch (choice) {
-					case 0:
-						if (m.getLocation().getNeighbors().get(Neighbor.WEST) != null) {
-							m.move(m.getLocation().getNeighbors()
-									.get(Neighbor.WEST));
+				int choice = (int) (Math.random() * 4);
 
-						}
-						break;
-					case 1:
-						if (m.getLocation().getNeighbors().get(Neighbor.EAST) != null) {
-							m.move(m.getLocation().getNeighbors()
-									.get(Neighbor.EAST));
+				switch (choice) {
+				case 0:
+					if (currentMonster.getLocation().getNeighbors().get(Neighbor.WEST) != null) {
+						currentMonster.move(currentMonster.getLocation().getNeighbors()
+								.get(Neighbor.WEST));
 
-						}
-						break;
-					case 2:
-						if (m.getLocation().getNeighbors().get(Neighbor.SOUTH) != null) {
-							m.move(m.getLocation().getNeighbors()
-									.get(Neighbor.SOUTH));
-
-						}
-						break;
-					case 3:
-						if (m.getLocation().getNeighbors().get(Neighbor.NORTH) != null) {
-							m.move(m.getLocation().getNeighbors()
-									.get(Neighbor.NORTH));
-
-						}
-						break;
 					}
-					Log.d(TAG, "MOVED " + m.getLocation().getName());
+					break;
+				case 1:
+					if (currentMonster.getLocation().getNeighbors().get(Neighbor.EAST) != null) {
+						currentMonster.move(currentMonster.getLocation().getNeighbors()
+								.get(Neighbor.EAST));
+
+					}
+					break;
+				case 2:
+					if (currentMonster.getLocation().getNeighbors().get(Neighbor.SOUTH) != null) {
+						currentMonster.move(currentMonster.getLocation().getNeighbors()
+								.get(Neighbor.SOUTH));
+
+					}
+					break;
+				case 3:
+					if (currentMonster.getLocation().getNeighbors().get(Neighbor.NORTH) != null) {
+						currentMonster.move(currentMonster.getLocation().getNeighbors()
+								.get(Neighbor.NORTH));
+
+					}
+					break;
 				}
+				Log.d(TAG, "MOVED " + currentMonster.getLocation().getName());
+
 				restartTimer(level);
 
 			}
@@ -445,7 +456,7 @@ public class WalkerActivity extends Activity {
 	}
 
 	public void restartTimer(int level) {
-		if (monsters.get(level).size() > 0) {
+		if (monsters.get(level) != null) {
 			movingTimer.cancel(); // prevents timer from overlapping
 			movingTimer.start();
 		}
@@ -478,6 +489,26 @@ public class WalkerActivity extends Activity {
 		return true;
 
 	}
+	
+	public void chase(TerrainView view){
+		for (Location loc : player.getLocation().getNeighbors()
+				.values()) {
+			if (loc == player.getLocation().getNeighbors().get(Neighbor.NORTH) ||
+					loc == player.getLocation().getNeighbors().get(Neighbor.SOUTH))
+				continue;
+			Log.d(TAG, String.valueOf(loc.getActors().size()));
+			if (loc.getActors().contains(monsters.get(view.getLevel()))) {
+				tempMonster = (AbstractMonster) monsters.get(view.getLevel());
+				tempMonster.setChasing(true);
+				player.addListeners(chaseListener);
+				movingTimer.cancel();
+				Log.d(TAG, "MONSTER HERE");
+				view.invalidate();
+				sp.play(growl, 1, 1, 0, 0, 1);
+				view.alert("Monster has spotted you! Equip a weapon before moving!");
+			}
+		}
+	}
 
 	@Override
 	protected void onPause() {
@@ -490,5 +521,7 @@ public class WalkerActivity extends Activity {
 		super.onResume();
 		movingTimer.start(); // start the monster moving timer
 	}
+
+
 
 }

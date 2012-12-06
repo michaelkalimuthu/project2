@@ -75,5 +75,13 @@ public class Person extends AbstractActor implements Actor {
 			listener.pickedUpItem();
 		}
 	}
+	
+	@Override
+	public void removeListeners(ActorListener listener) {
+		if (listeners.contains(listener)){
+			listeners.remove(listener);
+		}
+		
+	}
 
 }

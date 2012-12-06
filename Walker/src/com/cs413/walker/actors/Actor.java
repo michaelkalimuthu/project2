@@ -58,6 +58,8 @@ public interface Actor {
 	public ArrayList<Portable> getItems();
 
 	public void addListeners(ActorListener listener);
+	
+	public void removeListeners(ActorListener listener);
 
 	public int attack(Actor actor);
 
