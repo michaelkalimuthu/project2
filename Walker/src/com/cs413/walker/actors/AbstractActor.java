@@ -2,6 +2,7 @@ package com.cs413.walker.actors;
 
 import java.util.ArrayList;
 
+import com.cs413.walker.items.Coin;
 import com.cs413.walker.items.Portable;
 import com.cs413.walker.locations.Location;
 
@@ -31,10 +32,14 @@ public abstract class AbstractActor implements Actor {
 	}
 
 	@Override
-	public Boolean addItems(Portable item) {
-		if (getCurrentCapacity() + item.getVolume() < getCapacity()) {
-			items.add(item);
-			item.setActor(this);
+	public Boolean addItems(ArrayList<Portable> list) {
+		for (Portable item : list){
+			if (item instanceof Coin) {
+				addCoins(item.getValue());
+			}else if (getCurrentCapacity() + item.getVolume() < getCapacity()) {
+				items.add(item);
+				item.setActor(this);
+			}
 			return true;
 		}
 		return false;

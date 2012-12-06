@@ -53,7 +53,7 @@ public abstract class AbstractItem implements Portable {
 	}
 	@Override
 	public String toString(){
-		return getName() ;
+		return getName() + " weight=" + volume ;
 	}
 
 

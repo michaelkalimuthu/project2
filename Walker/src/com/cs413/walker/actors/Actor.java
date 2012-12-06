@@ -53,7 +53,7 @@ public interface Actor {
 	
 	public void attacked(int damage);
 
-	public Boolean addItems(Portable item);
+	public Boolean addItems(ArrayList<Portable> list);
 
 	public void useItem(Portable item);
 

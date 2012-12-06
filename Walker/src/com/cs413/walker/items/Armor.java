@@ -11,12 +11,14 @@ public class Armor extends AbstractItem{
 	
 	private int addHealth;
 	String name;
+	int value;
 	Location currentLocation;
 	Actor actor;
 	
 	public Armor(int addHealth, String name, int volume){
 		super(name, volume);
 		this.addHealth = addHealth;
+		value = addHealth;
 	}
 
 

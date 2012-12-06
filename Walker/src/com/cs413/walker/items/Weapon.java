@@ -10,6 +10,7 @@ public class Weapon extends AbstractItem {
 	Location currentLocation;
 	Actor actor;
 	
+	
 	public Weapon(String name, int volume){
 		super(name, volume);
 		

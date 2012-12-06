@@ -62,6 +62,7 @@ public class TerrainView extends View {
 
 	boolean canGoUp;
 	boolean canGoDown;
+	AlertDialog.Builder builder;
 
 	Bitmap player = BitmapFactory.decodeResource(getResources(),
 			R.drawable.player);
@@ -423,10 +424,7 @@ public class TerrainView extends View {
 		// canvas.drawRect(10, 10, 10, 10, paint);
 		drawText(actor, canvas);
 		boolean newItem = true;
-		if (actor.getLocation().getItems().size() > 0 && newItem) {
-			drawItemsBox();
-			newItem = false;
-		}
+
 	}
 
 	/*
@@ -462,7 +460,7 @@ public class TerrainView extends View {
 	 * 
 	 * @Override public void onClick(DialogInterface dialog, int id) {
 	 * Log.d(TAG, "Cancelled"); } }); builder.show(); }
-	 */
+	 
 	void drawItemsBox() {
 
 		final ArrayList<Portable> mSelectedItems = new ArrayList<Portable>();
@@ -476,7 +474,10 @@ public class TerrainView extends View {
 		for (int i = 0; i < arr.length; i++) {
 			list[i] = arr[i];
 		}
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		if (builder != null){
+			builder = null;
+		}
+		builder = new AlertDialog.Builder(context);
 
 		// Set the dialog title
 		builder.setTitle("Pick Up?")
@@ -510,6 +511,7 @@ public class TerrainView extends View {
 						});
 		builder.show();
 	}
+	*/
 
 	public void showInventory() {
 		final ArrayList<Portable> mSelectedItems = new ArrayList<Portable>();

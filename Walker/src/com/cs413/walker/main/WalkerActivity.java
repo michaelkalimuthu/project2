@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -52,11 +54,13 @@ public class WalkerActivity extends Activity {
 	ArrayList<Integer> movingOptions;
 	HashMap<Integer, Actor> monsters;
 	ArrayList<Actor> levelOne;
+	
+
 
 	CountDownTimer movingTimer;
 	ActorListener personListener, monsterListener, chaseListener;
 
-	Actor player, monster;
+	Actor player, monster, monster2;
 
 	AbstractMonster tempMonster;
 
@@ -125,6 +129,10 @@ public class WalkerActivity extends Activity {
 			public void pickedUpItem() {
 				view.invalidate();
 			}
+			@Override
+			public void death(){
+				view.alert("dead");
+			}
 
 			@Override
 			public void moved() {
@@ -136,6 +144,11 @@ public class WalkerActivity extends Activity {
 					chase(view);
 				}
 				view.invalidate(); //always invalidate when player moves
+				
+				
+				if (player.getLocation().getItems().size() > 0) {
+					itemsPresent(view);
+				}
 
 			}
 
@@ -148,6 +161,18 @@ public class WalkerActivity extends Activity {
 			public void pickedUpItem() {
 				// TODO Auto-generated method stub
 
+			}
+			
+			@Override
+			public void death(){
+				
+				monsters.remove(monsters.get(view.getLevel()));
+				view.invalidate();
+				
+				player.removeListeners(chaseListener);
+				view.alert("You've killed the monster!");
+				player.getLocation().getActors().clear();
+				
 			}
 
 			@Override
@@ -163,6 +188,7 @@ public class WalkerActivity extends Activity {
 
 		};
 		monster.addListeners(monsterListener);
+		monster2.addListeners(monsterListener);
 
 		chaseListener = new ActorListener(){
 			@Override
@@ -170,11 +196,16 @@ public class WalkerActivity extends Activity {
 				// TODO Auto-generated method stub
 
 			}
+			@Override
+			public void death(){
+				//todo
+			}
 
 			@Override
 			public void moved() {
 				monsters.get(view.getLevel()).move(player.getLocation());
 				monsters.get(view.getLevel()).attack(player);
+				player.attack(monsters.get(view.getLevel()));
 
 			}
 
@@ -196,6 +227,7 @@ public class WalkerActivity extends Activity {
 					// button
 					GridCell up = gridMap.get(TerrainView.UP); // get up button
 					GridCell inventory = gridMap.get(TerrainView.INVENTORY);
+
 
 					if (downButton(view, clickX, clickY, down)) {
 						if (checkToRemoveMonster(player.getLocation().getNeighbors()
@@ -360,10 +392,12 @@ public class WalkerActivity extends Activity {
 		levels.put(2, two);
 		levels.put(3, three);
 
-		monster = new Pudge("Monster", one.get(17), 5, 5, 5);
+		monster = new Pudge("Monster", one.get(26), 5, INIT_RATE);
+		monster2 = new Pudge("Monster2", two.get(42), 10, INIT_RATE);
 
 
 		monsters.put(1, monster);
+		monsters.put(2, monster2);
 		movingTimer(1, 4);
 
 		// movingTimer.start();
@@ -465,8 +499,8 @@ public class WalkerActivity extends Activity {
 	public void chase(TerrainView view){
 		for (Location loc : player.getLocation().getNeighbors()
 				.values()) {
-			if (loc == player.getLocation().getNeighbors().get(Neighbor.NORTH) ||
-					loc == player.getLocation().getNeighbors().get(Neighbor.SOUTH))
+			if (loc == player.getLocation().getNeighbors().get(Neighbor.ABOVE) ||
+					loc == player.getLocation().getNeighbors().get(Neighbor.BELOW))
 				continue;
 			Log.d(TAG, String.valueOf(loc.getActors().size()));
 			if (loc.getActors().contains(monsters.get(view.getLevel()))) {
@@ -528,7 +562,53 @@ public class WalkerActivity extends Activity {
 		super.onResume();
 		movingTimer.start(); // start the monster moving timer
 	}
+	
+	public void itemsPresent(final TerrainView view){
 
+		final ArrayList<Portable> mSelectedItems = new ArrayList<Portable>();
+		  // Where we track the selected items
+		String[] arr = new String[player.getLocation().getItems().size()];
+		for (int i=0; i< arr.length; i ++){
+			arr[i] = player.getLocation().getItems().get(i).toString();
+		}
+		
+		CharSequence[] list = new CharSequence[arr.length];
+		for (int i=0; i<arr.length; i++){
+			list[i] = arr[i];
+		}
+	    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+	   
+	    // Set the dialog title
+	    builder.setTitle("Pick Up?")
+	    // Specify the list array, the items to be selected by default (null for none),
+	    // and the listener through which to receive callbacks when items are selected
+	           .setMultiChoiceItems(list, null,
+	                      new DialogInterface.OnMultiChoiceClickListener() {
+	               @Override
+	               public void onClick(DialogInterface dialog, int which,
+	                       boolean isChecked) {
+	                   if (isChecked) {
+	                       // If the user checked the item, add it to the selected items
+	                       mSelectedItems.add(player.getLocation().getItems().get(which));
+	                   } 
+	               }
+	           }).setPositiveButton("Done", new DialogInterface.OnClickListener() {
+	               @Override
+	               public void onClick(DialogInterface dialog, int id) {
+	            	  player.addItems(mSelectedItems);
+	            	   // player.addItems(mSelectedItems.get(id+1));
+	            	  // player.getLocation().getItems().remove(id+1);
+	                   }
+	           })
+	           .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	               @Override
+	               public void onClick(DialogInterface dialog, int id) {
+	                   Log.d(TAG, "Cancelled");
+	               }
+	           });
+	           builder.show();
+	}
+	
 
 
 }

@@ -1,25 +1,29 @@
 package com.cs413.walker.actors;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 import com.cs413.walker.items.Coin;
 import com.cs413.walker.items.Portable;
 import com.cs413.walker.locations.Location;
 
 public class Person extends AbstractActor implements Actor {
-	HashSet<ActorListener> listeners;
+	ArrayList<ActorListener> listeners;
+
+	int initEnergy;
 
 	public Person(String name, Location location, int health, int energy,
 			int lives, int capacity, int rate) {
 		super(name, location, health, energy, lives, capacity, rate);
-		listeners = new HashSet<ActorListener>();
+		initEnergy = energy;
+		listeners = new ArrayList<ActorListener>();
 	}
 
 	@Override
 	public boolean move(Location newLocation) {
-		if (newLocation.canAddActor() && energy > 0) {
+		if (newLocation.canAddActor() && (getEnergy() - rate) > 0) {
 			location = newLocation;
 			energy -= 1 * rate;
+
 			for (ActorListener listener : listeners) {
 				listener.moved();
 			}
@@ -34,24 +38,20 @@ public class Person extends AbstractActor implements Actor {
 	}
 
 	@Override
-	public Boolean addItems(Portable item) {
-		if (item instanceof Coin) {
-			addCoins(item.getValue());
-			for (ActorListener listener : listeners) {
-				listener.pickedUpItem();
+	public Boolean addItems(ArrayList<Portable> list) {
+		for (Portable item : list){
+			if (item instanceof Coin) {
+				addCoins(item.getValue());
+				getLocation().getItems().remove(item);
+			}else if (getCurrentCapacity() + item.getVolume() <= getCapacity()) {
+				items.add(item);
+				item.setActor(this);
+				getLocation().getItems().remove(item);
 			}
-			return true;
 		}
-
-		if (getCurrentCapacity() + item.getVolume() < getCapacity()) {
-			items.add(item);
-			item.setActor(this);
-			for (ActorListener listener : listeners) {
-				listener.pickedUpItem();
-			}
-			return true;
-		}
-		return false;
+		for (ActorListener listener : listeners)
+			listener.pickedUpItem();
+		return true;
 
 	}
 
@@ -75,13 +75,23 @@ public class Person extends AbstractActor implements Actor {
 			listener.pickedUpItem();
 		}
 	}
-	
+
 	@Override
 	public void removeListeners(ActorListener listener) {
 		if (listeners.contains(listener)){
 			listeners.remove(listener);
 		}
-		
+
+	}
+	@Override
+	public void attacked(int damage){
+		super.attacked(damage);
+		if (health <= 0){
+			health = 0;
+			for (ActorListener listener : listeners) {
+				listener.death();
+			}
+		}
 	}
 
 }

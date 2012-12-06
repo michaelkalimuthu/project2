@@ -18,29 +18,28 @@ public abstract class AbstractMonster implements Actor {
 	protected ArrayList<Portable> items;
 
 	public AbstractMonster(String name, Location location, int health,
-			int energy, int lives) {
+			int damage) {
 		this.name = name;
 		this.location = location;
 		this.health = health;
-		this.energy = energy;
-		this.lives = lives;
-		this.capacity = 1;
-
-		armor = 1;
-		damage = 5;
+		this.damage = damage;
 		coins = 0;
 		items = new ArrayList<Portable>();
 	}
 
+
 	@Override
-	public Boolean addItems(Portable item) {
-		if (items.size() < capacity) {
-			items.add(item);
-			item.setActor(this);
+	public Boolean addItems(ArrayList<Portable> list) {
+		for (Portable item : list){
+			if (getCurrentCapacity() + item.getVolume() < getCapacity()) {
+				items.add(item);
+				item.setActor(this);
+			}
 			return true;
 		}
 		return false;
 	}
+
 
 	@Override
 	public ArrayList<Portable> getItems() {
@@ -130,7 +129,8 @@ public abstract class AbstractMonster implements Actor {
 
 	@Override
 	public void attack(Actor actor) {
-		actor.attacked(getDamage());
+		if (health > 0)
+			actor.attacked(getDamage());
 	}
 	@Override
 	public int getCurrentCapacity() {

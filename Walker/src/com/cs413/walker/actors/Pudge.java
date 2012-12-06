@@ -1,5 +1,6 @@
 package com.cs413.walker.actors;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.cs413.walker.items.Portable;
@@ -8,9 +9,8 @@ import com.cs413.walker.locations.Location;
 public class Pudge extends AbstractMonster implements Actor {
 	HashSet<ActorListener> listeners;
 
-	public Pudge(String name, Location location, int health, int energy,
-			int lives) {
-		super(name, location, health, energy, lives);
+	public Pudge(String name, Location location, int health, int damage) {
+		super(name, location, health, damage);
 		location.addActor(this);
 		listeners = new HashSet<ActorListener>();
 	}
@@ -28,16 +28,8 @@ public class Pudge extends AbstractMonster implements Actor {
 	}
 
 	@Override
-	public Boolean addItems(Portable item) {
+	public Boolean addItems(ArrayList<Portable> list) {
 
-		if (items.size() < capacity) {
-			items.add(item);
-			item.setActor(this);
-			for (ActorListener listener : listeners) {
-				listener.pickedUpItem();
-			}
-			return true;
-		}
 		return false;
 
 	}
@@ -68,6 +60,17 @@ public class Pudge extends AbstractMonster implements Actor {
 			listeners.remove(listener);
 		}
 		
+	}
+	
+	@Override
+	public void attacked(int damage){
+		super.attacked(damage);
+		if (health <= 0){
+			health = 0;
+			for (ActorListener listener : listeners) {
+				listener.death();
+			}
+		}
 	}
 
 }

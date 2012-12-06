@@ -4,5 +4,6 @@ public interface ActorListener {
 	
 	public void pickedUpItem();
 	public void moved();
+	public void death();
 
 }
