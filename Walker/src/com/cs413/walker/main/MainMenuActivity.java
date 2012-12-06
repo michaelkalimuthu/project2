@@ -35,7 +35,7 @@ public class MainMenuActivity extends Activity {
 		final Button resume_button = (Button) findViewById(R.id.resume);
 
 		final NumberPicker difficulty = (NumberPicker) findViewById(R.id.difficulty);
-		difficulty.setMaxValue(10);
+		difficulty.setMaxValue(3);
 		difficulty.setMinValue(1);
 		difficulty.setValue(1);
 

@@ -12,7 +12,6 @@ public class Person extends AbstractActor implements Actor {
 
 	int initEnergy;
 	int initHealth;
-	
 
 	public Person(String name, Location location, int health, int energy,
 			int lives, int capacity, int rate) {
@@ -24,7 +23,7 @@ public class Person extends AbstractActor implements Actor {
 
 	@Override
 	public boolean move(Location newLocation) {
-		if (newLocation.canAddActor() && (getEnergy() - rate) > 0) {
+		if (newLocation.canAddActor() && (getEnergy() - rate) >= 0) {
 			location = newLocation;
 			energy -= 1 * rate;
 
@@ -43,7 +42,7 @@ public class Person extends AbstractActor implements Actor {
 
 	@Override
 	public Boolean addItems(ArrayList<Portable> list) {
-		for (Portable item : list){
+		for (Portable item : list) {
 			if (item instanceof Coin) {
 				addCoins(item.getValue());
 				getLocation().getItems().remove(item);
@@ -52,15 +51,16 @@ public class Person extends AbstractActor implements Actor {
 				getLocation().getItems().remove(item);
 				additionalCapacity += item.getVolume();
 			}
-			
+
 			else if (getCurrentCapacity() + item.getVolume() <= getCapacity()) {
 				items.add(item);
 				item.setActor(this);
 				getLocation().getItems().remove(item);
 			}
 		}
-		for (ActorListener listener : listeners)
+		for (ActorListener listener : listeners) {
 			listener.pickedUpItem();
+		}
 		return true;
 
 	}
@@ -88,18 +88,19 @@ public class Person extends AbstractActor implements Actor {
 
 	@Override
 	public void removeListeners(ActorListener listener) {
-		if (listeners.contains(listener)){
+		if (listeners.contains(listener)) {
 			listeners.remove(listener);
 		}
 
 	}
+
 	@Override
-	public void attacked(int damage){
+	public void attacked(int damage) {
 		super.attacked(damage);
-		if (health <= 0 && lives > 0){
+		if (health <= 0 && lives > 0) {
 			health = initHealth;
 			lives -= 1;
-		}else if (health <= 0 && lives == 0){
+		} else if (health <= 0 && lives == 0) {
 			health = 0;
 			for (ActorListener listener : listeners) {
 				listener.death();

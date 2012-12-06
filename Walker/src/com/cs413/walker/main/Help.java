@@ -1,5 +1,7 @@
 package com.cs413.walker.main;
 
-public class Help {
+import android.app.Activity;
+
+public class Help extends Activity {
 
 }

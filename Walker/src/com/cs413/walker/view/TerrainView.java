@@ -30,7 +30,7 @@ public class TerrainView extends View {
 	private static final String TAG = "VIEW";
 	private final Location start;
 	// set iniLocation for monster
-	//public static String monsterLocation = "17";
+	// public static String monsterLocation = "17";
 
 	public final static int MAX_CELLS = 45;
 
@@ -178,13 +178,12 @@ public class TerrainView extends View {
 		textView.setVisibility(View.VISIBLE);
 		textView.setText("Name: " + actor.getName() + "\nCurrent Location: "
 				+ actor.getLocation().getName() + "\nLives: "
-				+ actor.getLives() + "\nAttackPower " + actor.getDamage()  
-				+ "  HP: " + actor.getHealth() 
-				+ "\nEnergy: " + actor.getEnergy()
-				+ "\nItems: " + actor.getCurrentCapacity() + "/"
-				+ actor.getCapacity() + "  Coins: " + actor.getCoins()
+				+ actor.getLives() + "\nAttackPower " + actor.getDamage()
+				+ "  HP: " + actor.getHealth() + "\nEnergy: "
+				+ actor.getEnergy() + "\nItems: " + actor.getCurrentCapacity()
+				+ "/" + actor.getCapacity() + "  Coins: " + actor.getCoins()
 				+ "\nDifficulty: " + actor.getRate());
-				
+
 		layout.addView(textView);
 
 		layout.measure(canvas.getWidth(), canvas.getHeight());
@@ -261,14 +260,13 @@ public class TerrainView extends View {
 		rect.set(cell.getLeft(), cell.getTop(), cell.getRight(),
 				cell.getBottom());
 		canvas.drawRect(rect, paint);
-		
+
 		int x = (int) rect.exactCenterX();
 		int y = (int) rect.exactCenterY();
 		canvas.drawBitmap(player, x - 20, y - 25, paint);
 		if (actor.getLocation().getActors().size() > 0) {
 			drawMonster(cell, canvas);
 		}
-
 
 		// get display info for south neighbor
 		if (getCurrentLoc() + 5 < MAX_CELLS) {
@@ -356,6 +354,13 @@ public class TerrainView extends View {
 		AlertDialog.Builder alert = new AlertDialog.Builder(context);
 
 		alert.setTitle(s);
+		alert.setCancelable(false).setPositiveButton("OK",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						// do things
+					}
+				});
 		alert.show();
 	}
 
@@ -410,14 +415,9 @@ public class TerrainView extends View {
 		if (!initDraw) {
 			movingOptions.clear();
 		}
-		
 
-		
 		setUpNeighbors(getCurrentLoc(), canvas, rect);
-		
-		
 
-		
 		drawItems(canvas, gridMap.get(getCurrentLoc()));
 
 		drawButtons(rect, canvas);
@@ -462,58 +462,36 @@ public class TerrainView extends View {
 	 * 
 	 * @Override public void onClick(DialogInterface dialog, int id) {
 	 * Log.d(TAG, "Cancelled"); } }); builder.show(); }
-	 
-	void drawItemsBox() {
-
-		final ArrayList<Portable> mSelectedItems = new ArrayList<Portable>();
-		// Where we track the selected items
-		String[] arr = new String[actor.getLocation().getItems().size()];
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = actor.getLocation().getItems().get(i).toString();
-		}
-
-		CharSequence[] list = new CharSequence[arr.length];
-		for (int i = 0; i < arr.length; i++) {
-			list[i] = arr[i];
-		}
-		if (builder != null){
-			builder = null;
-		}
-		builder = new AlertDialog.Builder(context);
-
-		// Set the dialog title
-		builder.setTitle("Pick Up?")
-				// Specify the list array, the items to be selected by default
-				// (null for none),
-				// and the listener through which to receive callbacks when
-				// items are selected
-				.setItems(list, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						Portable item = actor.getLocation().getItems()
-								.get(which);
-						if (actor.addItems(item)) {
-							actor.getLocation().getItems().remove(which);
-							// If the user checked the item, add it to the
-							// selected
-							// items
-							// mSelectedItems.add(actor.getLocation().getItems().get(which));
-						} else {
-							alert("You inventory is full!");
-						}
-					}
-
-				})
-				.setNegativeButton("Cancel",
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int id) {
-								Log.d(TAG, "Cancelled");
-							}
-						});
-		builder.show();
-	}
-	*/
+	 * 
+	 * void drawItemsBox() {
+	 * 
+	 * final ArrayList<Portable> mSelectedItems = new ArrayList<Portable>(); //
+	 * Where we track the selected items String[] arr = new
+	 * String[actor.getLocation().getItems().size()]; for (int i = 0; i <
+	 * arr.length; i++) { arr[i] =
+	 * actor.getLocation().getItems().get(i).toString(); }
+	 * 
+	 * CharSequence[] list = new CharSequence[arr.length]; for (int i = 0; i <
+	 * arr.length; i++) { list[i] = arr[i]; } if (builder != null){ builder =
+	 * null; } builder = new AlertDialog.Builder(context);
+	 * 
+	 * // Set the dialog title builder.setTitle("Pick Up?") // Specify the list
+	 * array, the items to be selected by default // (null for none), // and the
+	 * listener through which to receive callbacks when // items are selected
+	 * .setItems(list, new DialogInterface.OnClickListener() {
+	 * 
+	 * @Override public void onClick(DialogInterface dialog, int which) {
+	 * Portable item = actor.getLocation().getItems() .get(which); if
+	 * (actor.addItems(item)) { actor.getLocation().getItems().remove(which); //
+	 * If the user checked the item, add it to the // selected // items //
+	 * mSelectedItems.add(actor.getLocation().getItems().get(which)); } else {
+	 * alert("You inventory is full!"); } }
+	 * 
+	 * }) .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	 * 
+	 * @Override public void onClick(DialogInterface dialog, int id) {
+	 * Log.d(TAG, "Cancelled"); } }); builder.show(); }
+	 */
 
 	public void showInventory() {
 		final ArrayList<Portable> mSelectedItems = new ArrayList<Portable>();
