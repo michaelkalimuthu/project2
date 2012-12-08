@@ -17,8 +17,8 @@ public class Weapon extends AbstractItem {
 		
 	}
 
-
-	// engaging a Weapon during battle will protect a Player from death
+	// picking up a Weapon adds it to inventory which will
+	// protect a Player from death when encountered by Monster
 	@Override
 	public void useItem() {
 	getActor().setArmed(true);

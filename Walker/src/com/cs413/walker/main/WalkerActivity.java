@@ -40,12 +40,14 @@ import com.example.walker.R;
 public class WalkerActivity extends Activity {
 	private static final String TAG = "Activity";
 
+	//These are the game's attributes which are configurable at startup screen via a menu
 	private static int INIT_HEALTH = 100;
 	private static int INIT_ENERGY = 10;
 	private static int INIT_LIVES = 1;
 	private static int INIT_CAPACITY = 1;
 	private static int INIT_RATE;
 	private static String PLAY_NAME = "";
+	
 	HashMap<Integer, ArrayList<Location>> levels;
 	ArrayList<Location> one;
 	ArrayList<Location> two;
@@ -59,7 +61,6 @@ public class WalkerActivity extends Activity {
 	ActorListener personListener, monsterListener, chaseListener;
 
 	Actor player, monster, monster2;
-
 	AbstractMonster tempMonster;
 
 	SoundPool sp;
@@ -97,7 +98,7 @@ public class WalkerActivity extends Activity {
 		// this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		one = new ArrayList<Location>(); // level one
 		two = new ArrayList<Location>(); // level two
-		three = new ArrayList<Location>();
+		three = new ArrayList<Location>(); //level three
 		levels = new HashMap<Integer, ArrayList<Location>>();
 
 		monsters = new HashMap<Integer, Actor>();
@@ -109,12 +110,11 @@ public class WalkerActivity extends Activity {
 
 		setUpGame();
 
-		// SoundPool object allows up to 3 simultaneous sounds to be played.0
-		// represents normal audio quality.
+		// SoundPool object allows up to 3 simultaneous sounds to be played where 
+		// 0 represents normal audio quality.
 		sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		footsteps = sp.load(this, R.raw.footsteps, 1); // links footsteps
-		// variable to audio
-		// clip in raw folder
+		// variable to audio clip in raw folder
 		elevator = sp.load(this, R.raw.elevator, 1);
 		growl = sp.load(this, R.raw.growl, 1);
 
@@ -132,7 +132,7 @@ public class WalkerActivity extends Activity {
 			public void death() {
 				view.alert("dead");
 			}
-
+ 
 			@Override
 			public void moved() {
 				if (player.getEnergy() == 0 || player.getHealth() == 0
@@ -141,7 +141,7 @@ public class WalkerActivity extends Activity {
 						// create a new intent with minus one life
 						AlertDialog.Builder alert = new AlertDialog.Builder(
 								view.getContext());
-						alert.setTitle("you are dead");
+						alert.setTitle("You are dead!");
 						alert.setCancelable(false).setPositiveButton("OK",
 								new DialogInterface.OnClickListener() {
 									@Override
@@ -167,9 +167,9 @@ public class WalkerActivity extends Activity {
 					} else {
 						AlertDialog.Builder alert = new AlertDialog.Builder(
 								view.getContext());
-						alert.setTitle("Game is over.");
+						alert.setTitle("Game Over.");
 						alert.setCancelable(false).setPositiveButton(
-								"Main Menu",
+								"Return to Main Menu",
 								new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog,
@@ -212,6 +212,7 @@ public class WalkerActivity extends Activity {
 
 			}
 
+			//Called when player kills monster, which removes monster instance from the game
 			@Override
 			public void death() {
 
@@ -271,8 +272,7 @@ public class WalkerActivity extends Activity {
 					float clickX = event.getX();
 					float clickY = event.getY();
 					gridMap = view.getGridMap(); // get the grid
-					movingOptions = view.getMovingOptions(); // get moving
-					// options
+					movingOptions = view.getMovingOptions(); // see available spaces to move
 
 					GridCell down = gridMap.get(TerrainView.DOWN); // get down
 					// button
@@ -289,7 +289,7 @@ public class WalkerActivity extends Activity {
 							change(view, -1);
 						} // play elevator sound
 						else {
-							view.notify("You can not go there!");
+							view.notify("You cannot go there!");
 						}
 
 					} else if (upButton(view, clickX, clickY, up)) {
@@ -303,7 +303,7 @@ public class WalkerActivity extends Activity {
 							change(view, 1);
 
 						} else {
-							view.notify("You can not go there!");
+							view.notify("You cannot go there!");
 						}
 
 					} else if (centerButton(view, clickX, clickY, inventory)) {
@@ -333,7 +333,7 @@ public class WalkerActivity extends Activity {
 											view.notify(mapping.getKey(),
 													player);
 										} else {
-											view.notify("You can not go there!");
+											view.notify("You cannot go there!");
 										}
 
 									}
@@ -366,6 +366,9 @@ public class WalkerActivity extends Activity {
 		return false;
 	}
 
+	/*
+	 * Game setup includes levels being comprised of locations
+	 */
 	private void setUpGame() {
 		Location loc = null;
 
@@ -424,6 +427,9 @@ public class WalkerActivity extends Activity {
 			}
 		}
 
+		/* Above and below neighbors used to create three-dimensional game map 
+		 * and allow movement up and down if accessible 
+		 */
 		one.get(32).addNeighbor(Neighbor.ABOVE, two.get(5)); // 32's above
 		// neighbor is
 		// now 5 and
@@ -436,24 +442,28 @@ public class WalkerActivity extends Activity {
 
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
+		
+		// Create player based on values passed from Main Menu screen which allows configuration
 		player = new Person(PLAY_NAME, one.get(12), INIT_HEALTH, INIT_ENERGY,
 				INIT_LIVES, INIT_CAPACITY, INIT_RATE);
+		
+		// Create game items and define their location on game map
 		Portable food = new Food(10, "bread", 1);
 		Portable energy = new EnergyBar(2, "energybar", 1);
-
 		one.get(14).addItem(energy);
 		one.get(12).addItem(food);
 		one.get(12).addItem(new EnergyBar(4, "energybar", 4));
 		one.get(12).addItem(new Coin(3));
 		one.get(13).addItem(new Weapon("Axe", 2, 2));
 
+		// add levels to game map
 		levels.put(1, one);
 		levels.put(2, two);
 		levels.put(3, three);
 
+		// add monsters and define their starting location
 		monster = new Pudge("Monster", one.get(26), 5, INIT_RATE);
 		monster2 = new Pudge("Monster2", two.get(42), 10, INIT_RATE);
-
 		monsters.put(1, monster);
 		monsters.put(2, monster2);
 		movingTimer(1, 4);
@@ -643,7 +653,7 @@ public class WalkerActivity extends Activity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
 
 		// Set the dialog title
-		builder.setTitle("Pick Up?")
+		builder.setTitle("Pick up item?")
 				// Specify the list array, the items to be selected by default
 				// (null for none),
 				// and the listener through which to receive callbacks when

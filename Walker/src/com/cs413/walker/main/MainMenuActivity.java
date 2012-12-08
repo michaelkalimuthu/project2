@@ -12,7 +12,7 @@ import com.cs413.walker.actors.Person;
 import com.example.walker.R;
 
 /**
- * Main screen for the game.
+ * Main Menu screen for the game
  * 
  * @author shell
  * 
