@@ -48,7 +48,7 @@ public class MainMenuActivity extends Activity {
 		final NumberPicker inventory = (NumberPicker) findViewById(R.id.inventory);
 		inventory.setMaxValue(100);
 		inventory.setMinValue(1);
-		inventory.setValue(5);
+		inventory.setValue(15);
 		final NumberPicker energy = (NumberPicker) findViewById(R.id.energy);
 		energy.setMaxValue(100);
 		energy.setMinValue(1);
