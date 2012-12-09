@@ -46,7 +46,6 @@ public final class R {
         public static final int textView3=0x7f090004;
         public static final int textView4=0x7f090003;
         public static final int textView5=0x7f09000f;
-        public static final int use_item=0x7f090015;
     }
     public static final class layout {
         public static final int activity_walker=0x7f030000;

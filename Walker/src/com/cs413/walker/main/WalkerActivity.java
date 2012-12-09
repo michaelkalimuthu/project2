@@ -643,15 +643,6 @@ public class WalkerActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.use_item:
-			// Intent intent = new Intent("com.cs413.walker.main.USE_ITEM");
-			// Bundle bundle = getIntent().getExtras();
-			// intent.putExtras(bundle);
-			//
-			// startActivity(intent);
-			// break;
-			return true;
-
 		case R.id.new_game:
 			Intent intent = getIntent();
 			finish();

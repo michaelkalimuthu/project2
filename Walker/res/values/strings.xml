@@ -7,8 +7,10 @@
     <string name="lives">lives</string>
     <string name="credits">Michael Kalimuthu\nRon Giambalvo\nShell Yan</string>
     <string name="game_instructions">\n**A player may move by touching green squares only.\n**A menu will pop-up when items are found in a room. Select check boxes to pick them up. 
-                  \n**When a monster is nearby a notification will appear on the screen. If you have picked up a weapon it is automatically armed and the monster will die. If you are not 
-                  armed with a weapon you still have a chance to kill a monster if your attack power level is high enough, but it wont be easy.\n**When your energy level reaches 0 you will die.
+                  \n**When a monster is nearby a notification will appear on the screen. Monsters are blind so they can detect you by moving. If you have picked up a weapon it is automatically armed. If you are not 
+                  armed with a weapon you still have a chance to kill a monster if your attack power level is high enough, but it wont be easy.
+                  Monsters and Players attack on moving. You can also lose a monster by changing levels.
+                  \n**When your energy level reaches 0 you will die.
                   If you have remaining lives you will get to start the game over to try again. Good luck!</string>
     
 </resources>
