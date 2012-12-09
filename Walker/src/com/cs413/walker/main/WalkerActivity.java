@@ -689,7 +689,9 @@ public class WalkerActivity extends Activity {
 		movingTimer.cancel();
 		view.changeLevel(way);
 		movingTimer(view.getLevel(), 4);
-		((AbstractMonster)monsters.get(view.getLevel())).setChasing(false);
+		if (monsters.get(view.getLevel()) != null){
+			((AbstractMonster)monsters.get(view.getLevel())).setChasing(false);
+		}
 		movingTimer.start();
 		view.notify(player.getLocation(), player);
 		view.invalidate();
