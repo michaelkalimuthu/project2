@@ -47,8 +47,12 @@ public class Person extends AbstractActor implements Actor {
 			if (item instanceof Coin) {
 				addCoins(item.getValue());
 				getLocation().getItems().remove(item);
-			} else if (item instanceof Weapon || item instanceof Armor) {
+			} else if (item instanceof Weapon) {
 				addDamagePoints(item.getValue());
+				getLocation().getItems().remove(item);
+				additionalCapacity += item.getVolume();
+			} else if (item instanceof Armor){
+				addHealth(item.getValue());
 				getLocation().getItems().remove(item);
 				additionalCapacity += item.getVolume();
 			}
