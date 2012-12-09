@@ -34,6 +34,7 @@ public class MainMenuActivity extends Activity {
 		final Button play_button = (Button) findViewById(R.id.play);
 		final Button resume_button = (Button) findViewById(R.id.resume);
 		final Button help_button = (Button) findViewById(R.id.help);
+		final Button cloud_button = (Button) findViewById(R.id.cloud);
 
 		final NumberPicker difficulty = (NumberPicker) findViewById(R.id.difficulty);
 		difficulty.setMaxValue(3);
@@ -58,6 +59,7 @@ public class MainMenuActivity extends Activity {
 				WalkerActivity.class);
 
 		final EditText play_name = (EditText) findViewById(R.id.playername);
+		play_name.setText("Unique");
 
 		// new game button
 		play_button.setOnClickListener(new View.OnClickListener() {
@@ -91,6 +93,21 @@ public class MainMenuActivity extends Activity {
 			public void onClick(View v) {
 				Intent help = new Intent(getApplicationContext(), Help.class);
 				startActivity(help);
+			}
+		});
+
+		cloud_button.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent cloud = new Intent(getApplicationContext(), Cloud.class);
+				cloud.putExtra("difficulty", difficulty.getValue());
+				cloud.putExtra("lives", lives.getValue());
+				cloud.putExtra("energy", energy.getValue());
+				cloud.putExtra("inventory", inventory.getValue());
+				cloud.putExtra("playername", play_name.getText().toString());
+
+				startActivityForResult(cloud, 0);
 			}
 		});
 

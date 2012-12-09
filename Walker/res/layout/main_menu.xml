@@ -124,18 +124,8 @@
             android:textAllCaps="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textSize="13dp" />
-    </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="Walker"
-        android:textAllCaps="false"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="70dp" />
+    </LinearLayout>
 
     <EditText
         android:id="@+id/playername"
@@ -153,5 +143,24 @@
 
         <requestFocus />
     </EditText>
+
+    <Button
+        android:id="@+id/cloud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentTop="true"
+        android:text="OpenKeyval" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/playername"
+        android:layout_alignParentLeft="true"
+        android:text="Walker"
+        android:textAllCaps="false"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="70dp" />
 
 </RelativeLayout>
