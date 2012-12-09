@@ -28,7 +28,7 @@ public class Weapon extends AbstractItem {
 	
 	@Override
 	public String toString(){
-		return "Equip " + super.toString();
+		return "Equip " + super.toString() + value;
 	}
 	
 	@Override

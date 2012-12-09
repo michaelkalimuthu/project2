@@ -31,7 +31,7 @@ public class Armor extends AbstractItem{
 	
 	@Override
 	public String toString(){
-		return super.toString() + " " + addHealth;
+		return super.toString() + addHealth;
 	}
 	@Override
 	public int getValue(){

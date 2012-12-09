@@ -24,8 +24,9 @@ import com.cs413.walker.actors.Actor;
 import com.cs413.walker.actors.ActorListener;
 import com.cs413.walker.actors.Person;
 import com.cs413.walker.actors.Pudge;
+import com.cs413.walker.items.Armor;
 import com.cs413.walker.items.Coin;
-import com.cs413.walker.items.EnergyBar;
+import com.cs413.walker.items.Energy;
 import com.cs413.walker.items.Food;
 import com.cs413.walker.items.Portable;
 import com.cs413.walker.items.Weapon;
@@ -52,6 +53,8 @@ public class WalkerActivity extends Activity {
 	ArrayList<Location> one;
 	ArrayList<Location> two;
 	ArrayList<Location> three;
+	ArrayList<Location> four;
+
 	HashMap<Integer, GridCell> gridMap;
 	ArrayList<Integer> movingOptions;
 	HashMap<Integer, Actor> monsters;
@@ -60,13 +63,15 @@ public class WalkerActivity extends Activity {
 	CountDownTimer movingTimer;
 	ActorListener personListener, monsterListener, chaseListener;
 
-	Actor player, monster, monster2;
+	Actor player, monster, monster2, boss;
 	AbstractMonster tempMonster;
 
 	SoundPool sp;
 	int footsteps;
 	int elevator;
 	int growl;
+	
+	Location winningLocation;
 
 	@Override
 	public void onBackPressed() {
@@ -99,7 +104,10 @@ public class WalkerActivity extends Activity {
 		one = new ArrayList<Location>(); // level one
 		two = new ArrayList<Location>(); // level two
 		three = new ArrayList<Location>(); //level three
+		four = new ArrayList<Location>(); //level four
 		levels = new HashMap<Integer, ArrayList<Location>>();
+		
+		
 
 		monsters = new HashMap<Integer, Actor>();
 
@@ -135,6 +143,30 @@ public class WalkerActivity extends Activity {
  
 			@Override
 			public void moved() {
+				boolean won = false;
+				if (player.getLocation().equals(winningLocation)){
+					won = true;
+					AlertDialog.Builder alert = new AlertDialog.Builder(
+							view.getContext());
+					alert.setTitle("You have won! You collected " + player.getCoins() + " coins!");
+					alert.setCancelable(false).setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int id) {
+									final Intent MainMenuActivity = new Intent(
+											getApplicationContext(),
+											MainMenuActivity.class);
+
+									MainMenuActivity.putExtra("GAME_IS_ON",
+											0);
+									startActivityForResult(
+											MainMenuActivity, 0);
+								}
+							});
+					alert.show();
+								
+				}
 				if (player.getEnergy() == 0 || player.getHealth() == 0
 						|| player.getEnergy() < player.getRate()) {
 					if (player.getLives() - 1 > 0) {
@@ -241,6 +273,8 @@ public class WalkerActivity extends Activity {
 		};
 		monster.addListeners(monsterListener);
 		monster2.addListeners(monsterListener);
+		boss.addListeners(monsterListener);
+		
 
 		chaseListener = new ActorListener() {
 			@Override
@@ -371,9 +405,9 @@ public class WalkerActivity extends Activity {
 	 */
 	private void setUpGame() {
 		Location loc = null;
-
+		//level one set up
 		for (int i = 0; i < 45; i++) {
-			if (i == 22) {
+			if (i == 22 || i == 1) {
 				loc = new Water(String.valueOf(i));
 				one.add(loc);
 			} else {
@@ -383,7 +417,7 @@ public class WalkerActivity extends Activity {
 		}
 
 		int j = 45;
-
+		//level two set up
 		for (int i = 0; i < 45; i++) {
 
 			if (i == 25 || i == 12 || i == 4) {
@@ -394,7 +428,7 @@ public class WalkerActivity extends Activity {
 				two.add(loc);
 			}
 		}
-
+		//level three set up
 		for (int i = 0; i < 45; i++) {
 			if (i == 5 || i == 6 || i == 7 || i == 8 || i == 9) {
 				three.add(new Water(String.valueOf(j++)));
@@ -402,30 +436,23 @@ public class WalkerActivity extends Activity {
 				three.add(new DefaultLocation(String.valueOf(j++)));
 			}
 		}
-
+		//level four set up
 		for (int i = 0; i < 45; i++) {
-			if (i <= 39) {
-				one.get(i).addNeighbor(Neighbor.SOUTH, one.get(i + 5));
-				two.get(i).addNeighbor(Neighbor.SOUTH, two.get(i + 5));
-				three.get(i).addNeighbor(Neighbor.SOUTH, three.get(i + 5));
-			}
-			if (i % 5 == 0) {
-				one.get(i).addNeighbor(Neighbor.EAST, one.get(i + 1));
-				two.get(i).addNeighbor(Neighbor.EAST, two.get(i + 1));
-				three.get(i).addNeighbor(Neighbor.EAST, three.get(i + 1));
-			} else if ((i + 1) % 5 == 0) {
-				one.get(i).addNeighbor(Neighbor.WEST, one.get(i - 1));
-				two.get(i).addNeighbor(Neighbor.WEST, two.get(i - 1));
-				three.get(i).addNeighbor(Neighbor.WEST, three.get(i - 1));
+			if (i == 15 || i == 26 || i == 7 || i == 3 || i == 29) {
+				four.add(new Water(String.valueOf(j++)));
 			} else {
-				one.get(i).addNeighbor(Neighbor.EAST, one.get(i + 1));
-				two.get(i).addNeighbor(Neighbor.EAST, two.get(i + 1));
-				three.get(i).addNeighbor(Neighbor.EAST, three.get(i + 1));
-				one.get(i).addNeighbor(Neighbor.WEST, one.get(i - 1));
-				two.get(i).addNeighbor(Neighbor.WEST, two.get(i - 1));
-				three.get(i).addNeighbor(Neighbor.WEST, three.get(i - 1));
+				four.add(new DefaultLocation(String.valueOf(j++)));
 			}
 		}
+		
+		//configure neighbors
+		configureNeighbors(one);
+		configureNeighbors(two);
+		configureNeighbors(three);
+		configureNeighbors(four);
+		
+		//winning location is set to level four, tile 4
+		winningLocation = four.get(4);
 
 		/* Above and below neighbors used to create three-dimensional game map 
 		 * and allow movement up and down if accessible 
@@ -439,6 +466,7 @@ public class WalkerActivity extends Activity {
 		// neighbor is
 		// now 0 and
 		// vice versa
+		three.get(4).addNeighbor(Neighbor.ABOVE, four.get(36));
 
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
@@ -448,28 +476,93 @@ public class WalkerActivity extends Activity {
 				INIT_LIVES, INIT_CAPACITY, INIT_RATE);
 		
 		// Create game items and define their location on game map
+		
+		//food and energy items
 		Portable food = new Food(10, "bread", 1);
-		Portable energy = new EnergyBar(2, "energybar", 1);
+		Portable energy = new Energy(2, "energybar", 1);
 		one.get(14).addItem(energy);
-		one.get(12).addItem(food);
-		one.get(12).addItem(new EnergyBar(4, "energybar", 4));
-		one.get(12).addItem(new Coin(3));
-		one.get(13).addItem(new Weapon("Axe", 2, 2));
+		one.get(10).addItem(new Energy(5, "5 Hour Energy", 1));
+		one.get(5).addItem(new Energy(12, "Red Bull", 1));
+		two.get(6).addItem(new Energy(15, "Monster", 1));
+		three.get(2).addItem(new Energy(25, "Coffee", 1));
+		four.get(22).addItem(new Energy(20, "Espresso", 1));
+		
+		one.get(2).addItem(food);
+		one.get(12).addItem(new Food(3, "cereal", 2));
+		one.get(30).addItem(new Food(3, "brownie", 1));
+		two.get(3).addItem(new Food(5, "pizza", 3));
+		four.get(10).addItem(new Food(10, "bagels", 4));
+		four.get(20).addItem(new Food(15, "fruit", 3));
+		
+		
+		//weapons
+		one.get(3).addItem(new Weapon("Axe", 5, 2));
+		one.get(1).addItem(new Weapon("Sword", 2, 5));
+		two.get(15).addItem(new Weapon("Shotgun", 7, 5));
+		three.get(3).addItem(new Weapon("Bazooka", 10, 7));
+		four.get(22).addItem(new Weapon("Chainsaw", 7, 5));
+		
+		//armor
+		two.get(32).addItem(new Armor(25, "Shield", 10));
+
+		//coins
+		one.get(7).addItem(new Coin(3));
+		one.get(33).addItem(new Coin(12));
+		one.get(4).addItem(new Coin(52));
+		one.get(5).addItem(new Coin(1));
+		one.get(30).addItem(new Coin(1));
+		one.get(36).addItem(new Coin(1));
+		one.get(25).addItem(new Coin(3));
+		one.get(14).addItem(new Coin(1));
+		two.get(6).addItem(new Coin(1));
+		two.get(1).addItem(new Coin(25));
+		two.get(15).addItem(new Coin(12));
+		two.get(38).addItem(new Coin(50));
+		two.get(9).addItem(new Coin(1));
+		two.get(22).addItem(new Coin(1));
+		four.get(1).addItem(new Coin(1));
+		four.get(10).addItem(new Coin(12));
+		four.get(11).addItem(new Coin(15));
+		four.get(21).addItem(new Coin(1));
+		four.get(31).addItem(new Coin(2));
+		four.get(17).addItem(new Coin(3));
+		four.get(8).addItem(new Coin(5));
 
 		// add levels to game map
 		levels.put(1, one);
 		levels.put(2, two);
 		levels.put(3, three);
+		levels.put(4, four);
 
 		// add monsters and define their starting location
 		monster = new Pudge("Monster", one.get(26), 5, INIT_RATE);
 		monster2 = new Pudge("Monster2", two.get(42), 10, INIT_RATE);
+		boss = new Pudge("Boss", four.get(5), 30, 15);
 		monsters.put(1, monster);
 		monsters.put(2, monster2);
+		monsters.put(4, boss);
+		
 		movingTimer(1, 4);
 
 		// movingTimer.start();
 
+	}
+	//sets up neighbors
+	private void configureNeighbors(ArrayList<Location> level) {
+		for (int i = 0; i < 45; i++) {
+			if (i <= 39) {
+				level.get(i).addNeighbor(Neighbor.SOUTH, level.get(i + 5));
+			}
+			if (i % 5 == 0) {
+				level.get(i).addNeighbor(Neighbor.EAST, level.get(i + 1));
+			} else if ((i + 1) % 5 == 0) {
+				level.get(i).addNeighbor(Neighbor.WEST, level.get(i - 1));
+			} else {
+				level.get(i).addNeighbor(Neighbor.EAST, level.get(i + 1));
+				level.get(i).addNeighbor(Neighbor.WEST, level.get(i - 1));
+			}
+		}
+		
 	}
 
 	public void movingTimer(final int level, int rate) {
@@ -596,9 +689,10 @@ public class WalkerActivity extends Activity {
 		movingTimer.cancel();
 		view.changeLevel(way);
 		movingTimer(view.getLevel(), 4);
+		((AbstractMonster)monsters.get(view.getLevel())).setChasing(false);
 		movingTimer.start();
 		view.notify(player.getLocation(), player);
-
+		view.invalidate();
 	}
 
 	public boolean centerButton(TerrainView view, float clickX, float clickY,

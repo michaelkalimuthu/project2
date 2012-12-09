@@ -26,7 +26,7 @@ public class Food extends AbstractItem {
 	
 	@Override
 	public String toString(){
-		return super.toString() + " " + addHealth;
+		return super.toString() +  addHealth;
 	}
 
 }

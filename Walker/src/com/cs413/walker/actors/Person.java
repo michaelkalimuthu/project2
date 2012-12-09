@@ -2,6 +2,7 @@ package com.cs413.walker.actors;
 
 import java.util.ArrayList;
 
+import com.cs413.walker.items.Armor;
 import com.cs413.walker.items.Coin;
 import com.cs413.walker.items.Portable;
 import com.cs413.walker.items.Weapon;
@@ -46,7 +47,7 @@ public class Person extends AbstractActor implements Actor {
 			if (item instanceof Coin) {
 				addCoins(item.getValue());
 				getLocation().getItems().remove(item);
-			} else if (item instanceof Weapon) {
+			} else if (item instanceof Weapon || item instanceof Armor) {
 				addDamagePoints(item.getValue());
 				getLocation().getItems().remove(item);
 				additionalCapacity += item.getVolume();
