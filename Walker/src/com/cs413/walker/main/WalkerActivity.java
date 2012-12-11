@@ -2,14 +2,27 @@ package com.cs413.walker.main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -48,7 +61,8 @@ public class WalkerActivity extends Activity {
 	private static int INIT_LIVES = 1;
 	private static int INIT_CAPACITY = 1;
 	private static int INIT_RATE;
-	private static String PLAY_NAME = "";
+	private static String PLAYER_NAME = "";
+	private static String PLAYER_INFO = "";
 
 	HashMap<Integer, ArrayList<Location>> levels;
 	ArrayList<Location> one;
@@ -77,14 +91,65 @@ public class WalkerActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		// super.onBackPresse ();
+
+		PLAYER_INFO = "Energy: " + player.getEnergy() + "\nInventory: "
+				+ INIT_CAPACITY + "\nLives: " + player.getLives()
+				+ "\nDifficulty: " + INIT_RATE;
+		AsyncTask save = new AsyncTask<String, String, String>() {
+
+			private ProgressDialog pDialog;
+
+			/**
+			 * Before starting background thread Show Progress Dialog
+			 * */
+			@Override
+			protected void onPreExecute() {
+				super.onPreExecute();
+				pDialog = new ProgressDialog(WalkerActivity.this);
+				pDialog.setMessage("Saving player information..");
+				pDialog.setIndeterminate(false);
+				pDialog.setCancelable(true);
+				pDialog.show();
+			}
+
+			@Override
+			protected String doInBackground(String... args) {
+				try {
+					HttpClient client = new DefaultHttpClient();
+					HttpPost post = new HttpPost("http://api.openkeyval.org/");
+					List<NameValuePair> params = new ArrayList<NameValuePair>();
+					params.add(new BasicNameValuePair(PLAYER_NAME, PLAYER_INFO));
+					post.setEntity(new UrlEncodedFormEntity(params));
+
+					HttpResponse responsePOST = client.execute(post);
+					HttpEntity resEntity = responsePOST.getEntity();
+					if (resEntity != null) {
+						Log.i("RESPONSE", EntityUtils.toString(resEntity));
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
+
+			@Override
+			protected void onPostExecute(String file_url) {
+				// dismiss the dialog once done
+				pDialog.setMessage("Saved");
+				// pDialog.setCanceledOnTouchOutside(true);
+				pDialog.setIndeterminate(false);
+				pDialog.setCancelable(true);
+				pDialog.dismiss();
+
+			}
+		}.execute();
+
 		final Intent MainMenuActivity = new Intent(getApplicationContext(),
 				MainMenuActivity.class);
 
 		MainMenuActivity.putExtra("GAME_IS_ON", 1);
 		// setResult(RESULT_OK, i);
 		startActivityForResult(MainMenuActivity, 0);
-
-		// finish();
 
 	}
 
@@ -97,11 +162,13 @@ public class WalkerActivity extends Activity {
 		INIT_CAPACITY = i.getIntExtra("inventory", 1);
 		INIT_LIVES = i.getIntExtra("lives", 1);
 		INIT_RATE = i.getIntExtra("difficulty", 1);
-		PLAY_NAME = i.getExtras().getString("playername");
+		PLAYER_NAME = i.getExtras().getString("playername");
 		// Example of receiving parameter having key value as 'email'
 		// and storing the value in a variable named myemail
 		// String myemail = i.getStringExtra("email");
-
+		PLAYER_INFO = "Energy: " + INIT_ENERGY + "\nInventory: "
+				+ INIT_CAPACITY + "\nLives: " + INIT_LIVES + "\nDifficulty: "
+				+ INIT_RATE;
 		// this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		one = new ArrayList<Location>(); // level one
 		two = new ArrayList<Location>(); // level two
@@ -475,7 +542,7 @@ public class WalkerActivity extends Activity {
 
 		// Create player based on values passed from Main Menu screen which
 		// allows configuration
-		player = new Person(PLAY_NAME, one.get(12), INIT_HEALTH, INIT_ENERGY,
+		player = new Person(PLAYER_NAME, one.get(12), INIT_HEALTH, INIT_ENERGY,
 				INIT_LIVES, INIT_CAPACITY, INIT_RATE);
 
 		// Create game items and define their location on game map
@@ -651,6 +718,63 @@ public class WalkerActivity extends Activity {
 			finish();
 			startActivity(intent);
 			return true;
+		case R.id.save_game:
+			PLAYER_INFO = "Energy: " + player.getEnergy() + "\nInventory: "
+					+ INIT_CAPACITY + "\nLives: " + player.getLives()
+					+ "\nDifficulty: " + INIT_RATE;
+			AsyncTask save = new AsyncTask<String, String, String>() {
+
+				private ProgressDialog pDialog;
+
+				/**
+				 * Before starting background thread Show Progress Dialog
+				 * */
+				@Override
+				protected void onPreExecute() {
+					super.onPreExecute();
+					pDialog = new ProgressDialog(WalkerActivity.this);
+					pDialog.setMessage("Saving player information..");
+					pDialog.setIndeterminate(false);
+					pDialog.setCancelable(true);
+					pDialog.show();
+				}
+
+				@Override
+				protected String doInBackground(String... args) {
+					try {
+						HttpClient client = new DefaultHttpClient();
+						HttpPost post = new HttpPost(
+								"http://api.openkeyval.org/");
+						List<NameValuePair> params = new ArrayList<NameValuePair>();
+						params.add(new BasicNameValuePair(PLAYER_NAME,
+								PLAYER_INFO));
+						post.setEntity(new UrlEncodedFormEntity(params));
+
+						HttpResponse responsePOST = client.execute(post);
+						HttpEntity resEntity = responsePOST.getEntity();
+						if (resEntity != null) {
+							Log.i("RESPONSE", EntityUtils.toString(resEntity));
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					return null;
+				}
+
+				@Override
+				protected void onPostExecute(String file_url) {
+					// dismiss the dialog once done
+					pDialog.setMessage("Saved");
+					// pDialog.setCanceledOnTouchOutside(true);
+					pDialog.setIndeterminate(false);
+					pDialog.setCancelable(true);
+					pDialog.dismiss();
+
+				}
+			}.execute();
+
+			return true;
+
 		}
 		return true;
 

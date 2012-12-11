@@ -59,7 +59,7 @@ public class MainMenuActivity extends Activity {
 				WalkerActivity.class);
 
 		final EditText play_name = (EditText) findViewById(R.id.playername);
-		play_name.setText("Unique");
+		play_name.setText("walker");
 
 		// new game button
 		play_button.setOnClickListener(new View.OnClickListener() {

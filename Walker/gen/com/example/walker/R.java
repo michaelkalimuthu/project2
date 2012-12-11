@@ -46,6 +46,7 @@ public final class R {
         public static final int playername=0x7f090018;
         public static final int resume=0x7f09000c;
         public static final int save=0x7f090001;
+        public static final int save_game=0x7f09001b;
         public static final int start=0x7f090003;
         public static final int textView1=0x7f090006;
         public static final int textView2=0x7f090007;

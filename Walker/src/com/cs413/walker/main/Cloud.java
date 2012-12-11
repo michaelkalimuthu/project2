@@ -67,7 +67,7 @@ public class Cloud extends Activity {
 
 			@Override
 			public void onClick(View v) {
-
+				PLAYER_NAME = player_name.getText().toString();
 				new postPlayer().execute();
 
 			}
@@ -87,7 +87,7 @@ public class Cloud extends Activity {
 
 			@Override
 			public void onClick(View v) {
-
+				PLAYER_INFO = player_info.getText().toString();
 				analyzePlayer(PLAYER_INFO);
 
 				Intent walker_activity = new Intent(getApplicationContext(),
@@ -107,7 +107,7 @@ public class Cloud extends Activity {
 
 	public void alert(String s) {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-		dialog.setTitle("Error");
+		dialog.setTitle("Alert");
 		dialog.setMessage(s);
 		dialog.setNeutralButton("Cool", null);
 		dialog.create().show();
@@ -142,10 +142,6 @@ public class Cloud extends Activity {
 				HttpPost post = new HttpPost(URL);
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
 				params.add(new BasicNameValuePair(PLAYER_NAME, PLAYER_INFO));
-				// UrlEncodedFormEntity ent = new
-				// UrlEncodedFormEntity(params,
-				// HTTP.UTF_8);
-				// post.setEntity(ent);
 				post.setEntity(new UrlEncodedFormEntity(params));
 
 				HttpResponse responsePOST = client.execute(post);
@@ -167,20 +163,15 @@ public class Cloud extends Activity {
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog once done
 			pDialog.dismiss();
-			// alert(result);
+			alert("Succeed");
+
 		}
 
 	}
 
 	class getPlayer extends AsyncTask<String, String, String> {
 
-		private final String TAG_SUCCESS = null;
-		private final String TAG_SUBMITTED = null;
 		private ProgressDialog pDialog;
-		JSONParser jsonParser = new JSONParser();
-		int sucess, submitted;
-
-		// url to create new answer
 
 		/**
 		 * Before starting background thread Show Progress Dialog
@@ -227,6 +218,7 @@ public class Cloud extends Activity {
 			pDialog.dismiss();
 			TextView player_info = (TextView) findViewById(R.id.player_info);
 			player_info.setText(PLAYER_INFO);
+			alert("Succeed");
 		}
 
 	}
