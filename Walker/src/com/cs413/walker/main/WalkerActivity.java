@@ -41,14 +41,15 @@ import com.example.walker.R;
 public class WalkerActivity extends Activity {
 	private static final String TAG = "Activity";
 
-	//These are the game's attributes which are configurable at startup screen via a menu
+	// These are the game's attributes which are configurable at startup screen
+	// via a menu
 	private static int INIT_HEALTH = 100;
 	private static int INIT_ENERGY = 10;
 	private static int INIT_LIVES = 1;
 	private static int INIT_CAPACITY = 1;
 	private static int INIT_RATE;
 	private static String PLAY_NAME = "";
-	
+
 	HashMap<Integer, ArrayList<Location>> levels;
 	ArrayList<Location> one;
 	ArrayList<Location> two;
@@ -70,7 +71,7 @@ public class WalkerActivity extends Activity {
 	int footsteps;
 	int elevator;
 	int growl;
-	
+
 	Location winningLocation;
 
 	@Override
@@ -82,6 +83,7 @@ public class WalkerActivity extends Activity {
 		MainMenuActivity.putExtra("GAME_IS_ON", 1);
 		// setResult(RESULT_OK, i);
 		startActivityForResult(MainMenuActivity, 0);
+
 		// finish();
 
 	}
@@ -103,11 +105,9 @@ public class WalkerActivity extends Activity {
 		// this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		one = new ArrayList<Location>(); // level one
 		two = new ArrayList<Location>(); // level two
-		three = new ArrayList<Location>(); //level three
-		four = new ArrayList<Location>(); //level four
+		three = new ArrayList<Location>(); // level three
+		four = new ArrayList<Location>(); // level four
 		levels = new HashMap<Integer, ArrayList<Location>>();
-		
-		
 
 		monsters = new HashMap<Integer, Actor>();
 
@@ -118,7 +118,8 @@ public class WalkerActivity extends Activity {
 
 		setUpGame();
 
-		// SoundPool object allows up to 3 simultaneous sounds to be played where 
+		// SoundPool object allows up to 3 simultaneous sounds to be played
+		// where
 		// 0 represents normal audio quality.
 		sp = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
 		footsteps = sp.load(this, R.raw.footsteps, 1); // links footsteps
@@ -140,15 +141,16 @@ public class WalkerActivity extends Activity {
 			public void death() {
 				view.alert("dead");
 			}
- 
+
 			@Override
 			public void moved() {
 				boolean won = false;
-				if (player.getLocation().equals(winningLocation)){
+				if (player.getLocation().equals(winningLocation)) {
 					won = true;
 					AlertDialog.Builder alert = new AlertDialog.Builder(
 							view.getContext());
-					alert.setTitle("You have won! You collected " + player.getCoins() + " coins!");
+					alert.setTitle("You have won! You collected "
+							+ player.getCoins() + " coins!");
 					alert.setCancelable(false).setPositiveButton("OK",
 							new DialogInterface.OnClickListener() {
 								@Override
@@ -158,14 +160,12 @@ public class WalkerActivity extends Activity {
 											getApplicationContext(),
 											MainMenuActivity.class);
 
-									MainMenuActivity.putExtra("GAME_IS_ON",
-											0);
-									startActivityForResult(
-											MainMenuActivity, 0);
+									MainMenuActivity.putExtra("GAME_IS_ON", 0);
+									startActivityForResult(MainMenuActivity, 0);
 								}
 							});
 					alert.show();
-								
+
 				}
 				if (player.getEnergy() == 0 || player.getHealth() == 0
 						|| player.getEnergy() < player.getRate()) {
@@ -244,7 +244,8 @@ public class WalkerActivity extends Activity {
 
 			}
 
-			//Called when player kills monster, which removes monster instance from the game
+			// Called when player kills monster, which removes monster instance
+			// from the game
 			@Override
 			public void death() {
 
@@ -274,7 +275,6 @@ public class WalkerActivity extends Activity {
 		monster.addListeners(monsterListener);
 		monster2.addListeners(monsterListener);
 		boss.addListeners(monsterListener);
-		
 
 		chaseListener = new ActorListener() {
 			@Override
@@ -306,7 +306,9 @@ public class WalkerActivity extends Activity {
 					float clickX = event.getX();
 					float clickY = event.getY();
 					gridMap = view.getGridMap(); // get the grid
-					movingOptions = view.getMovingOptions(); // see available spaces to move
+					movingOptions = view.getMovingOptions(); // see available
+																// spaces to
+																// move
 
 					GridCell down = gridMap.get(TerrainView.DOWN); // get down
 					// button
@@ -405,7 +407,7 @@ public class WalkerActivity extends Activity {
 	 */
 	private void setUpGame() {
 		Location loc = null;
-		//level one set up
+		// level one set up
 		for (int i = 0; i < 45; i++) {
 			if (i == 22 || i == 1) {
 				loc = new Water(String.valueOf(i));
@@ -417,7 +419,7 @@ public class WalkerActivity extends Activity {
 		}
 
 		int j = 45;
-		//level two set up
+		// level two set up
 		for (int i = 0; i < 45; i++) {
 
 			if (i == 25 || i == 12 || i == 4) {
@@ -428,7 +430,7 @@ public class WalkerActivity extends Activity {
 				two.add(loc);
 			}
 		}
-		//level three set up
+		// level three set up
 		for (int i = 0; i < 45; i++) {
 			if (i == 5 || i == 6 || i == 7 || i == 8 || i == 9) {
 				three.add(new Water(String.valueOf(j++)));
@@ -436,7 +438,7 @@ public class WalkerActivity extends Activity {
 				three.add(new DefaultLocation(String.valueOf(j++)));
 			}
 		}
-		//level four set up
+		// level four set up
 		for (int i = 0; i < 45; i++) {
 			if (i == 15 || i == 26 || i == 7 || i == 3 || i == 29) {
 				four.add(new Water(String.valueOf(j++)));
@@ -444,18 +446,19 @@ public class WalkerActivity extends Activity {
 				four.add(new DefaultLocation(String.valueOf(j++)));
 			}
 		}
-		
-		//configure neighbors
+
+		// configure neighbors
 		configureNeighbors(one);
 		configureNeighbors(two);
 		configureNeighbors(three);
 		configureNeighbors(four);
-		
-		//winning location is set to level four, tile 4
+
+		// winning location is set to level four, tile 4
 		winningLocation = four.get(4);
 
-		/* Above and below neighbors used to create three-dimensional game map 
-		 * and allow movement up and down if accessible 
+		/*
+		 * Above and below neighbors used to create three-dimensional game map
+		 * and allow movement up and down if accessible
 		 */
 		one.get(32).addNeighbor(Neighbor.ABOVE, two.get(5)); // 32's above
 		// neighbor is
@@ -470,14 +473,14 @@ public class WalkerActivity extends Activity {
 
 		Log.d(TAG, "below " + two.get(5).getNeighbors().get(Neighbor.BELOW));
 
-		
-		// Create player based on values passed from Main Menu screen which allows configuration
+		// Create player based on values passed from Main Menu screen which
+		// allows configuration
 		player = new Person(PLAY_NAME, one.get(12), INIT_HEALTH, INIT_ENERGY,
 				INIT_LIVES, INIT_CAPACITY, INIT_RATE);
-		
+
 		// Create game items and define their location on game map
-		
-		//food and energy items
+
+		// food and energy items
 		Portable food = new Food(10, "bread", 1);
 		Portable energy = new Energy(2, "energybar", 1);
 		one.get(14).addItem(energy);
@@ -486,26 +489,25 @@ public class WalkerActivity extends Activity {
 		two.get(6).addItem(new Energy(15, "Monster", 1));
 		three.get(2).addItem(new Energy(25, "Coffee", 1));
 		four.get(22).addItem(new Energy(20, "Espresso", 1));
-		
+
 		one.get(2).addItem(food);
 		one.get(12).addItem(new Food(3, "cereal", 2));
 		one.get(30).addItem(new Food(3, "brownie", 1));
 		two.get(3).addItem(new Food(5, "pizza", 3));
 		four.get(10).addItem(new Food(10, "bagels", 4));
 		four.get(20).addItem(new Food(15, "fruit", 3));
-		
-		
-		//weapons
+
+		// weapons
 		one.get(3).addItem(new Weapon("Axe", 5, 2));
 		one.get(1).addItem(new Weapon("Sword", 2, 5));
 		two.get(15).addItem(new Weapon("Shotgun", 7, 5));
 		three.get(3).addItem(new Weapon("Bazooka", 10, 7));
 		four.get(22).addItem(new Weapon("Chainsaw", 7, 5));
-		
-		//armor
+
+		// armor
 		two.get(32).addItem(new Armor(25, "Shield", 10));
 
-		//coins
+		// coins
 		one.get(7).addItem(new Coin(3));
 		one.get(33).addItem(new Coin(12));
 		one.get(4).addItem(new Coin(52));
@@ -541,13 +543,14 @@ public class WalkerActivity extends Activity {
 		monsters.put(1, monster);
 		monsters.put(2, monster2);
 		monsters.put(4, boss);
-		
+
 		movingTimer(1, 4);
 
 		// movingTimer.start();
 
 	}
-	//sets up neighbors
+
+	// sets up neighbors
 	private void configureNeighbors(ArrayList<Location> level) {
 		for (int i = 0; i < 45; i++) {
 			if (i <= 39) {
@@ -562,7 +565,7 @@ public class WalkerActivity extends Activity {
 				level.get(i).addNeighbor(Neighbor.WEST, level.get(i - 1));
 			}
 		}
-		
+
 	}
 
 	public void movingTimer(final int level, int rate) {
@@ -680,8 +683,8 @@ public class WalkerActivity extends Activity {
 		movingTimer.cancel();
 		view.changeLevel(way);
 		movingTimer(view.getLevel(), 4);
-		if (monsters.get(view.getLevel()) != null){
-			((AbstractMonster)monsters.get(view.getLevel())).setChasing(false);
+		if (monsters.get(view.getLevel()) != null) {
+			((AbstractMonster) monsters.get(view.getLevel())).setChasing(false);
 		}
 		movingTimer.start();
 		view.notify(player.getLocation(), player);

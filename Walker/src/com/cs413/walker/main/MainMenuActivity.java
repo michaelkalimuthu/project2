@@ -107,6 +107,15 @@ public class MainMenuActivity extends Activity {
 				cloud.putExtra("inventory", inventory.getValue());
 				cloud.putExtra("playername", play_name.getText().toString());
 
+				// Bundle extras = cloud.getExtras();
+				// extras.putInt("difficulty", difficulty.getValue());
+				// extras.putInt("lives", lives.getValue());
+				// extras.putInt("energy", energy.getValue());
+				// extras.putInt("inventory", inventory.getValue());
+				// extras.putString("playername",
+				// play_name.getText().toString());
+				// cloud.putExtra("player_info", extras);
+
 				startActivityForResult(cloud, 0);
 			}
 		});
