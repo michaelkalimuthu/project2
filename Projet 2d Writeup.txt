@@ -1,0 +1,19 @@
+Projet 2d Writeup
+
+Group Members:
+
+Shell Yan
+Mike Kalimuthu
+Ron Giambalvo
+
+
+Project 2d Steps
+
+1. Run the Walker App on your emulator or Android device.
+2. When you reach the main screen, input a Player name over 5 characters long, on the line that defaults to the Player name 'Walker'. This length is necessary as a key has to be a minimum of 5 characters in length.
+3. Select the other configurable options like lives, energy, etc.
+3. When you are done, click the top button labeled "OpenKeyVal"
+4. Clicking the 'Post' button will push the Player attributes you selected on the previous screen, to Openkeyval web service. You should see a 'Post Successful!' message display on the screen.
+5. Open a web browser and type in the following url:  api.openkeyval.org/playername   
+where playername = the same name you entered in the app
+6. A webpage should now display the same player attributes and player name you inputted on the main menu screen of the Walker app
