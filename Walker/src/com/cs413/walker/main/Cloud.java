@@ -43,6 +43,10 @@ public class Cloud extends Activity {
 		setContentView(R.layout.cloud);
 
 		Intent i = getIntent();
+		
+		/**
+		 * Player attributes to push to cloud
+		 */
 
 		INIT_ENERGY = i.getIntExtra("energy", 1);
 		INIT_CAPACITY = i.getIntExtra("inventory", 1);
@@ -56,6 +60,9 @@ public class Cloud extends Activity {
 		final EditText player_name = (EditText) findViewById(R.id.player_id);
 		final TextView player_info = (TextView) findViewById(R.id.player_info);
 
+		/*
+		 * Grouping Player attributes makes it easier to push to cloud with 1 variable PLAYER_INFO
+		 */
 		PLAYER_INFO = "Energy: " + INIT_ENERGY + "\nInventory: "
 				+ INIT_CAPACITY + "\nLives: " + INIT_LIVES + "\nDifficulty: "
 				+ INIT_RATE;
@@ -109,7 +116,7 @@ public class Cloud extends Activity {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 		dialog.setTitle("Alert");
 		dialog.setMessage(s);
-		dialog.setNeutralButton("Cool", null);
+		dialog.setNeutralButton("Finished", null);
 		dialog.create().show();
 	}
 
@@ -117,16 +124,14 @@ public class Cloud extends Activity {
 
 		private ProgressDialog pDialog;
 
-		// url to create new answer
-
 		/**
 		 * Before starting background thread Show Progress Dialog
-		 * */
+		 **/
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pDialog = new ProgressDialog(Cloud.this);
-			pDialog.setMessage("Saving player information..");
+			pDialog.setMessage("Saving player information.");
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(true);
 			pDialog.show();
@@ -156,14 +161,15 @@ public class Cloud extends Activity {
 			return null;
 		}
 
-		/**
+		/*
 		 * After completing background task Dismiss the progress dialog
-		 * **/
+		 * 
+		 */
 		@Override
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog once done
 			pDialog.dismiss();
-			alert("Succeed");
+			alert("Post Successful!");
 
 		}
 
@@ -175,12 +181,13 @@ public class Cloud extends Activity {
 
 		/**
 		 * Before starting background thread Show Progress Dialog
-		 * */
+		 * 
+		 **/
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
 			pDialog = new ProgressDialog(Cloud.this);
-			pDialog.setMessage("Looking for player information..");
+			pDialog.setMessage("Looking for player information. This may take a bit.");
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(true);
 			pDialog.show();
@@ -188,7 +195,8 @@ public class Cloud extends Activity {
 
 		/**
 		 * Creating answer
-		 * */
+		 * 
+		 */
 		@Override
 		protected String doInBackground(String... args) {
 
@@ -211,14 +219,14 @@ public class Cloud extends Activity {
 
 		/**
 		 * After completing background task Dismiss the progress dialog
-		 * **/
+		 */
 		@Override
 		protected void onPostExecute(String file_url) {
 			// dismiss the dialog once done
 			pDialog.dismiss();
 			TextView player_info = (TextView) findViewById(R.id.player_info);
 			player_info.setText(PLAYER_INFO);
-			alert("Succeed");
+			alert("Post Successful!");
 		}
 
 	}
